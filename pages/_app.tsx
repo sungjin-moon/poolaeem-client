@@ -1,18 +1,43 @@
-import type { ReactElement, ReactNode } from "react";
-import type { NextPage } from "next";
-import type { AppProps } from "next/app";
+import { Global, css } from "@emotion/react";
+import { AppProps } from "next/app";
 
-export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
-  getLayout?: (page: ReactElement) => ReactNode;
-};
+import Gray from "../components/Color/Gray";
+import Layout from "../templates";
 
-type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout;
-};
+import QueryProvider from "../queries";
 
-export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
-  // Use the layout defined at the page level, if available
-  const getLayout = Component.getLayout ?? ((page) => page);
-
-  return getLayout(<Component {...pageProps} />);
+function App({ Component, pageProps }: AppProps) {
+  return (
+    <>
+      <Global styles={globalStyle} />
+      <QueryProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </QueryProvider>
+    </>
+  );
 }
+
+const globalStyle = css`
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: Pretendard, sans-serif, Roboto;
+  }
+
+  html,
+  body {
+    max-width: 100vw;
+    overflow-x: hidden;
+    background: ${Gray[200]};
+  }
+
+  @font-face {
+    font-family: "Pretendard";
+    src: url("/fonts/Pretendard.woff2") format("woff2");
+  }
+`;
+
+export default App;

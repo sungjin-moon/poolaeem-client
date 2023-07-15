@@ -1,0 +1,118 @@
+<svg width="600" height="1306" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="path-1-inside-1_214_1416" fill="white">
+<path d="M0 0H600V48H0V0Z"/>
+</mask>
+<path d="M600 47H0V49H600V47Z" fill="#FEBFCC" mask="url(#path-1-inside-1_214_1416)"/>
+<mask id="path-3-inside-2_214_1416" fill="white">
+<path d="M0 720H600V768H0V720Z"/>
+</mask>
+<path d="M600 767H0V769H600V767Z" fill="#FEBFCC" mask="url(#path-3-inside-2_214_1416)"/>
+<mask id="path-5-inside-3_214_1416" fill="white">
+<path d="M104 6H114V1306H104V6Z"/>
+</mask>
+<path d="M113 6V1306H115V6H113ZM105 1306V6H103V1306H105Z" fill="#FEBFCC" mask="url(#path-5-inside-3_214_1416)"/>
+<mask id="path-7-inside-4_214_1416" fill="white">
+<path d="M0 48H600V96H0V48Z"/>
+</mask>
+<path d="M600 95H0V97H600V95Z" fill="#FEBFCC" mask="url(#path-7-inside-4_214_1416)"/>
+<mask id="path-9-inside-5_214_1416" fill="white">
+<path d="M0 768H600V816H0V768Z"/>
+</mask>
+<path d="M600 815H0V817H600V815Z" fill="#FEBFCC" mask="url(#path-9-inside-5_214_1416)"/>
+<mask id="path-11-inside-6_214_1416" fill="white">
+<path d="M0 96H600V144H0V96Z"/>
+</mask>
+<path d="M600 143H0V145H600V143Z" fill="#FEBFCC" mask="url(#path-11-inside-6_214_1416)"/>
+<mask id="path-13-inside-7_214_1416" fill="white">
+<path d="M0 816H600V864H0V816Z"/>
+</mask>
+<path d="M600 863H0V865H600V863Z" fill="#FEBFCC" mask="url(#path-13-inside-7_214_1416)"/>
+<mask id="path-15-inside-8_214_1416" fill="white">
+<path d="M0 144H600V192H0V144Z"/>
+</mask>
+<path d="M600 191H0V193H600V191Z" fill="#FEBFCC" mask="url(#path-15-inside-8_214_1416)"/>
+<mask id="path-17-inside-9_214_1416" fill="white">
+<path d="M0 864H600V912H0V864Z"/>
+</mask>
+<path d="M600 911H0V913H600V911Z" fill="#FEBFCC" mask="url(#path-17-inside-9_214_1416)"/>
+<mask id="path-19-inside-10_214_1416" fill="white">
+<path d="M0 192H600V240H0V192Z"/>
+</mask>
+<path d="M600 239H0V241H600V239Z" fill="#FEBFCC" mask="url(#path-19-inside-10_214_1416)"/>
+<mask id="path-21-inside-11_214_1416" fill="white">
+<path d="M0 912H600V960H0V912Z"/>
+</mask>
+<path d="M600 959H0V961H600V959Z" fill="#FEBFCC" mask="url(#path-21-inside-11_214_1416)"/>
+<mask id="path-23-inside-12_214_1416" fill="white">
+<path d="M0 240H600V288H0V240Z"/>
+</mask>
+<path d="M600 287H0V289H600V287Z" fill="#FEBFCC" mask="url(#path-23-inside-12_214_1416)"/>
+<mask id="path-25-inside-13_214_1416" fill="white">
+<path d="M0 960H600V1008H0V960Z"/>
+</mask>
+<path d="M600 1007H0V1009H600V1007Z" fill="#FEBFCC" mask="url(#path-25-inside-13_214_1416)"/>
+<mask id="path-27-inside-14_214_1416" fill="white">
+<path d="M0 288H600V336H0V288Z"/>
+</mask>
+<path d="M600 335H0V337H600V335Z" fill="#FEBFCC" mask="url(#path-27-inside-14_214_1416)"/>
+<mask id="path-29-inside-15_214_1416" fill="white">
+<path d="M0 1008H600V1056H0V1008Z"/>
+</mask>
+<path d="M600 1055H0V1057H600V1055Z" fill="#FEBFCC" mask="url(#path-29-inside-15_214_1416)"/>
+<mask id="path-31-inside-16_214_1416" fill="white">
+<path d="M0 336H600V384H0V336Z"/>
+</mask>
+<path d="M600 383H0V385H600V383Z" fill="#FEBFCC" mask="url(#path-31-inside-16_214_1416)"/>
+<mask id="path-33-inside-17_214_1416" fill="white">
+<path d="M0 1056H600V1104H0V1056Z"/>
+</mask>
+<path d="M600 1103H0V1105H600V1103Z" fill="#FEBFCC" mask="url(#path-33-inside-17_214_1416)"/>
+<mask id="path-35-inside-18_214_1416" fill="white">
+<path d="M0 384H600V432H0V384Z"/>
+</mask>
+<path d="M600 431H0V433H600V431Z" fill="#FEBFCC" mask="url(#path-35-inside-18_214_1416)"/>
+<mask id="path-37-inside-19_214_1416" fill="white">
+<path d="M0 1104H600V1152H0V1104Z"/>
+</mask>
+<path d="M600 1151H0V1153H600V1151Z" fill="#FEBFCC" mask="url(#path-37-inside-19_214_1416)"/>
+<mask id="path-39-inside-20_214_1416" fill="white">
+<path d="M0 432H600V480H0V432Z"/>
+</mask>
+<path d="M600 479H0V481H600V479Z" fill="#FEBFCC" mask="url(#path-39-inside-20_214_1416)"/>
+<mask id="path-41-inside-21_214_1416" fill="white">
+<path d="M0 1152H600V1200H0V1152Z"/>
+</mask>
+<path d="M600 1199H0V1201H600V1199Z" fill="#FEBFCC" mask="url(#path-41-inside-21_214_1416)"/>
+<mask id="path-43-inside-22_214_1416" fill="white">
+<path d="M0 1200H600V1248H0V1200Z"/>
+</mask>
+<path d="M600 1247H0V1249H600V1247Z" fill="#FEBFCC" mask="url(#path-43-inside-22_214_1416)"/>
+<mask id="path-45-inside-23_214_1416" fill="white">
+<path d="M0 1248H600V1296H0V1248Z"/>
+</mask>
+<path d="M600 1295H0V1297H600V1295Z" fill="#FEBFCC" mask="url(#path-45-inside-23_214_1416)"/>
+<mask id="path-47-inside-24_214_1416" fill="white">
+<path d="M0 480H600V528H0V480Z"/>
+</mask>
+<path d="M600 527H0V529H600V527Z" fill="#FEBFCC" mask="url(#path-47-inside-24_214_1416)"/>
+<mask id="path-49-inside-25_214_1416" fill="white">
+<path d="M0 528H600V576H0V528Z"/>
+</mask>
+<path d="M600 575H0V577H600V575Z" fill="#FEBFCC" mask="url(#path-49-inside-25_214_1416)"/>
+<mask id="path-51-inside-26_214_1416" fill="white">
+<path d="M0 576H600V624H0V576Z"/>
+</mask>
+<path d="M600 623H0V625H600V623Z" fill="#FEBFCC" mask="url(#path-51-inside-26_214_1416)"/>
+<mask id="path-53-inside-27_214_1416" fill="white">
+<path d="M0 624H600V672H0V624Z"/>
+</mask>
+<path d="M600 671H0V673H600V671Z" fill="#FEBFCC" mask="url(#path-53-inside-27_214_1416)"/>
+<mask id="path-55-inside-28_214_1416" fill="white">
+<path d="M0 672H600V720H0V672Z"/>
+</mask>
+<path d="M600 719H0V721H600V719Z" fill="#FEBFCC" mask="url(#path-55-inside-28_214_1416)"/>
+<mask id="path-57-inside-29_214_1416" fill="white">
+<path d="M0 720H600V768H0V720Z"/>
+</mask>
+<path d="M600 767H0V769H600V767Z" fill="#FEBFCC" mask="url(#path-57-inside-29_214_1416)"/>
+</svg>
