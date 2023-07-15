@@ -20,7 +20,6 @@ const initialParams = {
 
 export const signIn = async (variables?: Variables) => {
   const url = `${API}/login/oauth2/code/google`;
-  console.log(variables);
   const config = {
     withCredentials: true,
     params: variables,
@@ -28,7 +27,7 @@ export const signIn = async (variables?: Variables) => {
 
   const response = await axios.get(url, config);
   const { data } = response;
-  console.log(data);
+  console.log(response.headers);
   if (data) {
     return data;
   }
@@ -39,17 +38,14 @@ export const signIn = async (variables?: Variables) => {
 function useAuth(params: Params = initialParams, options = {}) {
   const _params = { ...initialParams, ...params };
   const { key } = _params;
-  const payload = useMutation(async (variables?: Variables) => {
-    switch (key) {
-      case `signIn`: {
-        return signIn(variables);
-      }
-      default:
-        return initialData;
-    }
-  }, options);
 
-  return payload;
+  switch (key) {
+    case `signIn`: {
+      return useMutation(key, signIn, options);
+    }
+    default:
+      return useMutation("signIn", signIn, options);
+  }
 }
 
 export default useAuth;

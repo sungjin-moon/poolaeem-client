@@ -1,4 +1,7 @@
 import { useEffect } from "react";
+import styled from "@emotion/styled";
+
+import Spinner from "../components/Loader/Spinner";
 
 import useSignIn from "../process/SignIn/useSignIn";
 
@@ -12,7 +15,18 @@ function Google() {
     }
   }, [Router.isReady]);
 
-  return <div>...Loading</div>;
+  return (
+    <Template>
+      <Spinner />
+    </Template>
+  );
 }
+
+const Template = styled.div`
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 export default Google;

@@ -16,7 +16,7 @@ import useSignIn from "../../process/SignIn/useSignIn";
 interface Props {}
 
 function SignIn() {
-  const { Modal, onAuthGoogle } = useSignIn();
+  const { Modal, onAuthGoogle, onSignUp } = useSignIn();
 
   return (
     <Template>
@@ -46,7 +46,7 @@ function SignIn() {
         }}
         success={{
           placeholder: "동의함",
-          handler: () => {},
+          handler: onSignUp,
         }}
       />
     </Template>
