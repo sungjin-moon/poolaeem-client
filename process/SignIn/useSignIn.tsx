@@ -4,6 +4,7 @@ import Cookies from "universal-cookie";
 
 import useModal from "../../hooks/useModal";
 
+import { queryClient } from "../../queries";
 import { API } from "../../queries/settings";
 import useAuth from "../../queries/Account/useAuth";
 import useCreate from "../../queries/Account/useCreate";
@@ -21,26 +22,27 @@ function useSignIn() {
     Auth.mutate(query, {
       onSuccess: (data) => {
         console.log(data);
-        // const cookies = new Cookies();
-        // cookies.set("session", {
-        //   token: data.token,
-        // });
-
-        if (data.code === 0) {
-          return push("/");
+        if (data?.code === 0) {
+          const cookies = new Cookies();
+          cookies.set("session", {
+            accessToken: data?.accessToken,
+            refreshToken: data?.refreshToken,
+          });
+          return push("/account");
         }
-        if (data.code === 10023) {
+        if (data?.code === 10023) {
           return push({
             pathname: "/sign-in",
             query: {
               confirm: "register",
-              ...data.data,
+              ...data,
             },
           });
         }
       },
       onError: (error) => {
         console.log(error);
+        return push("/404");
       },
     });
   };
@@ -56,13 +58,13 @@ function useSignIn() {
       {
         onSuccess: (data) => {
           console.log(data);
-          // const cookies = new Cookies();
-          // cookies.set("session", {
-          //   token: data.token,
-          // });
-          // if (data.code === 10023) {
-          //   return push("/sign-in?confirm=register");
-          // }
+          if (data?.code === 0) {
+            const cookies = new Cookies();
+            cookies.set("session", {
+              token: data?.refreshToken,
+            });
+            return push("/account");
+          }
         },
         onError: (error) => {
           console.log(error);

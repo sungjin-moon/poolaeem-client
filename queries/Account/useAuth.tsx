@@ -29,7 +29,13 @@ export const signIn = async (variables?: Variables) => {
   const { data } = response;
   console.log(response.headers);
   if (data) {
-    return data;
+    const accessToken = response.headers["access-token"];
+    const refreshToken = response.headers["refresh-token"];
+    return {
+      ...data,
+      accessToken,
+      refreshToken,
+    };
   }
 
   return initialData;

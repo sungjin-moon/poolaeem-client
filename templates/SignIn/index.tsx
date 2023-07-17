@@ -6,6 +6,7 @@ import Typography from "../../components/Typography/Pretendard";
 import SolidButton from "../../components/Button/Solid";
 import Pink from "../../components/Color/Pink";
 import Confirm from "../../components/Modal/DialogBox/Confirm";
+import StoriesBox from "../../components/Stories";
 
 import SignInBackground from "../../assets/icons/SignInBackground.svg";
 import SignInLogo from "../../assets/icons/SignInLogo.svg";
@@ -13,10 +14,13 @@ import Google from "../../assets/icons/Google.svg";
 
 import useSignIn from "../../process/SignIn/useSignIn";
 
+import useStories from "../../hooks/useStories";
+
 interface Props {}
 
 function SignIn() {
   const { Modal, onAuthGoogle, onSignUp } = useSignIn();
+  const Stories = useStories();
 
   return (
     <Template>
@@ -30,6 +34,7 @@ function SignIn() {
           placeholder="Google 계정 로그인"
           Icon={<Google />}
           onClick={onAuthGoogle}
+          // onClick={Stories.onOpen}
         />
         <Typography className="SignIn-bottom-copyright" type="body" size={6}>
           © team 901. All rights reserved.
@@ -49,6 +54,7 @@ function SignIn() {
           handler: onSignUp,
         }}
       />
+      <StoriesBox hooks={{ Stories }} />
     </Template>
   );
 }
