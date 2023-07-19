@@ -27,14 +27,17 @@ export const signIn = async (variables?: Variables) => {
 
   const response = await axios.get(url, config);
   const { data } = response;
-  console.log(response.headers);
+
   if (data) {
-    const accessToken = response.headers["access-token"];
-    const refreshToken = response.headers["refresh-token"];
+    const accessToken = response.headers["access-token"] || "";
+    const refreshToken = response.headers["refresh-token"] || "";
     return {
-      ...data,
+      code: data?.code,
       accessToken,
       refreshToken,
+      query: {
+        ...data?.data,
+      },
     };
   }
 

@@ -9,7 +9,7 @@ import Confirm from "../../components/Modal/DialogBox/Confirm";
 import StoriesBox from "../../components/Stories";
 
 import SignInBackground from "../../assets/icons/SignInBackground.svg";
-import SignInLogo from "../../assets/icons/SignInLogo.svg";
+import Logo from "../../assets/icons/Logo.svg";
 import Google from "../../assets/icons/Google.svg";
 
 import useSignIn from "../../process/SignIn/useSignIn";
@@ -19,13 +19,13 @@ import useStories from "../../hooks/useStories";
 interface Props {}
 
 function SignIn() {
-  const { Modal, onAuthGoogle, onSignUp } = useSignIn();
+  const { Modal, Create, onAuthGoogle, onSignUp } = useSignIn();
   const Stories = useStories();
 
   return (
     <Template>
       <SignInBackground className="SignIn-background" />
-      <SignInLogo className="SignIn-logo" />
+      <Logo className="SignIn-logo" />
       <div className="SignIn-bottom">
         <SolidButton
           className="SignIn-bottom-button"
@@ -51,6 +51,7 @@ function SignIn() {
         }}
         success={{
           placeholder: "동의함",
+          status: Create.isLoading ? "loading" : "default",
           handler: onSignUp,
         }}
       />

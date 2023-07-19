@@ -12,11 +12,6 @@ function useAccount() {
   const Router = useRouter();
   const { push, query } = Router;
 
-  useEffect(() => {
-    const a = queryClient.getMutationCache();
-    console.log(a);
-  }, []);
-
   return {
     Router,
   };

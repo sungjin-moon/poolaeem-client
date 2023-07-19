@@ -35,14 +35,13 @@ function useSignIn() {
             pathname: "/sign-in",
             query: {
               confirm: "register",
-              ...data,
+              ...data?.query,
             },
           });
         }
       },
       onError: (error) => {
         console.log(error);
-        return push("/404");
       },
     });
   };
@@ -58,17 +57,17 @@ function useSignIn() {
       {
         onSuccess: (data) => {
           console.log(data);
-          if (data?.code === 0) {
+          if (data) {
             const cookies = new Cookies();
             cookies.set("session", {
-              token: data?.refreshToken,
+              accessToken: data?.accessToken,
+              refreshToken: data?.refreshToken,
             });
             return push("/account");
           }
         },
         onError: (error) => {
           console.log(error);
-          return push("/404");
         },
       }
     );
@@ -85,6 +84,7 @@ function useSignIn() {
   return {
     Router,
     Auth,
+    Create,
     Modal,
     onSignIn,
     onSignUp,

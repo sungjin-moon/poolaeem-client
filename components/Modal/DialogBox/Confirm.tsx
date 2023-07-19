@@ -29,10 +29,12 @@ interface Props {
   };
   cancel: {
     placeholder: string;
+    status?: string;
     handler: () => void;
   };
   success: {
     placeholder: string;
+    status?: string;
     handler: () => void;
   };
 }
@@ -71,6 +73,7 @@ function Confirm({
             size="large"
             theme="lightPink"
             placeholder={cancel.placeholder}
+            status={cancel.status}
             onClick={cancel.handler}
           />
           <SolidButton
@@ -78,6 +81,7 @@ function Confirm({
             size="large"
             theme="pink"
             placeholder={success.placeholder}
+            status={success.status}
             onClick={success.handler}
           />
         </div>
@@ -97,10 +101,12 @@ const defaultProps = {
   },
   cancel: {
     placeholder: "Placeholder",
+    status: "default",
     handler: () => {},
   },
   success: {
     placeholder: "Placeholder",
+    status: "default",
     handler: () => {},
   },
 };

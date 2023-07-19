@@ -5,7 +5,7 @@ interface Params {
   key: string;
 }
 
-export interface Variables {
+interface Variables {
   isAgreeTerms?: boolean;
   oauthProvider: string;
   oauthId: string;
@@ -31,13 +31,14 @@ export const signUp = async (variables: Variables = initialVariables) => {
 
   const response = await axios.post(url, variables, config);
   const { data } = response;
-  console.log(response);
-  if (data) {
-    return data;
-  }
 
-  if (response.status !== 200) {
-    throw new Error(`Response status is "${response.status}"`);
+  if (response?.status === 200) {
+    const accessToken = response.headers["access-token"] || "";
+    const refreshToken = response.headers["refresh-token"] || "";
+    return {
+      accessToken,
+      refreshToken,
+    };
   }
 
   return initialData;

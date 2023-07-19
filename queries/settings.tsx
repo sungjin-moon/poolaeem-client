@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "universal-cookie";
+import { refreshAccessToken } from "./Account/useUpdate";
 
 export const API = "https://poolaeem.com";
 
@@ -13,8 +14,8 @@ instance.interceptors.request.use(
   (request) => {
     const cookies = new Cookies();
     const session = cookies.get("session");
-    if (session) {
-      request.headers["Authorization"] = session.token;
+    if (session?.accessToken) {
+      request.headers["Authorization"] = `Bearer ${session?.accessToken}`;
     }
     return request;
   },
@@ -27,12 +28,19 @@ instance.interceptors.response.use(
   (response) => {
     return response;
   },
-  (err) => {
-    if (err.response?.status === 401) {
+  async (err) => {
+    const code = err.response?.data?.code;
+    if (code === 10052 || code === 10004) {
       const cookies = new Cookies();
       cookies.remove("session");
-
       window.location.href = "/sign-in";
+    }
+
+    if (code === 10050) {
+      const cookies = new Cookies();
+      const session = cookies.get("session") || null;
+      const payload = await refreshAccessToken(session?.refreshToken);
+      cookies.set("session", { ...session, accessToken: payload?.accessToken });
     }
     return Promise.reject(err);
   }

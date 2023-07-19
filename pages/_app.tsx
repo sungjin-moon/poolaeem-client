@@ -1,8 +1,8 @@
 import { Global, css } from "@emotion/react";
+import styled from "@emotion/styled";
 import { AppProps } from "next/app";
 
 import Gray from "../components/Color/Gray";
-import Layout from "../templates";
 
 import QueryProvider from "../queries";
 
@@ -11,9 +11,9 @@ function App({ Component, pageProps }: AppProps) {
     <>
       <Global styles={globalStyle} />
       <QueryProvider>
-        <Layout>
+        <GlobalLayout>
           <Component {...pageProps} />
-        </Layout>
+        </GlobalLayout>
       </QueryProvider>
     </>
   );
@@ -38,6 +38,15 @@ const globalStyle = css`
     font-family: "Pretendard";
     src: url("/fonts/Pretendard.woff2") format("woff2");
   }
+`;
+
+const GlobalLayout = styled.div`
+  position: relative;
+  max-width: 600px;
+  min-height: calc(100vh);
+  margin: 0 auto;
+  background: ${Gray[50]};
+  overflow-y: hidden;
 `;
 
 export default App;
