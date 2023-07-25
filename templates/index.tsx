@@ -4,33 +4,39 @@ import styled from "@emotion/styled";
 import Logo from "../assets/icons/Logo.svg";
 
 import Gray from "../components/Color/Gray";
-import Typography from "../components/Typography/Pretendard";
-import SolidButton from "../components/Button/Solid";
 import UserImage from "../components/Image/User";
+import StoriesBox from "../components/Stories";
 
-import useSession from "../process/Account/useSession";
+import useAccount from "../process/Account/useAccount";
 
 interface Props {
   children: ReactElement;
 }
 
 function Layout({ children }: Props) {
-  const Session = useSession();
-  const { Read } = Session;
+  const Account = useAccount();
+  const { Read, Stories } = Account;
 
   return (
     <Template>
       <Header>
         <Logo className="Header-logo" />
-        {Read?.data && <UserImage className="Header-user" />}
+        {Read?.data && (
+          <UserImage className="Header-user" onClick={Stories.onOpen} />
+        )}
       </Header>
       {children}
+      <StoriesBox {...Stories} />
     </Template>
   );
 }
 
 const Template = styled.div`
   position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: ${Gray[50]};
+  height: 100%;
 `;
 
 const Header = styled.div`

@@ -1,26 +1,23 @@
 import styled from "@emotion/styled";
 import { RefObject, ReactElement } from "react";
 
-import useModal from "../../hooks/useModal";
-
 interface Props {
   className: string;
   children: ReactElement;
-  hooks: {
-    Modal: {
-      ref: RefObject<HTMLInputElement>;
-      isOpen: boolean;
-      status: string;
-      onFadeIn: () => void;
-      onFadeOut: () => void;
-      onOpen: () => void;
-      onClose: () => void;
-    };
-  };
+  ref: RefObject<HTMLInputElement>;
+  isOpen: boolean;
+  status: string;
+  onClose: () => void;
 }
 
-function Background({ className, children, hooks }: Props) {
-  const { ref, isOpen, status, onClose } = hooks.Modal || useModal();
+function Background({
+  className,
+  children,
+  ref,
+  isOpen,
+  status,
+  onClose,
+}: Props) {
   return (
     <Modal
       className={`Modal ${className}`}
@@ -45,9 +42,10 @@ function Background({ className, children, hooks }: Props) {
 const defaultProps = {
   className: "",
   children: null,
-  hooks: {
-    Modal: null,
-  },
+  ref: null,
+  isOpen: false,
+  status: "init",
+  onClose: () => {},
 };
 
 Background.defaultProps = defaultProps;

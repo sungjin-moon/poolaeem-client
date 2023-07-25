@@ -14,13 +14,10 @@ import Google from "../../assets/icons/Google.svg";
 
 import useSignIn from "../../process/SignIn/useSignIn";
 
-import useStories from "../../hooks/useStories";
-
 interface Props {}
 
 function SignIn() {
   const { Modal, Create, onAuthGoogle, onSignUp } = useSignIn();
-  const Stories = useStories();
 
   return (
     <Template>
@@ -34,14 +31,12 @@ function SignIn() {
           placeholder="Google 계정 로그인"
           Icon={<Google />}
           onClick={onAuthGoogle}
-          // onClick={Stories.onOpen}
         />
         <Typography className="SignIn-bottom-copyright" type="body" size={6}>
           © team 901. All rights reserved.
         </Typography>
       </div>
       <Confirm
-        hooks={{ Modal }}
         Icon={<CheckSign />}
         title="약관 동의"
         description="만 14세 이상이며 개인정보 수집(이메일 주소, 이름)에 동의하시나요?"
@@ -54,8 +49,11 @@ function SignIn() {
           status: Create.isLoading ? "loading" : "default",
           handler: onSignUp,
         }}
+        ref={Modal.ref}
+        isOpen={Modal.isOpen}
+        status={Modal.status}
+        onClose={Modal.onClose}
       />
-      <StoriesBox hooks={{ Stories }} />
     </Template>
   );
 }
@@ -63,9 +61,8 @@ function SignIn() {
 const Template = styled.div`
   position: relative;
   background: ${Pink[100]};
-  height: 100vh;
+  height: 100%;
   .SignIn-background {
-    display: flex;
     width: 100%;
     height: 100%;
   }

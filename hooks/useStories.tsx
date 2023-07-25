@@ -5,8 +5,12 @@ function useStories(initialIsOpen = false) {
   const initialStories = [
     { title: "Title1", data: {} },
     { title: "Title2", data: {} },
+    { title: "Title3", data: {} },
+    { title: "Title4", data: {} },
+    { title: "Title5", data: {} },
+    { title: "Title6", data: {} },
   ];
-  const [story, setStory] = useState(initialStories);
+  const [stories, setStories] = useState(initialStories);
   const [isOpen, setOpen] = useState(initialIsOpen);
 
   const onOpen = () => {
@@ -18,7 +22,7 @@ function useStories(initialIsOpen = false) {
   };
 
   return {
-    story,
+    stories,
     isOpen,
     onOpen,
     onClose,

@@ -28,7 +28,7 @@ function useSignIn() {
             accessToken: data?.accessToken,
             refreshToken: data?.refreshToken,
           });
-          return push("/account");
+          return push("/");
         }
         if (data?.code === 10023) {
           return push({
@@ -63,7 +63,7 @@ function useSignIn() {
               accessToken: data?.accessToken,
               refreshToken: data?.refreshToken,
             });
-            return push("/account");
+            return push("/");
           }
         },
         onError: (error) => {

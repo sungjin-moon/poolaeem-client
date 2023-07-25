@@ -16,17 +16,13 @@ interface Props {
   Icon: ReactElement;
   title: string;
   description: string;
-  hooks: {
-    Modal: {
-      ref: RefObject<HTMLInputElement>;
-      isOpen: boolean;
-      status: string;
-      onFadeIn: () => void;
-      onFadeOut: () => void;
-      onOpen: () => void;
-      onClose: () => void;
-    };
-  };
+  ref: RefObject<HTMLInputElement>;
+  isOpen: boolean;
+  status: string;
+  onFadeIn: () => void;
+  onFadeOut: () => void;
+  onOpen: () => void;
+  onClose: () => void;
   cancel: {
     placeholder: string;
     status?: string;
@@ -44,15 +40,15 @@ function Confirm({
   Icon,
   title,
   description,
-  hooks,
+  ref,
+  isOpen,
+  status,
+  onClose,
   cancel,
   success,
 }: Props) {
-  const Modal = hooks.Modal || useModal();
-  const { ref, isOpen, status, onClose } = Modal;
-
   return (
-    <Background hooks={{ Modal }}>
+    <Background ref={ref} isOpen={isOpen} status={status} onClose={onClose}>
       <Container
         className={`Modal_Confirm ${className}`}
         css={css({
@@ -96,6 +92,13 @@ const defaultProps = {
   title: "Title",
   description:
     "Lorem ipsum dolor sit amet consectetur. Amet tincidunt eget sapien netus lorem.",
+  ref: null,
+  isOpen: false,
+  status: "init",
+  onFadeIn: () => {},
+  onFadeOut: () => {},
+  onOpen: () => {},
+  onClose: () => {},
   hooks: {
     Modal: null,
   },

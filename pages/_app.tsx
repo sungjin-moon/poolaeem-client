@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { AppProps } from "next/app";
 
 import Gray from "../components/Color/Gray";
+import Pink from "../components/Color/Pink";
 
 import QueryProvider from "../queries";
 
@@ -12,7 +13,9 @@ function App({ Component, pageProps }: AppProps) {
       <Global styles={globalStyle} />
       <QueryProvider>
         <GlobalLayout>
-          <Component {...pageProps} />
+          <div className="GlobalLayout-pages">
+            <Component {...pageProps} />
+          </div>
         </GlobalLayout>
       </QueryProvider>
     </>
@@ -29,9 +32,7 @@ const globalStyle = css`
 
   html,
   body {
-    max-width: 100vw;
-    overflow-x: hidden;
-    background: ${Gray[200]};
+    background: ${Pink[50]};
   }
 
   @font-face {
@@ -40,13 +41,34 @@ const globalStyle = css`
   }
 `;
 
+// const GlobalLayout = styled.div`
+//   position: relative;
+//   max-width: 600px;
+//   min-height: calc(100vh);
+//   margin: 0 auto;
+//   background: ${Gray[50]};
+//   overflow-y: auto;
+// `;
+
 const GlobalLayout = styled.div`
   position: relative;
-  max-width: 600px;
-  min-height: calc(100vh);
-  margin: 0 auto;
-  background: ${Gray[50]};
-  overflow-y: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  .GlobalLayout-pages {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    height: 100vh;
+    background: ${Gray[200]};
+    overflow-y: hidden;
+    @media (min-width: 960px) {
+      width: 430px;
+      height: 90vh;
+      border-radius: 20px;
+    }
+  }
 `;
 
 export default App;
