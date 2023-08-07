@@ -8,6 +8,7 @@ interface Props {
   type: string;
   size: number;
   children: ReactNode;
+  onClick?: () => void;
 }
 
 type TypographyType = {
@@ -97,7 +98,7 @@ const body: TypographyType = {
   },
 };
 
-function Pretendard({ className, type, size, children }: Props) {
+function Pretendard({ className, type, size, children, onClick }: Props) {
   let Typography = Heading;
 
   switch (type) {
@@ -124,6 +125,7 @@ function Pretendard({ className, type, size, children }: Props) {
       className={`Typography-Pretendard ${className}`}
       type={type}
       size={size}
+      onClick={onClick}
     >
       {children}
     </Typography>
@@ -183,7 +185,7 @@ export const Caption = styled.div<Props>`
 export const Body = styled.div<Props>`
   display: flex;
   font-family: "Pretendard";
-  font-weight: 500;
+  font-weight: 400;
   color: ${Gray["700"]};
   font-size: ${({ size }) => {
     return body[size].fontSize;

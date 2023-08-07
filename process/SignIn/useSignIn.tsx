@@ -21,7 +21,6 @@ function useSignIn() {
     if (Auth.isLoading) return;
     Auth.mutate(query, {
       onSuccess: (data) => {
-        console.log(data);
         if (data?.code === 0) {
           const cookies = new Cookies();
           cookies.set("session", {

@@ -16,7 +16,7 @@ interface Props {
   Icon: ReactElement;
   title: string;
   description: string;
-  ref: RefObject<HTMLInputElement>;
+  modalRef: RefObject<HTMLInputElement>;
   isOpen: boolean;
   status: string;
   onFadeIn: () => void;
@@ -40,7 +40,7 @@ function Confirm({
   Icon,
   title,
   description,
-  ref,
+  modalRef,
   isOpen,
   status,
   onClose,
@@ -48,7 +48,12 @@ function Confirm({
   success,
 }: Props) {
   return (
-    <Background ref={ref} isOpen={isOpen} status={status} onClose={onClose}>
+    <Background
+      modalRef={modalRef}
+      isOpen={isOpen}
+      status={status}
+      onClose={onClose}
+    >
       <Container
         className={`Modal_Confirm ${className}`}
         css={css({
@@ -92,7 +97,7 @@ const defaultProps = {
   title: "Title",
   description:
     "Lorem ipsum dolor sit amet consectetur. Amet tincidunt eget sapien netus lorem.",
-  ref: null,
+  modalRef: null,
   isOpen: false,
   status: "init",
   onFadeIn: () => {},

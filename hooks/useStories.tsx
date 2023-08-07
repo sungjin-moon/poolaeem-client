@@ -1,17 +1,31 @@
-import { useState, useEffect, useRef } from "react";
-import { debounce } from "lodash";
+import { useState, useRef } from "react";
 
-function useStories(initialIsOpen = false) {
-  const initialStories = [
-    { title: "Title1", data: {} },
-    { title: "Title2", data: {} },
-    { title: "Title3", data: {} },
-    { title: "Title4", data: {} },
-    { title: "Title5", data: {} },
-    { title: "Title6", data: {} },
-  ];
-  const [stories, setStories] = useState(initialStories);
-  const [isOpen, setOpen] = useState(initialIsOpen);
+export interface Story {
+  title: string;
+  view: any;
+}
+
+const initialStories = [
+  {
+    title: "Title1",
+    view: <div>Title1</div>,
+  },
+  {
+    title: "Title2",
+    view: <div>Title2</div>,
+  },
+  {
+    title: "Title3",
+    view: <div>Title3</div>,
+  },
+];
+
+function useStories(stories: Array<Story> = initialStories) {
+  const [isOpen, setOpen] = useState(false);
+  const [index, setIndex] = useState(0);
+  const swiperRef = useRef(null);
+  const el: any = swiperRef.current;
+  const currentStory = stories[index] || null;
 
   const onOpen = () => {
     return setOpen(true);
@@ -21,11 +35,40 @@ function useStories(initialIsOpen = false) {
     return setOpen(false);
   };
 
+  const onSlidePrev = () => {
+    if (el) {
+      const currentIndex = el.swiper.activeIndex;
+      const nextIndex = currentIndex - 1;
+      if (currentIndex === 0) {
+        onClose();
+        return;
+      }
+      setIndex(nextIndex);
+      el.swiper.slidePrev();
+    }
+  };
+
+  const onSlideNext = () => {
+    if (el) {
+      const currentIndex = el.swiper.activeIndex;
+      const nextIndex = currentIndex + 1;
+      if (currentIndex === stories.length - 1) {
+        return;
+      }
+      setIndex(nextIndex);
+      el.swiper.slideNext();
+    }
+  };
+
   return {
+    swiperRef,
+    currentStory,
     stories,
     isOpen,
     onOpen,
     onClose,
+    onSlidePrev,
+    onSlideNext,
   };
 }
 

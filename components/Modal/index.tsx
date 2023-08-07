@@ -4,7 +4,7 @@ import { RefObject, ReactElement } from "react";
 interface Props {
   className: string;
   children: ReactElement;
-  ref: RefObject<HTMLInputElement>;
+  modalRef: RefObject<HTMLInputElement>;
   isOpen: boolean;
   status: string;
   onClose: () => void;
@@ -13,7 +13,7 @@ interface Props {
 function Background({
   className,
   children,
-  ref,
+  modalRef,
   isOpen,
   status,
   onClose,
@@ -28,7 +28,7 @@ function Background({
         }
         onClose();
       }}
-      ref={ref}
+      ref={modalRef}
       css={{
         height: isOpen === true ? "100%" : "0%",
         opacity: status === "fadeIn" ? "1" : "0",
@@ -42,7 +42,7 @@ function Background({
 const defaultProps = {
   className: "",
   children: null,
-  ref: null,
+  modalRef: null,
   isOpen: false,
   status: "init",
   onClose: () => {},

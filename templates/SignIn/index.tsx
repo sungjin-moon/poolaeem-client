@@ -6,7 +6,6 @@ import Typography from "../../components/Typography/Pretendard";
 import SolidButton from "../../components/Button/Solid";
 import Pink from "../../components/Color/Pink";
 import Confirm from "../../components/Modal/DialogBox/Confirm";
-import StoriesBox from "../../components/Stories";
 
 import SignInBackground from "../../assets/icons/SignInBackground.svg";
 import Logo from "../../assets/icons/Logo.svg";
@@ -49,7 +48,7 @@ function SignIn() {
           status: Create.isLoading ? "loading" : "default",
           handler: onSignUp,
         }}
-        ref={Modal.ref}
+        modalRef={Modal.ref}
         isOpen={Modal.isOpen}
         status={Modal.status}
         onClose={Modal.onClose}

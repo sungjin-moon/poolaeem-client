@@ -15,6 +15,7 @@ interface Props {
 
 function Layout({ children }: Props) {
   const Account = useAccount();
+
   const { Read, Stories } = Account;
 
   return (
