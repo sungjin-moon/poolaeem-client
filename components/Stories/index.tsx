@@ -93,9 +93,9 @@ function Strories({
         loop={false}
         speed={500}
         simulateTouch={false}
-        onSwiper={(swiper) => {
-          console.log(swiper);
-        }}
+        // onSwiper={(swiper) => {
+        //   console.log(swiper);
+        // }}
       >
         {stories.map((story, index) => {
           const View = story.view;

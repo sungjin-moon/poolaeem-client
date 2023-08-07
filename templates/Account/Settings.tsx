@@ -7,6 +7,7 @@ import Typography from "../../components/Typography/Pretendard";
 import SoldButton from "../../components/Button/Solid";
 import { Layout } from "../../components/Stories";
 import Confirm from "../../components/Modal/DialogBox/Confirm";
+import ImageField from "../../components/Field/Image";
 
 import useSettings from "../../process/Account/useSettings";
 
@@ -32,6 +33,7 @@ function Settings({ className, onSlidePrev, onSlideNext }: Props) {
       }}
     >
       <Template className={`Settings ${className}`}>
+        <ImageField className="Settings-field" label="" />
         <Typography className="Settings-name" type="subHeading" size={1}>
           {name}
         </Typography>
@@ -98,6 +100,12 @@ const Template = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  .Settings-field {
+    width: 100%;
+    border: solid 1px;
+    display: flex;
+    justify-content: flex-end;
+  }
   .Settings-email {
     color: ${Gray[700]};
   }
