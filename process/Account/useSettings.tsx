@@ -4,6 +4,7 @@ import Cookies from "universal-cookie";
 
 import useToast from "../../hooks/useToast";
 import useModal from "../../hooks/useModal";
+import useField from "../../hooks/useField";
 
 import { queryClient } from "../../queries";
 import useRead from "../../queries/Account/useRead";
@@ -15,6 +16,8 @@ function useSettings() {
   const Delete = useDelete();
   const Toast = useToast();
   const Modal = useModal();
+
+  const ImageField = useField();
 
   const userId = Read?.data?.userId;
 
@@ -47,6 +50,7 @@ function useSettings() {
     Delete,
     Toast,
     Modal,
+    ImageField,
     onSignOut,
     onDeleteAccount,
   };

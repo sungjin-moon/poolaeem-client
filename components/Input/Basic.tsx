@@ -5,17 +5,30 @@ import { css } from "@emotion/react";
 import Gray from "../Color/Gray";
 import Pink from "../Color/Pink";
 
-function Basic({ className, placeholder, type, status, value, onChange }) {
+interface Props {
+  className: string;
+  placeholder: string;
+  type: string;
+  status: string;
+  value: undefined | string;
+  onChange: undefined | ((value: string) => void);
+}
+
+function Basic({
+  className,
+  placeholder,
+  type,
+  status,
+  value,
+  onChange,
+}: Props) {
   const [isFocus, setFocus] = useState(false);
-  const [initialValue, setInitialValue] = useState("");
+  const [$value, $setValue] = useState("");
 
-  const _value = value || initialValue;
-  const _onChange = onChange || setInitialValue;
-
-  const onChangeValue = (event) => {
+  const onChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
-    let value = event.target.value;
-    return _onChange(value);
+    const value = event.target.value;
+    onChange ? onChange(value) : $setValue(value);
   };
 
   return (
@@ -37,7 +50,7 @@ function Basic({ className, placeholder, type, status, value, onChange }) {
         onBlur={() => {
           setFocus(false);
         }}
-        value={_value}
+        value={value || $value}
         onChange={onChangeValue}
         type={type}
       />
@@ -50,8 +63,8 @@ const defaultProps = {
   placeholder: "Placeholder",
   type: null,
   status: "default",
-  value: "",
-  onChange: null,
+  value: undefined,
+  onChange: undefined,
 };
 
 Basic.defaultProps = defaultProps;

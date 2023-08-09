@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "@emotion/styled";
 
 import Gray from "../Color/Gray";
@@ -6,24 +7,84 @@ import Field from "./index";
 import ImageBox from "../Image/User";
 import SolidButton from "../Button/Solid";
 
+type Value = {
+  name: string;
+  file?: any;
+  size: number;
+  src: string;
+};
+
+type Item = {
+  required: boolean;
+  status: string;
+  value: Value;
+  placeholder: string;
+  message: string;
+};
+
 interface Props {
   className: string;
   label: string;
-  required: boolean;
+  item: Item;
+  onChange: undefined | ((item: Item) => void);
 }
 
-function Image({ className, label, required }: Props) {
+const initialValue = {
+  name: "",
+  file: null,
+  size: 0,
+  src: "",
+};
+
+function Image({ className, label, item, onChange }: Props) {
+  const [$value, $setValue] = useState<Value>(initialValue);
+
+  const onUpdate = () => {
+    const input = document.createElement("input");
+    const reader = new FileReader();
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+    input.onchange = () => {
+      const files = input.files;
+      const file = files?.[0] || null;
+
+      if (file) {
+        reader.readAsDataURL(file);
+        reader.onload = (loadEvent) => {
+          const base64 = loadEvent.target?.result || "";
+          const value = {
+            name: file.name,
+            file,
+            size: file.size,
+            src: JSON.stringify(base64),
+          };
+          console.log(value);
+          onChange ? onChange({ ...item, value }) : $setValue(value);
+        };
+      }
+    };
+  };
+
+  const onDelete = () => {
+    onChange
+      ? onChange({ ...item, value: initialValue })
+      : $setValue(initialValue);
+  };
+
+  const src = $value.src || item?.value?.src || "";
+
   return (
     <Field
       className={`Field_Image ${className}`}
       label={label}
-      required={required}
-      // message={item.message}
+      required={item.required}
+      message={item.message}
     >
       <Wrapper>
         <div className="Wrapper-temp" />
-        <UploadImage>
-          <ImageBox className="UploadImage-image" />
+        <UploadImage onClick={onUpdate}>
+          <ImageBox className="UploadImage-image" src={src} />
           <div className="UploadImage-button">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -43,6 +104,7 @@ function Image({ className, label, required }: Props) {
           className="Wrapper-delete"
           placeholder="삭제"
           theme="lightPink"
+          onClick={onDelete}
         />
       </Wrapper>
     </Field>
@@ -54,7 +116,7 @@ const defaultProps = {
   label: "Label",
   required: true,
   item: {},
-  onChange: () => {},
+  onChange: undefined,
 };
 
 Image.defaultProps = defaultProps;

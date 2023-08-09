@@ -5,19 +5,22 @@ import UserIcon from "../../assets/icons/User.svg";
 
 interface Props {
   className: string;
+  src: string;
   onClick: () => void;
 }
 
-function User({ className, onClick }: Props) {
+function User({ className, src, onClick }: Props) {
   return (
     <Image className={`Image_User ${className}`} onClick={onClick}>
-      <UserIcon className="Image_User-icon" />
+      {src && <img src={JSON.parse(src)} />}
+      {!src && <UserIcon className="Image_User-icon" />}
     </Image>
   );
 }
 
 const defaultProps = {
   className: "",
+  src: "",
   onClick: () => {},
 };
 
@@ -29,6 +32,12 @@ export const Image = styled.div`
   .Image_User-icon {
     width: 100%;
     height: 100%;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 32px;
+    object-fit: cover;
   }
 `;
 

@@ -7,7 +7,7 @@ import Typography from "../../components/Typography/Pretendard";
 import SoldButton from "../../components/Button/Solid";
 import { Layout } from "../../components/Stories";
 import Confirm from "../../components/Modal/DialogBox/Confirm";
-import ImageField from "../../components/Field/Image";
+import ImageFieldBox from "../../components/Field/Image";
 
 import useSettings from "../../process/Account/useSettings";
 
@@ -18,7 +18,8 @@ interface Props {
 }
 
 function Settings({ className, onSlidePrev, onSlideNext }: Props) {
-  const { Read, Delete, Modal, onDeleteAccount, onSignOut } = useSettings();
+  const { Read, Delete, Modal, ImageField, onDeleteAccount, onSignOut } =
+    useSettings();
 
   const name = Read?.data?.name;
   const email = Read?.data?.email;
@@ -33,7 +34,12 @@ function Settings({ className, onSlidePrev, onSlideNext }: Props) {
       }}
     >
       <Template className={`Settings ${className}`}>
-        <ImageField className="Settings-field" label="" />
+        <ImageFieldBox
+          className="Settings-field"
+          label=""
+          item={ImageField.item}
+          onChange={ImageField.onChange}
+        />
         <Typography className="Settings-name" type="subHeading" size={1}>
           {name}
         </Typography>
@@ -102,9 +108,9 @@ const Template = styled.div`
   align-items: center;
   .Settings-field {
     width: 100%;
-    border: solid 1px;
     display: flex;
     justify-content: flex-end;
+    margin-bottom: 10px;
   }
   .Settings-email {
     color: ${Gray[700]};
