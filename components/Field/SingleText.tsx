@@ -8,6 +8,7 @@ type Item = {
   value: string;
   placeholder: string;
   message: string;
+  maxSize?: undefined | number;
 };
 
 interface Props {
@@ -21,6 +22,7 @@ function SingleText({ className, label, item, onChange }: Props) {
   const [$value, $setValue] = useState("");
 
   const onChangeValue = (value: string) => {
+    if (item.maxSize && value.length > item.maxSize) return;
     onChange ? onChange({ ...item, value }) : $setValue(value);
   };
 
@@ -30,6 +32,8 @@ function SingleText({ className, label, item, onChange }: Props) {
       label={label}
       required={item.required}
       message={item.message}
+      currentSize={item.value.length}
+      maxSize={item.maxSize}
     >
       <Input {...item} value={item.value || $value} onChange={onChangeValue} />
     </Field>

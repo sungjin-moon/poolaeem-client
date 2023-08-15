@@ -89,6 +89,7 @@ export const Input = styled.div`
     width: 100%;
     line-height: 24px;
     letter-spacing: -0.16px;
+    color: ${Gray[700]};
   }
   input::placeholder {
     color: rgba(95, 92, 93, 0.36);

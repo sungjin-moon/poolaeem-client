@@ -106,13 +106,13 @@ function Settings({ className, onClose }: Props) {
       >
         <ChangeNameTemplate
           isOpen={ChangeNameModal.isOpen}
-          onClose={() => {
-            ChangeNameModal.onClose();
+          onClose={ChangeNameModal.onClose}
+          onPush={() =>
             Toast.onPush({
               status: "success",
               message: "내 정보가 변경되었어요",
-            });
-          }}
+            })
+          }
         />
       </NextModal>
 
@@ -143,6 +143,14 @@ const Main = styled.div`
     display: flex;
     justify-content: flex-end;
     margin-bottom: 10px;
+  }
+  .Main-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
   }
   .Main-email {
     color: ${Gray[700]};

@@ -20,7 +20,15 @@ function useSettings() {
   const DeleteAccountModal = useModal();
   const ChangeNameModal = useModal();
 
-  const ImageField = useField();
+  const ImageField = useField({
+    key: "Image",
+    required: true,
+    status: "default",
+    value: null,
+    placeholder: "",
+    message: "",
+    maxSize: 1000000,
+  });
 
   const userId = Read?.data?.id;
 
@@ -49,8 +57,16 @@ function useSettings() {
 
   const onChangeImage = (item: Item) => {
     if (Update.isLoading) return;
+    const currentSize: number = item.value.size || 0;
+    const maxSize: number = item.maxSize || 0;
+    if (currentSize > maxSize) {
+      return Toast.onPush({
+        status: "alert",
+        message: "최대 1mb 이하의 이미지를 업로드 해주세요",
+      });
+    }
 
-    Update.mutate(
+    return Update.mutate(
       { file: item.value.file },
       {
         onSuccess: (data) => {

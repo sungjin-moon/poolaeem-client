@@ -9,6 +9,7 @@ export interface Item {
   value: any;
   placeholder: string;
   message: string;
+  maxSize?: undefined | number;
 }
 
 const initialItem = {
@@ -39,6 +40,8 @@ function useField(customItem: Item = initialItem) {
       return {
         ...prevItem,
         value,
+        status: "default",
+        message: "",
       };
     });
   };

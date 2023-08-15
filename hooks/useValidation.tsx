@@ -31,7 +31,7 @@ function useValidation() {
 
   const onCheck = (item: Item) => {
     let nextItem = requiredCheck(item);
-
+    console.log(nextItem);
     return { ...item, ...nextItem };
   };
 

@@ -10,9 +10,10 @@ interface Props {
   className: string;
   isOpen: boolean;
   onClose: () => void;
+  onPush: () => void;
 }
 
-function ChangeName({ className, isOpen, onClose }: Props) {
+function ChangeName({ className, isOpen, onClose, onPush }: Props) {
   const { Read, NameField, onChangeName } = useChangeName();
 
   useEffect(() => {
@@ -27,7 +28,7 @@ function ChangeName({ className, isOpen, onClose }: Props) {
       <Header
         onClose={onClose}
         title="별명 변경"
-        action={{ name: "완료", handler: () => onChangeName(onClose) }}
+        action={{ name: "완료", handler: () => onChangeName(onClose, onPush) }}
       />
       <Main>
         <SingleTextField
@@ -45,6 +46,7 @@ const defaultProps = {
   className: "",
   isOpen: false,
   onClose: () => {},
+  onPush: () => {},
 };
 
 ChangeName.defaultProps = defaultProps;

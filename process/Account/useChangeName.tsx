@@ -17,9 +17,10 @@ function useChangeName() {
     value: "",
     placeholder: "별명을 작성해주세요",
     message: "",
+    maxSize: 30,
   });
 
-  const onChangeName = (callback: Callback = () => {}) => {
+  const onChangeName = (onClose: Callback, onPush: Callback) => {
     if (Update.isLoading) return;
 
     const name = NameField.getValue();
@@ -32,7 +33,8 @@ function useChangeName() {
             ...Read.data,
             ...data,
           });
-          callback();
+          onClose();
+          onPush();
         },
         onError: (error) => {},
       }

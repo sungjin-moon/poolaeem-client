@@ -59,7 +59,7 @@ function Image({ className, label, item, onChange }: Props) {
             size: file.size,
             src: JSON.stringify(base64),
           };
-          console.log(value);
+          console.log("!23", item);
           onChange ? onChange({ ...item, value }) : $setValue(value);
         };
       }

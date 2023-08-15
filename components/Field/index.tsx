@@ -2,6 +2,8 @@ import { ReactElement } from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
+import WarningSign from "../../assets/icons/$WarningSign.svg";
+
 import Typography from "../Typography/Pretendard";
 import Gray from "../Color/Gray";
 import Pink from "../Color/Pink";
@@ -13,10 +15,20 @@ interface Props {
   label: string;
   required: boolean;
   message: string;
+  currentSize?: undefined | number;
+  maxSize?: undefined | number;
   children: ReactElement;
 }
 
-function Basic({ className, label, required, message, children }: Props) {
+function Basic({
+  className,
+  label,
+  required,
+  message,
+  currentSize,
+  maxSize,
+  children,
+}: Props) {
   return (
     <Field className={`Field_Basic ${className}`}>
       {label && (
@@ -31,9 +43,25 @@ function Basic({ className, label, required, message, children }: Props) {
         </Typography>
       )}
       {children || <Input />}
-      <Typography className="Field_Basic-message" type="body" size={3}>
-        {message}
-      </Typography>
+      <div className="Field_Basic-bottom">
+        {message && (
+          <Message>
+            <div className="Message-wrapper">
+              <WarningSign className="Message-icon" />
+            </div>
+            <Typography className="Message-text" type="body" size={3}>
+              {message}
+            </Typography>
+          </Message>
+        )}
+        {maxSize && (
+          <MaxSize>
+            <Typography className="MaxSize-text" type="body" size={3}>
+              {`${currentSize}/${maxSize}`}
+            </Typography>
+          </MaxSize>
+        )}
+      </div>
     </Field>
   );
 }
@@ -43,6 +71,8 @@ const defaultProps = {
   label: "Label",
   required: true,
   message: "",
+  maxSize: undefined,
+  currentSize: undefined,
 };
 
 Basic.defaultProps = defaultProps;
@@ -54,9 +84,33 @@ export const Field = styled.div`
     }
     margin-bottom: 4px;
   }
-  .Field_Basic-message {
-    margin-top: 4px;
+  .Field_Basic-bottom {
+    display: flex;
+  }
+`;
+
+const Message = styled.div`
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  .Message-wrapper {
+    display: flex;
+  }
+  .Message-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 4px;
+  }
+  .Message-text {
     color: ${Pink[500]};
+  }
+`;
+
+const MaxSize = styled.div`
+  margin-top: 4px;
+  margin-left: auto;
+  .MaxSize-text {
+    color: rgba(95, 92, 93, 0.36);
   }
 `;
 
