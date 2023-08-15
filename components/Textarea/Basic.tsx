@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
+import TextareaAutosize from "react-textarea-autosize";
 
 import Gray from "../Color/Gray";
 import Pink from "../Color/Pink";
@@ -8,9 +9,10 @@ import Pink from "../Color/Pink";
 interface Props {
   className: string;
   placeholder: string;
-  type: string;
   status: string;
   value: undefined | string;
+  minRows?: undefined | number;
+  maxRows?: undefined | number;
   maxLength?: undefined | number;
   onChange: undefined | ((value: string) => void);
 }
@@ -18,24 +20,25 @@ interface Props {
 function Basic({
   className,
   placeholder,
-  type,
   status,
   value,
+  minRows,
+  maxRows,
   maxLength,
   onChange,
 }: Props) {
   const [isFocus, setFocus] = useState(false);
   const [$value, $setValue] = useState("");
 
-  const onChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeValue = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     event.preventDefault();
     const value = event.target.value;
     onChange ? onChange(value) : $setValue(value);
   };
 
   return (
-    <Input
-      className={`Input_Basic ${className}`}
+    <Textarea
+      className={`Textarea_Basic ${className}`}
       css={css({
         borderColor:
           status === "invalid"
@@ -45,27 +48,30 @@ function Basic({
             : "rgba(95, 92, 93, 0.18)",
       })}
     >
-      <input
-        className="Input_Basic-input"
+      <TextareaAutosize
+        className="Textarea_Basic-textarea"
         placeholder={placeholder}
+        value={value || $value}
+        minRows={minRows}
+        maxRows={maxRows}
         onFocus={() => setFocus(true)}
         onBlur={() => {
           setFocus(false);
         }}
-        value={value || $value}
+        style={{ width: "100%" }}
         onChange={onChangeValue}
-        type={type}
         maxLength={maxLength}
       />
-    </Input>
+    </Textarea>
   );
 }
 
 const defaultProps = {
   className: "",
   placeholder: "Placeholder",
-  type: null,
   status: "default",
+  minRows: 5,
+  maxRows: 7,
   maxLength: undefined,
   value: undefined,
   onChange: undefined,
@@ -73,7 +79,7 @@ const defaultProps = {
 
 Basic.defaultProps = defaultProps;
 
-export const Input = styled.div`
+export const Textarea = styled.div`
   display: flex;
   border-bottom: solid 1px;
   width: 100%;
@@ -81,7 +87,7 @@ export const Input = styled.div`
   border-color: rgba(95, 92, 93, 0.18);
   transition: 0.3s ease-in-out;
   padding: 8px 0px;
-  .Input_Basic-input {
+  .Textarea_Basic-textarea {
     padding: 0px;
     border: none;
     border-radius: inherit;
@@ -94,8 +100,9 @@ export const Input = styled.div`
     line-height: 24px;
     letter-spacing: -0.16px;
     color: ${Gray[700]};
+    resize: none;
   }
-  input::placeholder {
+  textarea::placeholder {
     color: rgba(95, 92, 93, 0.36);
   }
 `;

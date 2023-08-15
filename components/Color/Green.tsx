@@ -1,4 +1,4 @@
-export default {
+const Green = {
   50: "#E4FEEE",
   100: "#BEFCD4",
   200: "#8DFBB7",
@@ -8,3 +8,5 @@ export default {
   600: "#00DC59",
   700: "#00C74B",
 };
+
+export default Green;

@@ -9,7 +9,7 @@ export interface Item {
   value: any;
   placeholder: string;
   message: string;
-  maxSize?: undefined | number;
+  maxLength?: undefined | number;
 }
 
 const initialItem = {

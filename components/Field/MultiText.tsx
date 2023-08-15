@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Field from "./index";
-import Input from "../Input/Basic";
+import Textarea from "../Textarea/Basic";
 
 type Item = {
   required: boolean;
@@ -18,7 +18,7 @@ interface Props {
   onChange: undefined | ((item: Item) => void);
 }
 
-function SingleText({ className, label, item, onChange }: Props) {
+function MultiText({ className, label, item, onChange }: Props) {
   const [$value, $setValue] = useState("");
 
   const onChangeValue = (value: string) => {
@@ -35,7 +35,11 @@ function SingleText({ className, label, item, onChange }: Props) {
       currentLength={item.value.length}
       maxLength={item.maxLength}
     >
-      <Input {...item} value={item.value || $value} onChange={onChangeValue} />
+      <Textarea
+        {...item}
+        value={item.value || $value}
+        onChange={onChangeValue}
+      />
     </Field>
   );
 }
@@ -53,6 +57,6 @@ const defaultProps = {
   onChange: undefined,
 };
 
-SingleText.defaultProps = defaultProps;
+MultiText.defaultProps = defaultProps;
 
-export default SingleText;
+export default MultiText;

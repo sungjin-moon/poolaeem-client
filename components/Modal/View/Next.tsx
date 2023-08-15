@@ -10,6 +10,7 @@ import Typography from "../../Typography/Pretendard";
 
 interface Props {
   className: string;
+  animateType: string;
   modalRef: RefObject<HTMLInputElement>;
   children?: ReactElement;
   isOpen: boolean;
@@ -58,12 +59,20 @@ export const Header = ({
 
 function Next({
   className,
+  animateType,
   modalRef,
   children,
   isOpen,
   status,
   onClose,
 }: Props) {
+  const animate = () => {
+    if (animateType === "bottomToTop") {
+      return status === "fadeIn" ? "translateY(0px)" : "translateY(1000px)";
+    }
+    return status === "fadeIn" ? "translateX(0px)" : "translateX(800px)";
+  };
+
   return (
     <Background
       modalRef={modalRef}
@@ -74,8 +83,7 @@ function Next({
       <Container
         className={`Modal_Next ${className}`}
         css={css({
-          transform:
-            status === "fadeIn" ? "translateX(0px)" : "translateX(800px)",
+          transform: animate(),
         })}
       >
         {children}
@@ -86,6 +94,7 @@ function Next({
 
 const defaultProps = {
   className: "",
+  animateType: "rightToLeft",
   modalRef: null,
   isOpen: false,
   status: "init",

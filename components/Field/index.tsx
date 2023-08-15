@@ -15,8 +15,8 @@ interface Props {
   label: string;
   required: boolean;
   message: string;
-  currentSize?: undefined | number;
-  maxSize?: undefined | number;
+  currentLength?: undefined | number;
+  maxLength?: undefined | number;
   children: ReactElement;
 }
 
@@ -25,8 +25,8 @@ function Basic({
   label,
   required,
   message,
-  currentSize,
-  maxSize,
+  currentLength,
+  maxLength,
   children,
 }: Props) {
   return (
@@ -54,10 +54,10 @@ function Basic({
             </Typography>
           </Message>
         )}
-        {maxSize && (
+        {maxLength && (
           <MaxSize>
             <Typography className="MaxSize-text" type="body" size={3}>
-              {`${currentSize}/${maxSize}`}
+              {`${currentLength}/${maxLength}`}
             </Typography>
           </MaxSize>
         )}
@@ -71,8 +71,8 @@ const defaultProps = {
   label: "Label",
   required: true,
   message: "",
-  maxSize: undefined,
-  currentSize: undefined,
+  maxLength: undefined,
+  currentLength: undefined,
 };
 
 Basic.defaultProps = defaultProps;

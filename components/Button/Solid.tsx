@@ -165,6 +165,9 @@ export const Button = styled.button`
     width: 24px;
     height: 24px;
     margin-right: 6px;
+    path {
+      fill: ${Pink[50]};
+    }
   }
   .Button_Solid-spinner {
     width: 32px;

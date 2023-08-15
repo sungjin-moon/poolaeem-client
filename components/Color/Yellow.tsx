@@ -1,4 +1,4 @@
-export default {
+const Yellow = {
   50: "#FFF9E5",
   100: "#FFEEBD",
   200: "#FFE394",
@@ -8,3 +8,5 @@ export default {
   600: "#FEBA47",
   700: "#FBA843",
 };
+
+export default Yellow;

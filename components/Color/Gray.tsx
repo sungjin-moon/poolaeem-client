@@ -1,4 +1,4 @@
-export default {
+const Gray = {
   50: "#FFFFFF",
   100: "#F5F5F5",
   200: "#F0F0F0",
@@ -10,3 +10,5 @@ export default {
   800: "#4C494A",
   900: "#2E2C2C",
 };
+
+export default Gray;

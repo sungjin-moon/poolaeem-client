@@ -6,6 +6,7 @@ import Logo from "../assets/icons/Logo.svg";
 import Gray from "../components/Color/Gray";
 import UserImage from "../components/Image/User";
 import NextModal from "../components/Modal/View/Next";
+
 import SettingsTemplate from "../templates/Account/Settings";
 
 import useAccount from "../process/Account/useAccount";
