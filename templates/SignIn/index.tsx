@@ -5,13 +5,13 @@ import CheckSign from "../../assets/icons/$CheckSign.svg";
 import Typography from "../../components/Typography/Pretendard";
 import SolidButton from "../../components/Button/Solid";
 import Pink from "../../components/Color/Pink";
-import Confirm from "../../components/Modal/DialogBox/Confirm";
+import ConfirmModal from "../../components/Modal/DialogBox/Confirm";
 
 import SignInBackground from "../../assets/icons/SignInBackground.svg";
 import Logo from "../../assets/icons/Logo.svg";
 import Google from "../../assets/icons/Google.svg";
 
-import useSignIn from "../../process/SignIn/useSignIn";
+import useSignIn from "../../process/Account/useSignIn";
 
 interface Props {}
 
@@ -35,7 +35,7 @@ function SignIn() {
           © team 901. All rights reserved.
         </Typography>
       </div>
-      <Confirm
+      <ConfirmModal
         Icon={<CheckSign />}
         title="약관 동의"
         description="만 14세 이상이며 개인정보 수집(이메일 주소, 이름)에 동의하시나요?"

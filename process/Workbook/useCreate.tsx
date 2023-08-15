@@ -3,12 +3,10 @@ import useField from "../../hooks/useField";
 import useModal from "../../hooks/useModal";
 
 import { queryClient } from "../../queries";
-import useRead from "../../queries/Account/useRead";
-import { useUpdateName } from "../../queries/Account/useUpdate";
+import useCreate from "../../queries/Workbook/useCreate";
 
-function useCreate() {
-  const Read = useRead();
-  const Update = useUpdateName();
+function useCreateWorkbook() {
+  const Create = useCreate();
   const Modal = useModal();
 
   type Callback = () => void;
@@ -34,33 +32,32 @@ function useCreate() {
   });
 
   const onCreate = (onClose: Callback, onPush: Callback) => {
-    if (Update.isLoading) return;
+    if (Create.isLoading) return;
+    const nameChecked = NameField.onCheckValue();
+    const descriptionChecked = DescriptionField.onCheckValue();
+    if (nameChecked && descriptionChecked) {
+      const name = NameField.getValue();
+      const description = DescriptionField.getValue();
 
-    const name = NameField.getValue();
-
-    Update.mutate(
-      { name },
-      {
-        onSuccess: (data) => {
-          queryClient.setQueryData(["account", "profile"], {
-            ...Read.data,
-            ...data,
-          });
-          onClose();
-          onPush();
-        },
-        onError: (error) => {},
-      }
-    );
+      Create.mutate(
+        { name, description },
+        {
+          onSuccess: (data) => {
+            onClose();
+            onPush();
+          },
+          onError: (error) => {},
+        }
+      );
+    }
   };
 
   return {
     Modal,
-    Read,
     NameField,
     DescriptionField,
     onCreate,
   };
 }
 
-export default useCreate;
+export default useCreateWorkbook;

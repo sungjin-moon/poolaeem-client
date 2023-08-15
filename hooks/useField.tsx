@@ -1,4 +1,4 @@
-import { useState, useReducer, useCallback, ReactElement } from "react";
+import { useState } from "react";
 
 import useValidation from "./useValidation";
 
@@ -10,6 +10,7 @@ export interface Item {
   placeholder: string;
   message: string;
   maxLength?: undefined | number;
+  maxSize?: undefined | number;
 }
 
 const initialItem = {
@@ -33,6 +34,12 @@ function useField(customItem: Item = initialItem) {
     }
 
     setItem(nextItem);
+  };
+
+  const onCheckValue = () => {
+    const nextItem = onCheck(item);
+    setItem(nextItem);
+    return nextItem.status === "success";
   };
 
   const setValue = (value: any) => {
@@ -62,6 +69,7 @@ function useField(customItem: Item = initialItem) {
   return {
     item,
     onChange,
+    onCheckValue,
     setValue,
     getValue,
     updateItem,

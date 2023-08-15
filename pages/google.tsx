@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 
 import Spinner from "../components/Loader/Spinner";
 
-import useSignIn from "../process/SignIn/useSignIn";
+import useSignIn from "../process/Account/useSignIn";
 
 function Google() {
   const { Router, onSignIn } = useSignIn();
