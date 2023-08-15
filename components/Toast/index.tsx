@@ -7,17 +7,15 @@ import WarningSign from "../../assets/icons/$WarningSign.svg";
 import CheckSign from "../../assets/icons/$CheckSign.svg";
 
 import Gray from "../Color/Gray";
-import Blue from "../Color/Blue";
-import Pink from "../Color/Pink";
 import Typography from "../Typography/Pretendard";
 
 interface BoxProps {
   className: string;
-  description: string;
+  message: string;
   status: string;
 }
 
-function Box({ className, description, status }: BoxProps) {
+function Box({ className, message, status }: BoxProps) {
   type StatusTypes = {
     [key: string]: {
       Icon: ReactNode;
@@ -41,8 +39,8 @@ function Box({ className, description, status }: BoxProps) {
   return (
     <ToastBox className={`Toast ${className}`}>
       {_status.Icon}
-      <Typography className="Toast-description" type="body" size={4}>
-        {description}
+      <Typography className="Toast-message" type="body" size={4}>
+        {message}
       </Typography>
     </ToastBox>
   );
@@ -50,7 +48,7 @@ function Box({ className, description, status }: BoxProps) {
 
 Box.defaultProps = {
   className: "",
-  description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   status: "noti",
 };
 
@@ -60,7 +58,7 @@ interface Props {
 }
 
 type Toast = {
-  description: string;
+  message: string;
   status: string;
 };
 
@@ -70,7 +68,7 @@ function Toast({ className, list }: Props) {
       {list.map((toast, index) => {
         return (
           <div className="effect" key={index}>
-            <Box description={toast.description} status={toast.status} />
+            <Box message={toast.message} status={toast.status} />
           </div>
         );
       })}
@@ -135,7 +133,7 @@ const ToastBox = styled.div`
   }
   .invalid {
   }
-  .Toast-description {
+  .Toast-message {
     margin-left: 6px;
     color: ${Gray[50]};
     font-weight: 400;

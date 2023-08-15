@@ -1,34 +1,45 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
 
-First, run the development server:
+package install:
+
+```bash
+npm install
+# or
+yarn
+```
+
+run the development server:
 
 ```bash
 npm run dev
 # or
 yarn dev
+```
+
+run the production server:
+
+```bash
+npm run build
+npm start
 # or
-pnpm dev
+yarn build
+yarn start
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 기술스택
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- 언어: Javascript / Typescript
+- 코어: React / Next
+- 상태관리: React-query
+- 스타일: Emotion
 
-## Learn More
+## 폴더구조
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- /components: 컴포넌트(UI)를 관리합니다.
+- /hooks: 기능 모듈을 관리합니다.
+- /pages: 페이지들을 관리하며 전체적인 라우팅을 구성하고, 서버사이드 로직들을 관리합니다.
+- /templates: 페이지에서 사용되는 화면들을 관리하며, 레이아웃 구성 및 컴포넌트를 조합하여 템플릿 단위로 관리됩니다.
+- /process: 각각의 템플릿에서 사용되며, 각각의 사용자 비즈니스 로직들을 처리하고 관리합니다.
+- /queries: 서버사이드 상태를 관리합니다. (API 로직 처리 관여)

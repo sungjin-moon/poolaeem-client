@@ -1,11 +1,12 @@
-import { ReactElement } from "react";
+import { ReactElement, useRef } from "react";
 import styled from "@emotion/styled";
 
 import Logo from "../assets/icons/Logo.svg";
 
 import Gray from "../components/Color/Gray";
 import UserImage from "../components/Image/User";
-import StoriesBox from "../components/Stories";
+import NextModal from "../components/Modal/View/Next";
+import SettingsTemplate from "../templates/Account/Settings";
 
 import useAccount from "../process/Account/useAccount";
 
@@ -16,18 +17,25 @@ interface Props {
 function Layout({ children }: Props) {
   const Account = useAccount();
 
-  const { Read, Stories } = Account;
+  const { Read, Modal } = Account;
 
   return (
     <Template>
       <Header>
         <Logo className="Header-logo" />
         {Read?.data && (
-          <UserImage className="Header-user" onClick={Stories.onOpen} />
+          <UserImage className="Header-user" onClick={Modal.onOpen} />
         )}
       </Header>
       {children}
-      <StoriesBox {...Stories} />
+      <NextModal
+        modalRef={Modal.ref}
+        isOpen={Modal.isOpen}
+        status={Modal.status}
+        onClose={Modal.onClose}
+      >
+        <SettingsTemplate onClose={Modal.onClose} />
+      </NextModal>
     </Template>
   );
 }
@@ -35,13 +43,16 @@ function Layout({ children }: Props) {
 const Template = styled.div`
   position: relative;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
   background: ${Gray[50]};
   height: 100%;
+  .Template-view {
+    transition: all 0.2s ease-in-out;
+  }
 `;
 
 const Header = styled.div`
-  height: 48px;
+  min-height: 48px;
   display: flex;
   justify-content: space-between;
   align-items: center;

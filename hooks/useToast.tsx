@@ -2,12 +2,12 @@ import { useState, useEffect, useCallback } from "react";
 import { produce } from "immer";
 
 const initialToast = {
-  description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   status: "noti",
 };
 
 export type Toast = {
-  description: string;
+  message: string;
   status: string;
 };
 

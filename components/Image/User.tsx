@@ -12,7 +12,7 @@ interface Props {
 function User({ className, src, onClick }: Props) {
   return (
     <Image className={`Image_User ${className}`} onClick={onClick}>
-      {src && <img src={JSON.parse(src)} />}
+      {src && <img src={src} />}
       {!src && <UserIcon className="Image_User-icon" />}
     </Image>
   );

@@ -19,7 +19,10 @@ export const getProfile = async (params: Params = initialParams) => {
   const { data } = response;
   if (data) {
     return {
-      ...data?.data,
+      id: data?.data?.userId || "",
+      name: data?.data?.name || "",
+      email: data?.data?.email || "",
+      image: data?.data?.profileImageUrl || "",
     };
   }
 
