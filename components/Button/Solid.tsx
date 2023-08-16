@@ -14,6 +14,7 @@ interface Props {
   theme: string;
   status: string;
   Icon: ReactNode;
+  iconType: string;
   onClick: (event: object) => void;
 }
 
@@ -89,6 +90,7 @@ function Solid({
   status,
   onClick,
   Icon,
+  iconType,
 }: Props) {
   let _size = buttonSize[size] || buttonSize[1];
   let _theme = buttonTheme[theme] || buttonTheme["pink"];
@@ -107,6 +109,11 @@ function Solid({
         },
         opacity: status === "disabled" ? 0.4 : 1,
         cursor: status === "disabled" ? "auto" : "pointer",
+        svg: {
+          path: {
+            fill: iconType === "emoji" ? "auto" : Pink[50],
+          },
+        },
       })}
       onClick={(event) => {
         event.preventDefault();
@@ -143,6 +150,7 @@ const defaultProps = {
   theme: "pink",
   status: "default",
   Icon: null,
+  iconType: "emoji",
   onClick: () => {},
 };
 
@@ -165,9 +173,6 @@ export const Button = styled.button`
     width: 24px;
     height: 24px;
     margin-right: 6px;
-    path {
-      fill: ${Pink[50]};
-    }
   }
   .Button_Solid-spinner {
     width: 32px;

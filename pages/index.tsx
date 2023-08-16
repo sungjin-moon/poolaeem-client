@@ -1,7 +1,7 @@
-import HomeTemplate from "../templates/Home";
+import WorkbookListTemplate from "../templates/Workbook/List";
 
 function Home() {
-  return <HomeTemplate />;
+  return <WorkbookListTemplate />;
 }
 
 export default Home;

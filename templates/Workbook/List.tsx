@@ -7,15 +7,15 @@ import Typography from "../../components/Typography/Pretendard";
 import SolidButton from "../../components/Button/Solid";
 import NextModal from "../../components/Modal/View/Next";
 
-import Layout from "../../templates";
+import Layout from "..";
 
-import CreateWorkbookTemplate from "../../templates/Workbook/Create";
+import CreateWorkbookTemplate from "./Create";
 
 import useModal from "../../hooks/useModal";
 
 interface Props {}
 
-function Home() {
+function List() {
   const Modal = useModal();
   return (
     <Layout>
@@ -87,4 +87,4 @@ const EmptyBox = styled.div`
   }
 `;
 
-export default Home;
+export default List;
