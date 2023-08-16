@@ -156,7 +156,7 @@ const defaultProps = {
 
 Solid.defaultProps = defaultProps;
 
-export const Button = styled.button`
+const Button = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;

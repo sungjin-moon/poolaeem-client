@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { css } from "@emotion/react";
 
 import EmptyPresent from "../../assets/icons/$EmptyPresent.svg";
 import Edit from "../../assets/icons/Edit.svg";
@@ -6,55 +7,126 @@ import Edit from "../../assets/icons/Edit.svg";
 import Typography from "../../components/Typography/Pretendard";
 import SolidButton from "../../components/Button/Solid";
 import NextModal from "../../components/Modal/View/Next";
+import Spinner from "../../components/Loader/Spinner";
+import WorkbookCard from "../../components/Card/Workbook";
+import FloatButton from "../../components/Button/Float";
 
-import Layout from "..";
+import Layout from "../";
 
 import CreateWorkbookTemplate from "./Create";
+import UpdateWorkbookTemplate from "./Update";
 
-import useModal from "../../hooks/useModal";
+import useWorkbookList from "../../process/Workbook/useList";
 
 interface Props {}
 
 function List() {
-  const Modal = useModal();
+  const { CreateModal, UpdateModal, List, InfiniteScroll } = useWorkbookList();
+
+  const { isFetched, isRefetching, hasNextPage } = List;
+  const pages = List.data?.pages || [];
+  const length = pages?.[pages?.length - 1]?.list?.length || 0;
   return (
     <Layout>
       <Template>
-        <EmptyBox>
-          <div className="EmptyBox-wrapper">
-            <EmptyPresent className="EmptyBox-wrapper-icon" />
-            <Typography
-              className="EmptyBox-wrapper-title"
-              type="subHeading"
-              size={1}
-            >
-              아직 문제집이 없어요
-            </Typography>
-            <Typography
-              className="EmptyBox-wrapper-description"
-              type="body"
-              size={3}
-            >
-              지금 바로 새로운 문제집을 만들어보세요
-            </Typography>
-            <SolidButton
-              className="EmptyBox-wrapper-button"
-              Icon={<Edit />}
-              placeholder="문제집 만들기"
-              onClick={Modal.onOpen}
+        {!isFetched && (
+          <div className="Template-loading">
+            <Spinner className="Template-loading-spinner" />
+          </div>
+        )}
+        {isFetched && length > 0 && (
+          <div className="Template-list">
+            {pages.map((page, pageIndex) => {
+              const lastPageIndex = pages.length - 1;
+              const isLastPage = lastPageIndex === pageIndex;
+              return page.list.map((workbook, workbookIndex) => {
+                return (
+                  <WorkbookCard
+                    key={workbookIndex}
+                    onClick={UpdateModal.onOpen}
+                    name={workbook.name}
+                    createdAt={workbook.createdAt}
+                    problemCount={workbook.problemCount}
+                    solvedCount={workbook.solvedCount}
+                    ScrollView={
+                      <ScrollView
+                        ref={InfiniteScroll.ref}
+                        css={css({
+                          display:
+                            hasNextPage === true &&
+                            isLastPage &&
+                            page.list.length - 1 === workbookIndex
+                              ? "block"
+                              : "none",
+                        })}
+                      />
+                    }
+                  />
+                );
+              });
+            })}
+            <FloatButton
+              className="Template-list-button"
+              onClick={CreateModal.onOpen}
             />
           </div>
-        </EmptyBox>
+        )}
+        {isFetched && length === 0 && (
+          <EmptyBox>
+            <div className="EmptyBox-wrapper">
+              <EmptyPresent className="EmptyBox-wrapper-icon" />
+              <Typography
+                className="EmptyBox-wrapper-title"
+                type="subHeading"
+                size={1}
+              >
+                아직 문제집이 없어요
+              </Typography>
+              <Typography
+                className="EmptyBox-wrapper-description"
+                type="body"
+                size={3}
+              >
+                지금 바로 새로운 문제집을 만들어보세요
+              </Typography>
+              <SolidButton
+                className="EmptyBox-wrapper-button"
+                Icon={<Edit />}
+                placeholder="문제집 만들기"
+                iconType="icon"
+                onClick={CreateModal.onOpen}
+              />
+            </div>
+          </EmptyBox>
+        )}
+
+        {isRefetching && (
+          <div className="Template-loading">
+            <Spinner className="Template-loading-spinner" />
+          </div>
+        )}
         <NextModal
           animateType="bottomToTop"
-          modalRef={Modal.ref}
-          isOpen={Modal.isOpen}
-          status={Modal.status}
-          onClose={Modal.onClose}
+          modalRef={CreateModal.ref}
+          isOpen={CreateModal.isOpen}
+          status={CreateModal.status}
+          onClose={CreateModal.onClose}
         >
           <CreateWorkbookTemplate
-            isOpen={Modal.isOpen}
-            onClose={Modal.onClose}
+            isOpen={CreateModal.isOpen}
+            onClose={CreateModal.onClose}
+          />
+        </NextModal>
+        <NextModal
+          animateType="rightToLeft"
+          modalRef={UpdateModal.ref}
+          isOpen={UpdateModal.isOpen}
+          status={UpdateModal.status}
+          onClose={UpdateModal.onClose}
+        >
+          <UpdateWorkbookTemplate
+            isOpen={UpdateModal.isOpen}
+            onClose={UpdateModal.onClose}
           />
         </NextModal>
       </Template>
@@ -65,6 +137,24 @@ function List() {
 const Template = styled.div`
   height: calc(100% - 48px);
   overflow-y: auto;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  .Template-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 0px;
+  }
+  .Template-list {
+    padding: 12px 8px;
+    .Template-list-button {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+      margin: 20px;
+    }
+  }
 `;
 
 const EmptyBox = styled.div`
@@ -85,6 +175,10 @@ const EmptyBox = styled.div`
       margin-top: 24px;
     }
   }
+`;
+
+const ScrollView = styled.div`
+  height: 1px;
 `;
 
 export default List;
