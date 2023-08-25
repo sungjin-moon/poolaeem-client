@@ -4,6 +4,7 @@ import { debounce } from "lodash";
 function useModal(initialIsOpen = false) {
   const [isOpen, setOpen] = useState(initialIsOpen);
   const [status, setStatus] = useState("init");
+  const [data, setData] = useState<any>({});
   const ref = useRef(null);
 
   useEffect(() => {
@@ -31,7 +32,8 @@ function useModal(initialIsOpen = false) {
     return setOpen(false);
   }, 200);
 
-  const onOpen = () => {
+  const onOpen = (updateData: object | undefined = undefined) => {
+    if (updateData) setData(updateData);
     return setOpen(true);
   };
 
@@ -41,6 +43,7 @@ function useModal(initialIsOpen = false) {
 
   return {
     ref,
+    data,
     isOpen,
     status,
     onFadeIn,

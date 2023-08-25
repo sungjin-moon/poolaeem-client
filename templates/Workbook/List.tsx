@@ -10,6 +10,7 @@ import NextModal from "../../components/Modal/View/Next";
 import Spinner from "../../components/Loader/Spinner";
 import WorkbookCard from "../../components/Card/Workbook";
 import FloatButton from "../../components/Button/Float";
+import ToastBox from "../../components/Toast";
 
 import Layout from "../";
 
@@ -21,11 +22,13 @@ import useWorkbookList from "../../process/Workbook/useList";
 interface Props {}
 
 function List() {
-  const { CreateModal, UpdateModal, List, InfiniteScroll } = useWorkbookList();
+  const { CreateModal, UpdateModal, List, InfiniteScroll, Toast } =
+    useWorkbookList();
 
   const { isFetched, isRefetching, hasNextPage } = List;
   const pages = List.data?.pages || [];
   const length = pages?.[pages?.length - 1]?.list?.length || 0;
+
   return (
     <Layout>
       <Template>
@@ -42,8 +45,8 @@ function List() {
               return page.list.map((workbook, workbookIndex) => {
                 return (
                   <WorkbookCard
-                    key={workbookIndex}
-                    onClick={UpdateModal.onOpen}
+                    key={workbook.id}
+                    onClick={() => UpdateModal.onOpen(workbook)}
                     name={workbook.name}
                     createdAt={workbook.createdAt}
                     problemCount={workbook.problemCount}
@@ -115,6 +118,12 @@ function List() {
           <CreateWorkbookTemplate
             isOpen={CreateModal.isOpen}
             onClose={CreateModal.onClose}
+            onPush={() => {
+              Toast.onPush({
+                status: "success",
+                message: "문제집이 만들어졌어요",
+              });
+            }}
           />
         </NextModal>
         <NextModal
@@ -125,10 +134,22 @@ function List() {
           onClose={UpdateModal.onClose}
         >
           <UpdateWorkbookTemplate
+            id={UpdateModal.data?.id}
+            name={UpdateModal.data?.name}
+            description={UpdateModal.data?.description}
+            createdAt={UpdateModal.data?.createdAt}
             isOpen={UpdateModal.isOpen}
             onClose={UpdateModal.onClose}
+            onPush={() =>
+              Toast.onPush({
+                status: "noti",
+                message: "문제집이 삭제되었어요",
+              })
+            }
+            isRefetching={isRefetching}
           />
         </NextModal>
+        <ToastBox list={Toast.list} />
       </Template>
     </Layout>
   );

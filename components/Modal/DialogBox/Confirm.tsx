@@ -135,9 +135,12 @@ export const Container = styled.div`
     width: 64px;
     height: 64px;
   }
+  .Modal_Confirm-title {
+    margin: 4px 0px;
+  }
   .Modal_Confirm-title,
   .Modal_Confirm-description {
-    color: ${Gray[600]};
+    color: ${Gray[700]};
     text-align: center;
   }
   .Modal_Confirm-buttons {

@@ -23,7 +23,7 @@ function useCreateWorkbook() {
 
   const DescriptionField = useField({
     key: "Name",
-    required: true,
+    required: false,
     status: "default",
     value: "",
     placeholder: "문제집에 대한 설명을 작성해주세요",
@@ -43,6 +43,7 @@ function useCreateWorkbook() {
         { name, description },
         {
           onSuccess: (data) => {
+            queryClient.invalidateQueries("workbookList");
             onClose();
             onPush();
           },

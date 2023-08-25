@@ -25,7 +25,7 @@ interface HeaderProps {
     name: string;
     handler: () => void;
   };
-  onClose?: () => void;
+  onClose?: (data: undefined) => void;
 }
 
 export const Header = ({
@@ -39,7 +39,7 @@ export const Header = ({
 }: HeaderProps) => {
   return (
     <HeaderBox className={`HeaderBox ${className}`}>
-      <LeftArrow onClick={onClose} />
+      <LeftArrow onClick={() => onClose(undefined)} />
       <Typography className="HeaderBox-title" type="caption" size={1}>
         {title}
       </Typography>

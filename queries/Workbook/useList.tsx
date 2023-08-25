@@ -7,6 +7,7 @@ import { ServerPayload } from "./types";
 type Workbook = {
   id: string;
   name: string;
+  description: string;
   problemCount: number;
   solvedCount: number;
   createdAt: string;
@@ -24,14 +25,24 @@ const initialPayload: ClientPayload = {
   list: [],
 };
 
-export const getList = async (page: number = 1) => {
+type Config = {
+  params: {
+    size: number;
+    lastId?: string;
+  };
+};
+
+export const getList = async (lastId = "") => {
   const url = `${API}/api/workbooks`;
-  const config = {
+  const config: Config = {
     params: {
       size: 10,
-      page,
     },
   };
+  console.log(lastId);
+  if (lastId) {
+    config.params.lastId = lastId;
+  }
 
   const response = await axios.get(url, config);
   const status: number = response.status;
@@ -47,6 +58,7 @@ export const getList = async (page: number = 1) => {
           return {
             id: workbook?.workbookId || "",
             name: workbook?.name || "",
+            description: workbook?.description || "",
             problemCount: workbook?.problemCount || 0,
             solvedCount: workbook?.solvedCount || 0,
             createdAt:
@@ -63,17 +75,26 @@ export const getList = async (page: number = 1) => {
 export default function useList(params = {}, options = {}) {
   const payload = useInfiniteQuery(
     ["workbookList"],
-    ({ pageParam }) => getList(pageParam),
+    ({ pageParam }) => {
+      const lastId = pageParam?.lastId || "";
+      return getList(lastId);
+    },
     {
       ...options,
       // refetchOnMount: false,
       refetchOnWindowFocus: false,
       staleTime: 500000,
       getNextPageParam: (lastPage, allPage) => {
+        const list = lastPage?.list;
+        const lastItem = list?.[list?.length - 1];
+        const lastId = lastItem?.id || "";
+
         if (lastPage.hasNext === false) {
           return undefined;
         }
-        return allPage.length + 1;
+        return {
+          lastId,
+        };
       },
     }
   );

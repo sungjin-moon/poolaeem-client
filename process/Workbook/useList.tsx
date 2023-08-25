@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 import useModal from "../../hooks/useModal";
 import useInfiniteScroll from "../../hooks/useInfiniteScroll";
+import useToast from "../../hooks/useToast";
 
 import { queryClient } from "../../queries";
 import useList from "../../queries/Workbook/useList";
@@ -10,6 +11,7 @@ function useWorkbookList() {
   const CreateModal = useModal();
   const UpdateModal = useModal();
   const InfiniteScroll = useInfiniteScroll();
+  const Toast = useToast();
 
   const { onScrollBottom } = InfiniteScroll;
 
@@ -32,6 +34,7 @@ function useWorkbookList() {
     UpdateModal,
     List,
     InfiniteScroll,
+    Toast,
   };
 }
 

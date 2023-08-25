@@ -1,15 +1,22 @@
-import useField from "../../hooks/useField";
+import { useState } from "react";
+import useField from "../../../hooks/useField";
 
-import useModal from "../../hooks/useModal";
+import useModal from "../../../hooks/useModal";
 
-import { queryClient } from "../../queries";
-import useCreate from "../../queries/Workbook/useCreate";
+import { queryClient } from "../../../queries";
+import { useUpdateInfo } from "../../../queries/Workbook/useUpdate";
 
-function useCreateWorkbook() {
-  const Create = useCreate();
-  const Modal = useModal();
+type Data = {
+  id: string;
+  name: string;
+  description: string;
+};
 
-  type Callback = () => void;
+type onClose = (data: undefined | Data) => void;
+type onPush = () => void;
+
+function useUpdate() {
+  const UpdateInfo = useUpdateInfo();
 
   const NameField = useField({
     key: "Name",
@@ -23,7 +30,7 @@ function useCreateWorkbook() {
 
   const DescriptionField = useField({
     key: "Name",
-    required: true,
+    required: false,
     status: "default",
     value: "",
     placeholder: "문제집에 대한 설명을 작성해주세요",
@@ -31,19 +38,20 @@ function useCreateWorkbook() {
     maxLength: 300,
   });
 
-  const onCreate = (onClose: Callback, onPush: Callback) => {
-    if (Create.isLoading) return;
+  const onUpdate = (id: string = "", onClose: onClose, onPush: onPush) => {
+    if (UpdateInfo.isLoading) return;
     const nameChecked = NameField.onCheckValue();
     const descriptionChecked = DescriptionField.onCheckValue();
     if (nameChecked && descriptionChecked) {
       const name = NameField.getValue();
       const description = DescriptionField.getValue();
 
-      Create.mutate(
-        { name, description },
+      UpdateInfo.mutate(
+        { id, name, description },
         {
           onSuccess: (data) => {
-            onClose();
+            queryClient.invalidateQueries("workbookList");
+            onClose({ id, name, description });
             onPush();
           },
           onError: (error) => {},
@@ -53,11 +61,11 @@ function useCreateWorkbook() {
   };
 
   return {
-    Modal,
+    UpdateInfo,
     NameField,
     DescriptionField,
-    onCreate,
+    onUpdate,
   };
 }
 
-export default useCreateWorkbook;
+export default useUpdate;

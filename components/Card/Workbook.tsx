@@ -52,7 +52,7 @@ function Workbook({
         <Chip
           className="WorkBookCard-bottom-chip"
           theme="lightPink"
-          name={`${solvedCount}먕 풀이`}
+          name={`${solvedCount}명 풀이`}
         />
         <RightArrow className="WorkBookCard-bottom-icon" />
       </div>

@@ -175,10 +175,10 @@ const Button = styled.button`
     margin-right: 6px;
   }
   .Button_Solid-spinner {
-    width: 32px;
-    height: 32px;
-    border: 4px solid ${Gray[400]};
-    border-top: 4px solid ${Gray[50]};
+    width: 24px;
+    height: 24px;
+    border: 2px solid ${Pink[400]};
+    border-top: 2px solid ${Gray[50]};
   }
   .Button_Solid-placeholder {
   }
