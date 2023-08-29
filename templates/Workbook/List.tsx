@@ -146,7 +146,6 @@ function List() {
                 message: "문제집이 삭제되었어요",
               })
             }
-            isRefetching={isRefetching}
           />
         </NextModal>
         <ToastBox list={Toast.list} />

@@ -41,6 +41,7 @@ instance.interceptors.response.use(
       const session = cookies.get("session") || null;
       const payload = await refreshAccessToken(session?.refreshToken);
       cookies.set("session", { ...session, accessToken: payload?.accessToken });
+      return instance(err.config);
     }
     return Promise.reject(err);
   }

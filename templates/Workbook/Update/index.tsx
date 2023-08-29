@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { css } from "@emotion/react";
 import { useState, useEffect } from "react";
 
 import Edit from "../../../assets/icons/Edit.svg";
@@ -14,6 +15,7 @@ import NextModal from "../../../components/Modal/View/Next";
 import ConfirmModal from "../../../components/Modal/DialogBox/Confirm";
 import Menu from "../../../components/Menu/Basic";
 import ToastBox from "../../../components/Toast";
+import Spinner from "../../../components/Loader/Spinner";
 
 import UpdateInfoTemplate from "./UpdateInfo";
 
@@ -26,7 +28,6 @@ interface Props {
   description: string;
   createdAt: string;
   isOpen: boolean;
-  isRefetching: boolean;
   onClose: () => void;
   onPush: () => void;
 }
@@ -36,10 +37,31 @@ interface SettingsProps {
   onDelete: () => void;
 }
 
+interface SolvedHistoriesProps {
+  isFetched: boolean;
+  isRefetching: boolean;
+  pages: Pages[];
+  length: number;
+}
+
 type Data = {
   id: string;
   name: string;
   description: string;
+};
+
+type SolvedHistory = {
+  id: string;
+  userName: string;
+  questionCount: number;
+  correctCount: number;
+  solvedAt: string;
+};
+
+type Pages = {
+  total: number;
+  hasNext: boolean;
+  list: SolvedHistory[];
 };
 
 const Settings = ({ onOpenInfo, onDelete }: SettingsProps) => {
@@ -61,6 +83,86 @@ const Settings = ({ onOpenInfo, onDelete }: SettingsProps) => {
   );
 };
 
+const SolvedHistories = ({
+  isFetched,
+  isRefetching,
+  pages,
+  length,
+}: SolvedHistoriesProps) => {
+  return (
+    <div className="Main-solvedHistories">
+      {!isFetched && (
+        <div className="Main-solvedHistories-loading">
+          <Spinner className="Main-solvedHistories-loading-spinner" />
+        </div>
+      )}
+      {isFetched && length > 0 && (
+        <Table>
+          <div className="Table-column">
+            <Typography className="Table-column-name" type="body" size={6}>
+              별명
+            </Typography>
+            <Typography className="Table-column-name" type="body" size={6}>
+              풀이날짜
+            </Typography>
+            <Typography className="Table-column-name" type="body" size={6}>
+              문항
+            </Typography>
+          </div>
+          {pages.map((page, pageIndex) => {
+            const lastPageIndex = pages.length - 1;
+            const isLastPage = lastPageIndex === pageIndex;
+            return page.list.map((solvedHistory) => {
+              return (
+                <div className="Table-row" key={solvedHistory.id}>
+                  {/* <ScrollView
+                        ref={InfiniteScroll.ref}
+                        css={css({
+                          display:
+                            hasNextPage === true &&
+                            isLastPage &&
+                            page.list.length - 1 === workbookIndex
+                              ? "block"
+                              : "none",
+                        })}
+                      /> */}
+                  <Typography
+                    className="Table-row-name"
+                    type="caption"
+                    size={6}
+                  >
+                    {solvedHistory.userName}
+                  </Typography>
+                  <Typography
+                    className="Table-row-name"
+                    type="caption"
+                    size={6}
+                  >
+                    {solvedHistory.solvedAt}
+                  </Typography>
+                  <Typography
+                    className="Table-row-name"
+                    type="caption"
+                    size={6}
+                  >
+                    {`${solvedHistory.correctCount}/${solvedHistory.questionCount} 문항`}
+                  </Typography>
+                </div>
+              );
+            });
+          })}
+        </Table>
+      )}
+
+      {isRefetching && (
+        <div className="Main-solvedHistories-loading">
+          <Spinner className="Main-solvedHistories-loading-spinner" />
+        </div>
+      )}
+    </div>
+  );
+};
+
 function UpdateWorkbook({
   className,
   id,
@@ -68,7 +170,6 @@ function UpdateWorkbook({
   description,
   createdAt,
   isOpen,
-  isRefetching,
   onClose,
   onPush,
 }: Props) {
@@ -77,10 +178,22 @@ function UpdateWorkbook({
     name: "",
     description: "",
   });
-  const Update = useUpdate();
-  const { UpdateInfoModal, DeleteModal, Toast, Delete, onDelete } = Update;
+  const Update = useUpdate(id);
+  const {
+    UpdateInfoModal,
+    DeleteModal,
+    Toast,
+    Delete,
+    SolvedHistoryList,
+    onDelete,
+  } = Update;
   const { tabs, tab, setTab } = Update.Tabs;
 
+  const { isFetched, isRefetching } = SolvedHistoryList;
+  const pages = SolvedHistoryList.data?.pages || [];
+  const length = pages?.[pages?.length - 1]?.list?.length || 0;
+
+  console.log(SolvedHistoryList);
   useEffect(() => {
     if (isOpen === true) {
       setData({ id, name, description });
@@ -118,6 +231,14 @@ function UpdateWorkbook({
               UpdateInfoModal.onOpen();
             }}
             onDelete={DeleteModal.onOpen}
+          />
+        )}
+        {tab.id === "solvedHisotries" && (
+          <SolvedHistories
+            isFetched={isFetched}
+            isRefetching={isRefetching}
+            pages={pages}
+            length={length}
           />
         )}
       </Main>
@@ -178,7 +299,6 @@ const defaultProps = {
   description: "",
   createdAt: "0000년 0월 0일",
   isOpen: false,
-  isRefetching: false,
   onClose: () => {},
   onPush: () => {},
 };
@@ -208,6 +328,57 @@ const Main = styled.main`
       margin-bottom: 6px;
     }
   }
+  .Main-solvedHistories {
+    .Main-solvedHistories-loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 240px;
+      .Main-solvedHistories-loading-spinner {
+        border: 4px solid ${Pink[400]};
+        border-top: 4px solid ${Gray[50]};
+      }
+    }
+  }
+`;
+
+const Table = styled.div`
+  display: flex;
+  flex-direction: column;
+  .Table-column {
+    display: flex;
+    padding: 0px 6px;
+    .Table-column-name {
+      width: 100%;
+      padding: 0px 6px;
+      border-right: solid 1px;
+      color: ${Gray[50]};
+      border-color: transparent;
+      :last-child {
+        border-right: 0px;
+      }
+    }
+  }
+  .Table-row {
+    display: flex;
+    padding: 8px 6px;
+    background: ${Pink[400]};
+    border-radius: 12px;
+    margin-top: 6px;
+    .Table-row-name {
+      width: 100%;
+      border-right: solid 1px;
+      color: ${Gray[50]};
+      padding: 0px 6px;
+      :last-child {
+        border-right: 0px;
+      }
+    }
+  }
+`;
+
+const ScrollView = styled.div`
+  height: 1px;
 `;
 
 export default UpdateWorkbook;

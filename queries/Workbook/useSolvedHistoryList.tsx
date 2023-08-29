@@ -2,21 +2,20 @@ import axios, { API } from "../settings";
 import { useInfiniteQuery } from "react-query";
 import moment from "moment";
 
-import { ServerWorkbooksPayload } from "./types";
+import { ServerSolvedHistoriesPayload } from "./types";
 
-type Workbook = {
+export type SolvedHistory = {
   id: string;
-  name: string;
-  description: string;
-  problemCount: number;
-  solvedCount: number;
-  createdAt: string;
+  userName: string;
+  questionCount: number;
+  correctCount: number;
+  solvedAt: string;
 };
 
-type ClientPayload = {
+export type ClientPayload = {
   total: number;
   hasNext: boolean;
-  list: Workbook[];
+  list: SolvedHistory[];
 };
 
 const initialPayload: ClientPayload = {
@@ -32,8 +31,12 @@ type Config = {
   };
 };
 
-export const getList = async (lastId = "") => {
-  const url = `${API}/api/workbooks`;
+type Params = {
+  workbookId: string;
+};
+
+export const getList = async (workbookId = "", lastId = "") => {
+  const url = `${API}/api/results/workbooks/${workbookId}/solved/histories`;
   const config: Config = {
     params: {
       size: 10,
@@ -46,22 +49,21 @@ export const getList = async (lastId = "") => {
 
   const response = await axios.get(url, config);
   const status: number = response.status;
-  const payload: ServerWorkbooksPayload = response.data;
+  const payload: ServerSolvedHistoriesPayload = response.data;
 
   if (status === 200) {
     const nextPayload: ClientPayload = {
       total: 0,
       hasNext: payload?.data?.hasNext || false,
       list:
-        payload?.data?.workbooks?.map?.((workbook) => {
+        payload?.data?.results?.map?.((solvedHistory) => {
           return {
-            id: workbook?.workbookId || "",
-            name: workbook?.name || "",
-            description: workbook?.description || "",
-            problemCount: workbook?.problemCount || 0,
-            solvedCount: workbook?.solvedCount || 0,
-            createdAt:
-              moment(workbook?.createdAt).format("YYYY년 MM월 DD일") || "",
+            id: solvedHistory?.resultId || "",
+            userName: solvedHistory?.userName || "",
+            questionCount: solvedHistory?.totalQuestions || 0,
+            correctCount: solvedHistory?.correctCount || 0,
+            solvedAt:
+              moment(solvedHistory?.solvedAt).format("YYYY년 MM월 DD일") || "",
           };
         }) || [],
     };
@@ -71,12 +73,15 @@ export const getList = async (lastId = "") => {
   return initialPayload;
 };
 
-export default function useList(params = {}, options = {}) {
+export default function useList(
+  params: Params = { workbookId: "" },
+  options = {}
+) {
   const payload = useInfiniteQuery(
-    ["workbookList"],
+    ["solvedHistoryList", params.workbookId],
     ({ pageParam }) => {
       const lastId = pageParam?.lastId || "";
-      return getList(lastId);
+      return getList(params.workbookId, lastId);
     },
     {
       ...options,
