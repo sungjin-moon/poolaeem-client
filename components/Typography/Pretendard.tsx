@@ -152,6 +152,7 @@ export const Heading = styled.div<Props>`
     return heading[size].lineHeight;
   }};
   letter-spacing: -0.01em;
+  white-space: pre-wrap;
 `;
 
 export const SubHeading = styled.div<Props>`
@@ -166,6 +167,7 @@ export const SubHeading = styled.div<Props>`
     return subHeading[size].lineHeight;
   }};
   letter-spacing: -0.01em;
+  white-space: pre-wrap;
 `;
 
 export const Caption = styled.div<Props>`
@@ -180,6 +182,7 @@ export const Caption = styled.div<Props>`
     return caption[size].lineHeight;
   }};
   letter-spacing: -0.01em;
+  white-space: pre-wrap;
 `;
 
 export const Body = styled.div<Props>`
@@ -194,6 +197,7 @@ export const Body = styled.div<Props>`
     return body[size].lineHeight;
   }};
   letter-spacing: -0.01em;
+  white-space: pre-wrap;
 `;
 
 export default Pretendard;

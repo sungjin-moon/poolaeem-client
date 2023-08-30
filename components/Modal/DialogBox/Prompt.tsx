@@ -1,15 +1,26 @@
 import styled from "@emotion/styled";
-import { RefObject, ReactElement } from "react";
+import { RefObject, ReactElement, useEffect } from "react";
 import { css } from "@emotion/react";
 
 import WarningSign from "../../../assets/icons/$WarningSign.svg";
-
-import useModal from "../../../hooks/useModal";
 
 import Background from "../index";
 import Gray from "../../Color/Gray";
 import Typography from "../../Typography/Pretendard";
 import SolidButton from "../../Button/Solid";
+import SingleTextField from "../../Field/SingleText";
+
+import useField from "../../../hooks/useField";
+
+type Field = {
+  key?: string;
+  required?: boolean;
+  status?: string;
+  value?: string;
+  placeholder?: string;
+  message?: string;
+  maxLength?: number;
+};
 
 interface Props {
   className: string;
@@ -19,9 +30,6 @@ interface Props {
   modalRef: RefObject<HTMLInputElement>;
   isOpen: boolean;
   status: string;
-  onFadeIn: () => void;
-  onFadeOut: () => void;
-  onOpen: () => void;
   onClose: () => void;
   cancel: {
     placeholder: string;
@@ -31,11 +39,22 @@ interface Props {
   success: {
     placeholder: string;
     status?: string;
-    handler: () => void;
+    handler: (field: Field) => void;
   };
+  field: Field;
 }
 
-function Confirm({
+const initialField = {
+  key: "name",
+  required: true,
+  status: "default",
+  value: "",
+  placeholder: "Placeholder",
+  message: "",
+  maxLength: 100,
+};
+
+function Prompt({
   className,
   Icon,
   title,
@@ -46,7 +65,16 @@ function Confirm({
   onClose,
   cancel,
   success,
+  field,
 }: Props) {
+  const Field = useField({ ...initialField, ...field });
+
+  useEffect(() => {
+    if (isOpen === false) {
+      Field.setValue("");
+    }
+  }, [isOpen]);
+
   return (
     <Background
       modalRef={modalRef}
@@ -55,22 +83,30 @@ function Confirm({
       onClose={onClose}
     >
       <Container
-        className={`Modal_Confirm ${className}`}
+        className={`Modal_Prompt ${className}`}
         css={css({
           transform:
             status === "fadeIn" ? "translateY(0px)" : "translateY(1000px)",
         })}
       >
         {Icon}
-        <Typography className="Modal_Confirm-title" type="subHeading" size={1}>
+        <Typography className="Modal_Prompt-title" type="subHeading" size={1}>
           {title}
         </Typography>
-        <Typography className="Modal_Confirm-description" type="body" size={3}>
-          {description}
-        </Typography>
-        <div className="Modal_Confirm-buttons">
+        {description && (
+          <Typography className="Modal_Prompt-description" type="body" size={3}>
+            {description}
+          </Typography>
+        )}
+        <SingleTextField
+          className="Modal_Prompt-field"
+          label=""
+          item={Field.item}
+          onChange={Field.onChange}
+        />
+        <div className="Modal_Prompt-buttons">
           <SolidButton
-            className="Modal_Confirm-buttons-button cancel"
+            className="Modal_Prompt-buttons-button cancel"
             size="large"
             theme="lightPink"
             placeholder={cancel.placeholder}
@@ -78,12 +114,17 @@ function Confirm({
             onClick={cancel.handler}
           />
           <SolidButton
-            className="Modal_Confirm-buttons-button success"
+            className="Modal_Prompt-buttons-button success"
             size="large"
             theme="pink"
             placeholder={success.placeholder}
             status={success.status}
-            onClick={success.handler}
+            onClick={() => {
+              const isSuccess = Field.onCheckValue();
+              if (isSuccess === true) {
+                return success.handler(Field.item);
+              }
+            }}
           />
         </div>
       </Container>
@@ -95,14 +136,10 @@ const defaultProps = {
   className: "",
   Icon: <WarningSign />,
   title: "Title",
-  description:
-    "Lorem ipsum dolor sit amet consectetur. Amet tincidunt eget sapien netus lorem.",
+  description: "",
   modalRef: null,
   isOpen: false,
   status: "init",
-  onFadeIn: () => {},
-  onFadeOut: () => {},
-  onOpen: () => {},
   onClose: () => {},
   cancel: {
     placeholder: "Placeholder",
@@ -114,9 +151,18 @@ const defaultProps = {
     status: "default",
     handler: () => {},
   },
+  field: {
+    key: "name",
+    required: true,
+    status: "default",
+    value: "",
+    placeholder: "Placeholder",
+    message: "",
+    maxLength: 100,
+  },
 };
 
-Confirm.defaultProps = defaultProps;
+Prompt.defaultProps = defaultProps;
 
 export const Container = styled.div`
   width: 100%;
@@ -132,19 +178,22 @@ export const Container = styled.div`
     width: 64px;
     height: 64px;
   }
-  .Modal_Confirm-title {
+  .Modal_Prompt-title {
     margin: 4px 0px;
   }
-  .Modal_Confirm-title,
-  .Modal_Confirm-description {
+  .Modal_Prompt-title,
+  .Modal_Prompt-description {
     color: ${Gray[700]};
     text-align: center;
   }
-  .Modal_Confirm-buttons {
+  .Modal_Prompt-field {
+    width: 100%;
+  }
+  .Modal_Prompt-buttons {
     display: flex;
     width: 100%;
     margin-top: 24px;
-    .Modal_Confirm-buttons-button {
+    .Modal_Prompt-buttons-button {
       width: 100%;
       margin-right: 8px;
       :last-child {
@@ -154,4 +203,4 @@ export const Container = styled.div`
   }
 `;
 
-export default Confirm;
+export default Prompt;

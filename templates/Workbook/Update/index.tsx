@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
-import { css } from "@emotion/react";
 import { useState, useEffect } from "react";
 
 import Edit from "../../../assets/icons/Edit.svg";
 import TrashCan from "../../../assets/icons/TrashCan.svg";
+import Add from "../../../assets/icons/Add.svg";
 import $TrashCan from "../../../assets/icons/$TrashCan.svg";
 
 import Pink from "../../../components/Color/Pink";
@@ -18,6 +18,7 @@ import ToastBox from "../../../components/Toast";
 import Spinner from "../../../components/Loader/Spinner";
 
 import UpdateInfoTemplate from "./UpdateInfo";
+import CreateProblemTemplate from "./CreateProblem";
 
 import useUpdate from "../../../process/Workbook/Update/useUpdate";
 
@@ -37,10 +38,18 @@ interface SettingsProps {
   onDelete: () => void;
 }
 
+interface ProblemsProps {
+  isFetched: boolean;
+  isRefetching: boolean;
+  pages: ProblemPages[];
+  length: number;
+  onOpenCreate: () => void;
+}
+
 interface SolvedHistoriesProps {
   isFetched: boolean;
   isRefetching: boolean;
-  pages: Pages[];
+  pages: SolvedHistoryPages[];
   length: number;
 }
 
@@ -58,10 +67,24 @@ type SolvedHistory = {
   solvedAt: string;
 };
 
-type Pages = {
+type Problem = {
+  id: string;
+  question: string;
+  type: string;
+  optionCount: number;
+  timeout: number;
+};
+
+type SolvedHistoryPages = {
   total: number;
   hasNext: boolean;
   list: SolvedHistory[];
+};
+
+type ProblemPages = {
+  total: number;
+  hasNext: boolean;
+  list: Problem[];
 };
 
 const Settings = ({ onOpenInfo, onDelete }: SettingsProps) => {
@@ -83,6 +106,64 @@ const Settings = ({ onOpenInfo, onDelete }: SettingsProps) => {
   );
 };
 
+const Problems = ({
+  isFetched,
+  isRefetching,
+  pages,
+  length,
+  onOpenCreate,
+}: ProblemsProps) => {
+  return (
+    <div className="Main-problems">
+      {isFetched && (
+        <Menu
+          className="Main-problems-menu"
+          name="문항 추가"
+          Icon={<Add />}
+          onClick={onOpenCreate}
+        />
+      )}
+      {isFetched && length === 0 && (
+        <div className="Main-problems-empty">
+          <Typography
+            className="Main-problems-empty-description"
+            type="body"
+            size={6}
+          >
+            아직 문항이 존재하지 않아요
+          </Typography>
+        </div>
+      )}
+      {!isFetched && (
+        <div className="Main-problems-loading">
+          <Spinner className="Main-problems-loading-spinner" />
+        </div>
+      )}
+      {isFetched && length > 0 && (
+        <div className="Main-problems-list">
+          {pages.map((page, pageIndex) => {
+            const lastPageIndex = pages.length - 1;
+            const isLastPage = lastPageIndex === pageIndex;
+            return page.list.map((problem) => {
+              return (
+                <div className="Table-row" key={problem.id}>
+                  {problem.id}
+                </div>
+              );
+            });
+          })}
+        </div>
+      )}
+
+      {isRefetching && (
+        <div className="Main-problems-loading">
+          <Spinner className="Main-problems-loading-spinner" />
+        </div>
+      )}
+    </div>
+  );
+};
+
 const SolvedHistories = ({
   isFetched,
   isRefetching,
@@ -91,6 +172,18 @@ const SolvedHistories = ({
 }: SolvedHistoriesProps) => {
   return (
     <div className="Main-solvedHistories">
+      {isFetched && length === 0 && (
+        <div className="Main-solvedHistories-empty">
+          <Typography
+            className="Main-solvedHistories-empty-description"
+            type="body"
+            size={6}
+          >
+            아직 풀이내역이 존재하지 않아요
+          </Typography>
+        </div>
+      )}
+
       {!isFetched && (
         <div className="Main-solvedHistories-loading">
           <Spinner className="Main-solvedHistories-loading-spinner" />
@@ -178,29 +271,33 @@ function UpdateWorkbook({
     name: "",
     description: "",
   });
-  const Update = useUpdate(id);
+  const Update = useUpdate(id, isOpen);
   const {
     UpdateInfoModal,
     DeleteModal,
+    CreateProblemModal,
     Toast,
     Delete,
     SolvedHistoryList,
+    ProblemList,
     onDelete,
   } = Update;
   const { tabs, tab, setTab } = Update.Tabs;
 
-  const { isFetched, isRefetching } = SolvedHistoryList;
-  const pages = SolvedHistoryList.data?.pages || [];
-  const length = pages?.[pages?.length - 1]?.list?.length || 0;
+  const solvedHistoryPages = SolvedHistoryList.data?.pages || [];
+  const solvedHistoryLength =
+    solvedHistoryPages?.[solvedHistoryPages?.length - 1]?.list?.length || 0;
 
-  console.log(SolvedHistoryList);
+  const problemPages = ProblemList.data?.pages || [];
+  const problemLength =
+    problemPages?.[problemPages?.length - 1]?.list?.length || 0;
+
   useEffect(() => {
     if (isOpen === true) {
       setData({ id, name, description });
       return;
     }
   }, [isOpen]);
-
   return (
     <Template className={`UpdateWorkbook ${className}`}>
       <Header
@@ -224,6 +321,23 @@ function UpdateWorkbook({
             setTab(tab);
           }}
         />
+        {tab.id === "problems" && (
+          <Problems
+            isFetched={ProblemList.isFetched}
+            isRefetching={ProblemList.isRefetching}
+            pages={problemPages}
+            length={problemLength}
+            onOpenCreate={CreateProblemModal.onOpen}
+          />
+        )}
+        {tab.id === "solvedHisotries" && (
+          <SolvedHistories
+            isFetched={SolvedHistoryList.isFetched}
+            isRefetching={SolvedHistoryList.isRefetching}
+            pages={solvedHistoryPages}
+            length={solvedHistoryLength}
+          />
+        )}
         {tab.id === "settings" && (
           <Settings
             onOpenInfo={() => {
@@ -231,14 +345,6 @@ function UpdateWorkbook({
               UpdateInfoModal.onOpen();
             }}
             onDelete={DeleteModal.onOpen}
-          />
-        )}
-        {tab.id === "solvedHisotries" && (
-          <SolvedHistories
-            isFetched={isFetched}
-            isRefetching={isRefetching}
-            pages={pages}
-            length={length}
           />
         )}
       </Main>
@@ -260,6 +366,24 @@ function UpdateWorkbook({
             Toast.onPush({
               status: "success",
               message: "문제집 기본정보가 변경되었어요",
+            })
+          }
+        />
+      </NextModal>
+      <NextModal
+        animateType="bottomToTop"
+        modalRef={CreateProblemModal.ref}
+        isOpen={CreateProblemModal.isOpen}
+        status={CreateProblemModal.status}
+        onClose={CreateProblemModal.onClose}
+      >
+        <CreateProblemTemplate
+          isOpen={CreateProblemModal.isOpen}
+          onClose={CreateProblemModal.onClose}
+          onPush={() =>
+            Toast.onPush({
+              status: "success",
+              message: "문항이 추가되었어요",
             })
           }
         />
@@ -329,14 +453,53 @@ const Main = styled.main`
     }
   }
   .Main-solvedHistories {
+    .Main-solvedHistories-empty {
+      height: 120px;
+      border: solid 1px;
+      border-color: ${Pink[400]};
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .Main-solvedHistories-empty-description {
+        color: ${Gray[50]};
+      }
+    }
     .Main-solvedHistories-loading {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 240px;
       .Main-solvedHistories-loading-spinner {
-        border: 4px solid ${Pink[400]};
-        border-top: 4px solid ${Gray[50]};
+        border: 2px solid ${Pink[400]};
+        border-top: 2px solid ${Gray[50]};
+      }
+    }
+  }
+  .Main-problems {
+    .Main-problems-menu {
+      margin-bottom: 6px;
+    }
+    .Main-problems-empty {
+      height: 120px;
+      border: solid 1px;
+      border-color: ${Pink[400]};
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .Main-problems-empty-description {
+        color: ${Gray[50]};
+      }
+    }
+    .Main-problems-loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 240px;
+      .Main-problems-loading-spinner {
+        border: 2px solid ${Pink[400]};
+        border-top: 2px solid ${Gray[50]};
       }
     }
   }

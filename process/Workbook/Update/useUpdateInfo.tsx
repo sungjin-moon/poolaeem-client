@@ -19,7 +19,7 @@ function useUpdate() {
   const UpdateInfo = useUpdateInfo();
 
   const NameField = useField({
-    key: "Name",
+    key: "name",
     required: true,
     status: "default",
     value: "",
@@ -29,7 +29,7 @@ function useUpdate() {
   });
 
   const DescriptionField = useField({
-    key: "Name",
+    key: "description",
     required: false,
     status: "default",
     value: "",

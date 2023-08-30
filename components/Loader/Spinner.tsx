@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-import Gray from "../Color/Gray";
+import Pink from "../Color/Pink";
 
 interface Props {
   className: string;
@@ -17,11 +17,11 @@ const defaultProps = {
 Loader.defaultProps = defaultProps;
 
 export const Spinner = styled.div`
-  border: 4px solid ${Gray[400]};
-  border-top: 4px solid ${Gray[500]};
+  border: 2px solid ${Pink[100]};
+  border-top: 2px solid ${Pink[500]};
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   animation: spin 1s linear infinite;
   @keyframes spin {
     0% {

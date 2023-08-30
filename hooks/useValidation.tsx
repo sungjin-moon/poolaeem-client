@@ -16,7 +16,7 @@ function useValidation() {
   const requiredCheck = (item: Item) => {
     const value = item.value;
     const required = item.required;
-    if (!value && required) {
+    if ((!value || value?.length === 0) && required) {
       return {
         message: messages["notEntered"](),
         status: "invalid",

@@ -16,6 +16,14 @@ export type SolvedHistory = {
   solvedAt: string;
 };
 
+export type Problem = {
+  problemId: string;
+  question: string;
+  type: string;
+  optionCount: number;
+  timeout: number;
+};
+
 export type ServerWorkbooksPayload = {
   code: number;
   data: {
@@ -29,5 +37,13 @@ export type ServerSolvedHistoriesPayload = {
   data: {
     hasNext: boolean;
     results: SolvedHistory[];
+  };
+};
+
+export type ServerProblemPayload = {
+  code: number;
+  data: {
+    hasNext: boolean;
+    problems: Problem[];
   };
 };

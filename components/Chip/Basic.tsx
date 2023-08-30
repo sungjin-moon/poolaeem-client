@@ -16,6 +16,8 @@ interface Props {
   name: string;
   theme: string;
   isClose: boolean;
+  onClick: () => void;
+  onClose: () => void;
 }
 
 type themeType = {
@@ -68,7 +70,7 @@ const chipTheme: themeType = {
   },
 };
 
-function Solid({ className, name, theme, isClose }: Props) {
+function Solid({ className, name, theme, isClose, onClick, onClose }: Props) {
   let _theme = chipTheme[theme] || chipTheme["pink"];
 
   return (
@@ -77,6 +79,7 @@ function Solid({ className, name, theme, isClose }: Props) {
       css={css({
         background: _theme.background,
       })}
+      onClick={onClick}
     >
       <Typography
         className="Chip_Basic-name"
@@ -96,6 +99,7 @@ function Solid({ className, name, theme, isClose }: Props) {
               fill: _theme.color,
             },
           })}
+          onClick={onClose}
         />
       )}
     </Chip>
@@ -108,6 +112,7 @@ const defaultProps = {
   theme: "pink",
   isClose: false,
   onClick: () => {},
+  onClose: () => {},
 };
 
 Solid.defaultProps = defaultProps;

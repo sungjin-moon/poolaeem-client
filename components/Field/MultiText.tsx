@@ -28,7 +28,7 @@ function MultiText({ className, label, item, onChange }: Props) {
 
   return (
     <Field
-      className={`Field_SingleText ${className}`}
+      className={`Field_MultiText ${className}`}
       label={label}
       required={item.required}
       message={item.message}
