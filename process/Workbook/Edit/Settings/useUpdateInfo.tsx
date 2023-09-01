@@ -1,10 +1,10 @@
 import { useState } from "react";
-import useField from "../../../hooks/useField";
+import useField from "../../../../hooks/useField";
 
-import useModal from "../../../hooks/useModal";
+import useModal from "../../../../hooks/useModal";
 
-import { queryClient } from "../../../queries";
-import { useUpdateInfo } from "../../../queries/Workbook/useUpdate";
+import { queryClient } from "../../../../queries";
+import { useUpdateInfo } from "../../../../queries/Workbook/useUpdate";
 
 type Data = {
   id: string;

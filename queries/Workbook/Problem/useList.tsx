@@ -38,7 +38,7 @@ export const getList = async (workbookId = "", lastId = "") => {
   const url = `${API}/api/workbooks/${workbookId}/problems`;
   const config: Config = {
     params: {
-      size: 10,
+      size: 5,
     },
   };
 
@@ -76,7 +76,7 @@ export default function useList(
   options = {}
 ) {
   const payload = useInfiniteQuery(
-    ["questionList", params.workbookId],
+    ["problemList", params.workbookId],
     ({ pageParam }) => {
       const lastId = pageParam?.lastId || "";
       return getList(params.workbookId, lastId);

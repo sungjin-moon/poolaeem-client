@@ -11,10 +11,12 @@ import PromptModal from "../Modal/DialogBox/Prompt";
 
 import useModal from "../../hooks/useModal";
 
+type Theme = "pink" | "lightPink";
+
 type Value = {
   id: string;
   name: string;
-  theme?: string;
+  theme: Theme;
 };
 
 type Button = {
@@ -73,7 +75,7 @@ function Data({
     };
   };
 
-  const onAdd = (name: string, theme: string) => {
+  const onAdd = (name: string, theme: Theme) => {
     const { value, setValue } = getHandler();
     const createdValue = [{ id: "", name, theme }];
     return setValue([...value, ...createdValue]);

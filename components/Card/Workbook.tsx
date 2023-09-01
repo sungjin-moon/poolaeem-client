@@ -77,6 +77,7 @@ export const Card = styled.div`
   border-radius: 20px;
   background: ${Pink[500]};
   margin-bottom: 8px;
+  cursor: pointer;
   :last-child {
     margin-bottom: 0px;
   }

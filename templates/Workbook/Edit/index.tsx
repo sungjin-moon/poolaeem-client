@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 
 import Edit from "../../../assets/icons/Edit.svg";
 import TrashCan from "../../../assets/icons/TrashCan.svg";
-import Add from "../../../assets/icons/Add.svg";
 import $TrashCan from "../../../assets/icons/$TrashCan.svg";
 
 import Pink from "../../../components/Color/Pink";
@@ -17,14 +16,15 @@ import Menu from "../../../components/Menu/Basic";
 import ToastBox from "../../../components/Toast";
 import Spinner from "../../../components/Loader/Spinner";
 
-import UpdateInfoTemplate from "./UpdateInfo";
-import CreateProblemTemplate from "./CreateProblem";
+import UpdateInfoTemplate from "./Settings/UpdateInfo";
+import CreateProblemTemplate from "./ProblemList/CreateProblem";
+import ProblemListTemplate from "./ProblemList";
 
 import useEdit from "../../../process/Workbook/Edit";
 
 interface Props {
   className: string;
-  id: string;
+  workbookId: string;
   name: string;
   description: string;
   createdAt: string;
@@ -44,6 +44,8 @@ interface ProblemsProps {
   pages: ProblemPages[];
   length: number;
   onOpenCreate: () => void;
+  onOpenEdit: () => void;
+  onOpenDelete: () => void;
 }
 
 interface SolvedHistoriesProps {
@@ -102,64 +104,6 @@ const Settings = ({ onOpenInfo, onDelete }: SettingsProps) => {
         Icon={<TrashCan />}
         onClick={onDelete}
       />
-    </div>
-  );
-};
-
-const Problems = ({
-  isFetched,
-  isRefetching,
-  pages,
-  length,
-  onOpenCreate,
-}: ProblemsProps) => {
-  return (
-    <div className="Main-problems">
-      {isFetched && (
-        <Menu
-          className="Main-problems-menu"
-          name="문항 추가"
-          Icon={<Add />}
-          onClick={onOpenCreate}
-        />
-      )}
-      {isFetched && length === 0 && (
-        <div className="Main-problems-empty">
-          <Typography
-            className="Main-problems-empty-description"
-            type="body"
-            size={6}
-          >
-            아직 문항이 존재하지 않아요
-          </Typography>
-        </div>
-      )}
-      {!isFetched && (
-        <div className="Main-problems-loading">
-          <Spinner className="Main-problems-loading-spinner" />
-        </div>
-      )}
-      {isFetched && length > 0 && (
-        <div className="Main-problems-list">
-          {pages.map((page, pageIndex) => {
-            const lastPageIndex = pages.length - 1;
-            const isLastPage = lastPageIndex === pageIndex;
-            return page.list.map((problem) => {
-              return (
-                <div className="Table-row" key={problem.id}>
-                  {problem.id}
-                </div>
-              );
-            });
-          })}
-        </div>
-      )}
-
-      {isRefetching && (
-        <div className="Main-problems-loading">
-          <Spinner className="Main-problems-loading-spinner" />
-        </div>
-      )}
     </div>
   );
 };
@@ -258,7 +202,7 @@ const SolvedHistories = ({
 
 function EditWorkbook({
   className,
-  id,
+  workbookId,
   name,
   description,
   createdAt,
@@ -271,15 +215,13 @@ function EditWorkbook({
     name: "",
     description: "",
   });
-  const Update = useEdit(id, isOpen);
+  const Update = useEdit(workbookId, isOpen);
   const {
     UpdateInfoModal,
     DeleteModal,
-    CreateProblemModal,
     Toast,
     Delete,
     SolvedHistoryList,
-    ProblemList,
     onDelete,
   } = Update;
   const { tabs, tab, setTab } = Update.Tabs;
@@ -288,137 +230,113 @@ function EditWorkbook({
   const solvedHistoryLength =
     solvedHistoryPages?.[solvedHistoryPages?.length - 1]?.list?.length || 0;
 
-  const problemPages = ProblemList.data?.pages || [];
-  const problemLength =
-    problemPages?.[problemPages?.length - 1]?.list?.length || 0;
-
   useEffect(() => {
     if (isOpen === true) {
-      setData({ id, name, description });
+      setData({ id: workbookId, name, description });
       return;
     }
   }, [isOpen]);
-  return (
-    <Template className={`EditWorkbook ${className}`}>
-      <Header
-        onClose={onClose}
-        title="문제집"
-        action={{ name: "풀이", handler: () => {} }}
-      />
-      <Main>
-        <Typography className="Main-name" type="subHeading" size={1}>
-          {data?.name}
-        </Typography>
-        <Typography className="Main-createdAt" type="body" size={5}>
-          {createdAt}
-        </Typography>
-        <Tabs
-          className="Main-tabs"
-          tabs={tabs}
-          tab={tab}
-          setTab={(tab) => {
-            if (Delete.isLoading) return;
-            setTab(tab);
-          }}
+
+  if (isOpen) {
+    return (
+      <Template className={`EditWorkbook ${className}`}>
+        <Header
+          onClose={onClose}
+          title="문제집"
+          action={{ name: "풀이", handler: () => {} }}
         />
-        {tab.id === "problems" && (
-          <Problems
-            isFetched={ProblemList.isFetched}
-            isRefetching={ProblemList.isRefetching}
-            pages={problemPages}
-            length={problemLength}
-            onOpenCreate={CreateProblemModal.onOpen}
-          />
-        )}
-        {tab.id === "solvedHisotries" && (
-          <SolvedHistories
-            isFetched={SolvedHistoryList.isFetched}
-            isRefetching={SolvedHistoryList.isRefetching}
-            pages={solvedHistoryPages}
-            length={solvedHistoryLength}
-          />
-        )}
-        {tab.id === "settings" && (
-          <Settings
-            onOpenInfo={() => {
+        <Main>
+          <Typography className="Main-name" type="subHeading" size={1}>
+            {data?.name}
+          </Typography>
+          <Typography className="Main-createdAt" type="body" size={5}>
+            {createdAt}
+          </Typography>
+          <Tabs
+            className="Main-tabs"
+            tabs={tabs}
+            tab={tab}
+            setTab={(tab) => {
               if (Delete.isLoading) return;
-              UpdateInfoModal.onOpen();
+              setTab(tab);
             }}
-            onDelete={DeleteModal.onOpen}
           />
-        )}
-      </Main>
-      <NextModal
-        animateType="rightToLeft"
-        modalRef={UpdateInfoModal.ref}
-        isOpen={UpdateInfoModal.isOpen}
-        status={UpdateInfoModal.status}
-        onClose={UpdateInfoModal.onClose}
-      >
-        <UpdateInfoTemplate
+          {tab.id === "problems" && (
+            <ProblemListTemplate workbookId={workbookId} />
+          )}
+          {tab.id === "solvedHisotries" && (
+            <SolvedHistories
+              isFetched={SolvedHistoryList.isFetched}
+              isRefetching={SolvedHistoryList.isRefetching}
+              pages={solvedHistoryPages}
+              length={solvedHistoryLength}
+            />
+          )}
+          {tab.id === "settings" && (
+            <Settings
+              onOpenInfo={() => {
+                if (Delete.isLoading) return;
+                UpdateInfoModal.onOpen();
+              }}
+              onDelete={DeleteModal.onOpen}
+            />
+          )}
+        </Main>
+        <NextModal
+          animateType="rightToLeft"
+          modalRef={UpdateInfoModal.ref}
           isOpen={UpdateInfoModal.isOpen}
-          data={data}
-          onClose={(data) => {
-            data && setData(data);
-            UpdateInfoModal.onClose();
+          status={UpdateInfoModal.status}
+          onClose={UpdateInfoModal.onClose}
+        >
+          <UpdateInfoTemplate
+            isOpen={UpdateInfoModal.isOpen}
+            data={data}
+            onClose={(data) => {
+              data && setData(data);
+              UpdateInfoModal.onClose();
+            }}
+            onPush={() =>
+              Toast.onPush({
+                status: "success",
+                message: "문제집 기본정보가 변경되었어요",
+              })
+            }
+          />
+        </NextModal>
+        <ConfirmModal
+          Icon={<$TrashCan />}
+          title="문제집 삭제"
+          description="문제집을 삭제하면 문항 및 풀이내역이 영구 삭제되며, 복구되지 않아요"
+          cancel={{
+            placeholder: "닫기",
+            handler: DeleteModal.onClose,
           }}
-          onPush={() =>
-            Toast.onPush({
-              status: "success",
-              message: "문제집 기본정보가 변경되었어요",
-            })
-          }
+          success={{
+            placeholder: "문제집 삭제",
+            status: Delete.isLoading ? "loading" : "default",
+            handler: () => {
+              onDelete(workbookId, onClose, () => {
+                onPush();
+                DeleteModal.onClose();
+              });
+            },
+          }}
+          modalRef={DeleteModal.ref}
+          isOpen={DeleteModal.isOpen}
+          status={DeleteModal.status}
+          onClose={DeleteModal.onClose}
         />
-      </NextModal>
-      <NextModal
-        animateType="bottomToTop"
-        modalRef={CreateProblemModal.ref}
-        isOpen={CreateProblemModal.isOpen}
-        status={CreateProblemModal.status}
-        onClose={CreateProblemModal.onClose}
-      >
-        <CreateProblemTemplate
-          isOpen={CreateProblemModal.isOpen}
-          onClose={CreateProblemModal.onClose}
-          onPush={() =>
-            Toast.onPush({
-              status: "success",
-              message: "문항이 추가되었어요",
-            })
-          }
-        />
-      </NextModal>
-      <ConfirmModal
-        Icon={<$TrashCan />}
-        title="문제집 삭제"
-        description="문제집을 삭제하면 문항 및 풀이내역이 영구 삭제되며, 복구되지 않아요"
-        cancel={{
-          placeholder: "닫기",
-          handler: DeleteModal.onClose,
-        }}
-        success={{
-          placeholder: "문제집 삭제",
-          status: Delete.isLoading ? "loading" : "default",
-          handler: () => {
-            onDelete(id, onClose, () => {
-              onPush();
-              DeleteModal.onClose();
-            });
-          },
-        }}
-        modalRef={DeleteModal.ref}
-        isOpen={DeleteModal.isOpen}
-        status={DeleteModal.status}
-        onClose={DeleteModal.onClose}
-      />
-      <ToastBox list={Toast.list} />
-    </Template>
-  );
+        <ToastBox list={Toast.list} />
+      </Template>
+    );
+  }
+  return null;
 }
 
 const defaultProps = {
   className: "",
-  id: "",
+  workbookId: "",
   name: "Title",
   description: "",
   createdAt: "0000년 0월 0일",
@@ -437,7 +355,7 @@ const Main = styled.main`
   padding: 20px;
   background: ${Pink[500]};
   border-radius: 20px 20px 0px 0px;
-  height: 100%;
+  height: calc(100% - 48px);
   .Main-name {
     color: ${Gray[50]};
   }
@@ -471,33 +389,6 @@ const Main = styled.main`
       align-items: center;
       height: 240px;
       .Main-solvedHistories-loading-spinner {
-        border: 2px solid ${Pink[400]};
-        border-top: 2px solid ${Gray[50]};
-      }
-    }
-  }
-  .Main-problems {
-    .Main-problems-menu {
-      margin-bottom: 6px;
-    }
-    .Main-problems-empty {
-      height: 120px;
-      border: solid 1px;
-      border-color: ${Pink[400]};
-      border-radius: 12px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      .Main-problems-empty-description {
-        color: ${Gray[50]};
-      }
-    }
-    .Main-problems-loading {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 240px;
-      .Main-problems-loading-spinner {
         border: 2px solid ${Pink[400]};
         border-top: 2px solid ${Gray[50]};
       }
@@ -538,10 +429,6 @@ const Table = styled.div`
       }
     }
   }
-`;
-
-const ScrollView = styled.div`
-  height: 1px;
 `;
 
 export default EditWorkbook;

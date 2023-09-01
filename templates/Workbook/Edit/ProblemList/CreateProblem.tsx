@@ -1,24 +1,36 @@
 import { useEffect } from "react";
 import styled from "@emotion/styled";
 
-import CheckSign from "../../../assets/icons/$CheckSign.svg";
-import CrossMark from "../../../assets/icons/$CrossMark.svg";
+import CheckSign from "../../../../assets/icons/$CheckSign.svg";
+import CrossMark from "../../../../assets/icons/$CrossMark.svg";
 
-import SingleTextField from "../../../components/Field/SingleText";
-import DataField from "../../../components/Field/Data";
-import { Header } from "../../../components/Modal/View/Next";
+import SingleTextField from "../../../../components/Field/SingleText";
+import DataField from "../../../../components/Field/Data";
+import { Header } from "../../../../components/Modal/View/Next";
 
-import useCreateProblem from "../../../process/Workbook/Edit/useCreateProblem";
+import useCreateProblem from "../../../../process/Workbook/Edit/ProblemList/useCreateProblem";
+
+type Data = {
+  id: string;
+};
 
 interface Props {
   className: string;
   isOpen: boolean;
+  data: Data;
   onClose: () => void;
   onPush: () => void;
 }
 
-function CreateProblem({ className, isOpen, onClose, onPush }: Props) {
-  const { NameField, OptionsField, onCreate } = useCreateProblem();
+function CreateProblem({ className, data, isOpen, onClose, onPush }: Props) {
+  const { QuestionField, OptionsField, onCreate } = useCreateProblem(data.id);
+
+  useEffect(() => {
+    if (isOpen) {
+      QuestionField.setValue("");
+      OptionsField.setValue([]);
+    }
+  }, [isOpen]);
 
   return (
     <Template className={`CreateProblem ${className}`}>
@@ -34,8 +46,8 @@ function CreateProblem({ className, isOpen, onClose, onPush }: Props) {
         <SingleTextField
           className="Main-field"
           label="문제"
-          item={NameField.item}
-          onChange={NameField.onChange}
+          item={QuestionField.item}
+          onChange={QuestionField.onChange}
         />
         <DataField
           className="Main-field"
@@ -65,6 +77,9 @@ function CreateProblem({ className, isOpen, onClose, onPush }: Props) {
 const defaultProps = {
   className: "",
   isOpen: false,
+  data: {
+    id: "",
+  },
   onClose: () => {},
   onPush: () => {},
 };

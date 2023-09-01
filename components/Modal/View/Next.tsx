@@ -39,13 +39,16 @@ export const Header = ({
 }: HeaderProps) => {
   return (
     <HeaderBox className={`HeaderBox ${className}`}>
-      <LeftArrow onClick={() => onClose(undefined)} />
+      <LeftArrow
+        className="HeaderBox-close"
+        onClick={() => onClose(undefined)}
+      />
       <Typography className="HeaderBox-title" type="caption" size={1}>
         {title}
       </Typography>
       {action && (
         <Typography
-          className="HeaderBox-name"
+          className="HeaderBox-action"
           type="caption"
           size={3}
           onClick={action.handler}
@@ -118,7 +121,11 @@ const HeaderBox = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 0px 8px;
-  .HeaderBox-name {
+  .HeaderBox-close {
+    cursor: pointer;
+  }
+  .HeaderBox-action {
+    cursor: pointer;
     padding-right: 12px;
   }
 `;

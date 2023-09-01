@@ -16,8 +16,8 @@ export type Variables = {
 
 const initialData = null;
 
-export const create = async (variables: Variables) => {
-  const url = `${API}/api/workbooks/${variables.id}/problem`;
+export const update = async (variables: Variables) => {
+  const url = `${API}/api/problems/${variables.id}`;
   const config = {};
 
   const body = {
@@ -25,6 +25,7 @@ export const create = async (variables: Variables) => {
     type: variables.type,
     options: variables.options.map((option) => {
       return {
+        optionId: option.id,
         value: option.name,
         isCorrect:
           option.theme === "pink"
@@ -36,18 +37,21 @@ export const create = async (variables: Variables) => {
     }),
   };
 
-  const response = await axios.post(url, body, config);
+  const response = await axios.put(url, body, config);
   const { data, status } = response;
 
   if (status === 200) {
-    return {};
+    return {
+      name: data?.data?.name || "",
+      description: data?.data?.description || "",
+    };
   }
 
   return initialData;
 };
 
-export default function useCreate(options = {}) {
-  const payload = useMutation(create, options);
+export function useUpdateInfo(options = {}) {
+  const payload = useMutation(update, options);
 
   return payload;
 }

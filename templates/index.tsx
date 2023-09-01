@@ -65,6 +65,7 @@ const Header = styled.div`
   .Header-user {
     width: 26px;
     height: 26px;
+    cursor: pointer;
   }
 `;
 

@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import styled from "@emotion/styled";
 
-import SingleTextField from "../../../components/Field/SingleText";
-import MultiTexttField from "../../../components/Field/MultiText";
-import { Header } from "../../../components/Modal/View/Next";
+import SingleTextField from "../../../../components/Field/SingleText";
+import MultiTexttField from "../../../../components/Field/MultiText";
+import { Header } from "../../../../components/Modal/View/Next";
 
-import useUpdateInfo from "../../../process/Workbook/Edit/useUpdateInfo";
+import useUpdateInfo from "../../../../process/Workbook/Edit/Settings/useUpdateInfo";
 
 type Data = {
   id: string;

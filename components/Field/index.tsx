@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
-import WarningSign from "../../assets/icons/$WarningSign.svg";
+import WarningSign from "../../assets/icons/WarningSign.svg";
 
 import Typography from "../Typography/Pretendard";
 import Gray from "../Color/Gray";
@@ -100,6 +100,9 @@ const Message = styled.div`
     width: 20px;
     height: 20px;
     margin-right: 4px;
+    path {
+      fill: ${Pink[500]};
+    }
   }
   .Message-text {
     color: ${Pink[500]};

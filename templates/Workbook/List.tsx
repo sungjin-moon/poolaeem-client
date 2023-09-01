@@ -134,7 +134,7 @@ function List() {
           onClose={UpdateModal.onClose}
         >
           <UpdateWorkbookTemplate
-            id={UpdateModal.data?.id}
+            workbookId={UpdateModal.data?.id}
             name={UpdateModal.data?.name}
             description={UpdateModal.data?.description}
             createdAt={UpdateModal.data?.createdAt}

@@ -3,7 +3,7 @@ import messages from "../assets/messages";
 interface Item {
   required: boolean;
   status: string;
-  value: string;
+  value: any;
   placeholder: string;
   message: string;
 }

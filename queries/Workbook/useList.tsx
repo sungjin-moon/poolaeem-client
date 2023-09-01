@@ -36,7 +36,7 @@ export const getList = async (lastId = "") => {
   const url = `${API}/api/workbooks`;
   const config: Config = {
     params: {
-      size: 10,
+      size: 5,
     },
   };
 

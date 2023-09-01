@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import useValidation from "./useValidation";
 
@@ -57,11 +57,12 @@ function useField(customItem: Item = initialItem) {
     return item.value;
   };
 
-  const updateItem = (item: Item) => {
+  const validator = (status: string, message: string) => {
     setItem((prevItem) => {
       return {
         ...prevItem,
-        ...item,
+        status,
+        message,
       };
     });
   };
@@ -72,7 +73,7 @@ function useField(customItem: Item = initialItem) {
     onCheckValue,
     setValue,
     getValue,
-    updateItem,
+    validator,
   };
 }
 
