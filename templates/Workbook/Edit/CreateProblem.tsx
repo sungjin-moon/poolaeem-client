@@ -8,7 +8,7 @@ import SingleTextField from "../../../components/Field/SingleText";
 import DataField from "../../../components/Field/Data";
 import { Header } from "../../../components/Modal/View/Next";
 
-import useCreateProblem from "../../../process/Workbook/Update/useCreateProblem";
+import useCreateProblem from "../../../process/Workbook/Edit/useCreateProblem";
 
 interface Props {
   className: string;

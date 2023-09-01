@@ -15,7 +15,7 @@ import ToastBox from "../../components/Toast";
 import Layout from "../";
 
 import CreateWorkbookTemplate from "./Create";
-import UpdateWorkbookTemplate from "./Update";
+import UpdateWorkbookTemplate from "./Edit";
 
 import useWorkbookList from "../../process/Workbook/useList";
 

@@ -16,7 +16,7 @@ type Tab = {
 type onClose = () => void;
 type onPush = () => void;
 
-function useUpdateWorkbook(workbookId: string, isOpen: boolean) {
+function useEdit(workbookId: string, isOpen: boolean) {
   const tabs = [
     { id: "problems", name: "문항 (0)" },
     { id: "solvedHisotries", name: "풀이내역 (0)" },
@@ -66,4 +66,4 @@ function useUpdateWorkbook(workbookId: string, isOpen: boolean) {
   };
 }
 
-export default useUpdateWorkbook;
+export default useEdit;

@@ -20,7 +20,7 @@ import Spinner from "../../../components/Loader/Spinner";
 import UpdateInfoTemplate from "./UpdateInfo";
 import CreateProblemTemplate from "./CreateProblem";
 
-import useUpdate from "../../../process/Workbook/Update/useUpdate";
+import useEdit from "../../../process/Workbook/Edit";
 
 interface Props {
   className: string;
@@ -256,7 +256,7 @@ const SolvedHistories = ({
   );
 };
 
-function UpdateWorkbook({
+function EditWorkbook({
   className,
   id,
   name,
@@ -271,7 +271,7 @@ function UpdateWorkbook({
     name: "",
     description: "",
   });
-  const Update = useUpdate(id, isOpen);
+  const Update = useEdit(id, isOpen);
   const {
     UpdateInfoModal,
     DeleteModal,
@@ -299,7 +299,7 @@ function UpdateWorkbook({
     }
   }, [isOpen]);
   return (
-    <Template className={`UpdateWorkbook ${className}`}>
+    <Template className={`EditWorkbook ${className}`}>
       <Header
         onClose={onClose}
         title="문제집"
@@ -427,7 +427,7 @@ const defaultProps = {
   onPush: () => {},
 };
 
-UpdateWorkbook.defaultProps = defaultProps;
+EditWorkbook.defaultProps = defaultProps;
 
 const Template = styled.div`
   height: 100%;
@@ -544,4 +544,4 @@ const ScrollView = styled.div`
   height: 1px;
 `;
 
-export default UpdateWorkbook;
+export default EditWorkbook;

@@ -87,7 +87,7 @@ function Data({
 
   const { value } = getHandler();
   const maxLength = item.maxLength || 0;
-  console.log(value.length);
+
   return (
     <Field
       className={`Field_Data ${className}`}
