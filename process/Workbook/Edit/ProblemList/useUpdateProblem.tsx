@@ -1,13 +1,20 @@
+import { useEffect } from "react";
 import useField from "../../../../hooks/useField";
 
 import { queryClient } from "../../../../queries";
-import useCreate from "../../../../queries/Workbook/Problem/useCreate";
+import useRead from "../../../../queries/Workbook/Problem/useRead";
+import { useUpdateInfo } from "../../../../queries/Workbook/Problem/useUpdate";
 
 type onClose = () => void;
 type onPush = () => void;
 
-function useCreateProblem(workbookId: string = "") {
-  const Create = useCreate();
+function useUpdateProblem(
+  id: string = "",
+  workbookId: string = "",
+  isOpen: boolean = false
+) {
+  const Read = useRead({ id }, { enabled: isOpen });
+  const Update = useUpdateInfo();
 
   const QuestionField = useField({
     key: "Name",
@@ -30,17 +37,17 @@ function useCreateProblem(workbookId: string = "") {
     maxLength: 10,
   });
 
-  const onCreate = (onClose: onClose, onPush: onPush) => {
-    if (Create.isLoading) return;
+  const onUpdate = (onClose: onClose, onPush: onPush) => {
+    if (Update.isLoading) return;
     const nameChecked = QuestionField.onCheckValue();
     const optionsChecked = OptionsField.onCheckValue();
-    console.log(OptionsField.getValue());
+
     if (nameChecked && optionsChecked) {
       const question = QuestionField.getValue();
       const options = OptionsField.getValue();
 
-      Create.mutate(
-        { workbookId, question, type: "CHECKBOX", options },
+      Update.mutate(
+        { id, question, type: "CHECKBOX", options },
         {
           onSuccess: (data) => {
             queryClient.invalidateQueries(["problemList", workbookId]);
@@ -61,12 +68,23 @@ function useCreateProblem(workbookId: string = "") {
     }
   };
 
+  useEffect(() => {
+    if (isOpen && Read.isFetched) {
+      console.log(Read.data);
+      const question = Read.data?.question;
+      const options = Read.data?.options;
+      QuestionField.setValue(question);
+      OptionsField.setValue(options);
+    }
+  }, [isOpen, Read.data]);
+
   return {
-    Create,
+    Read,
+    Update,
     QuestionField,
     OptionsField,
-    onCreate,
+    onUpdate,
   };
 }
 
-export default useCreateProblem;
+export default useUpdateProblem;

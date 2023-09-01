@@ -1,7 +1,7 @@
 import axios, { API } from "../../settings";
 import { useInfiniteQuery } from "react-query";
 
-import { ServerProblemPayload } from "../types";
+import { ServerProblemListPayload } from "../types";
 
 export type Problem = {
   id: string;
@@ -48,7 +48,7 @@ export const getList = async (workbookId = "", lastId = "") => {
 
   const response = await axios.get(url, config);
   const status: number = response.status;
-  const payload: ServerProblemPayload = response.data;
+  const payload: ServerProblemListPayload = response.data;
 
   if (status === 200) {
     const nextPayload: ClientPayload = {

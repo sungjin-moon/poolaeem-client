@@ -16,34 +16,46 @@ export type SolvedHistory = {
   solvedAt: string;
 };
 
+export type ProblemOption = {
+  optionId?: string;
+  value: string;
+  isCorrect: boolean;
+};
+
 export type Problem = {
   problemId: string;
   question: string;
-  type: string;
-  optionCount: number;
-  timeout: number;
+  type: "CHECKBOX";
+  optionCount?: number;
+  timeout?: number;
+  options?: ProblemOption[];
 };
 
-export type ServerWorkbooksPayload = {
+export interface ServerWorkbookListPayload {
   code: number;
   data: {
     hasNext: boolean;
     workbooks: Workbook[];
   };
-};
+}
 
-export type ServerSolvedHistoriesPayload = {
+export interface ServerSolvedHistoryListPayload {
   code: number;
   data: {
     hasNext: boolean;
     results: SolvedHistory[];
   };
-};
+}
 
-export type ServerProblemPayload = {
+export interface ServerProblemListPayload {
   code: number;
   data: {
     hasNext: boolean;
     problems: Problem[];
   };
-};
+}
+
+export interface ServerProblemPayload {
+  code: number;
+  data: Problem;
+}

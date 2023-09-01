@@ -126,6 +126,7 @@ export const Chip = styled.div`
   }
 
   .Chip_Basic-close {
+    cursor: pointer;
     width: 18px;
     height: 18px;
   }

@@ -2,7 +2,7 @@ import axios, { API } from "../settings";
 import { useInfiniteQuery } from "react-query";
 import moment from "moment";
 
-import { ServerWorkbooksPayload } from "./types";
+import { ServerWorkbookListPayload } from "./types";
 
 type Workbook = {
   id: string;
@@ -46,7 +46,7 @@ export const getList = async (lastId = "") => {
 
   const response = await axios.get(url, config);
   const status: number = response.status;
-  const payload: ServerWorkbooksPayload = response.data;
+  const payload: ServerWorkbookListPayload = response.data;
 
   if (status === 200) {
     const nextPayload: ClientPayload = {

@@ -8,41 +8,39 @@ import SingleTextField from "../../../../components/Field/SingleText";
 import DataField from "../../../../components/Field/Data";
 import { Header } from "../../../../components/Modal/View/Next";
 
-import useCreateProblem from "../../../../process/Workbook/Edit/ProblemList/useCreateProblem";
+import useUpdateProblem from "../../../../process/Workbook/Edit/ProblemList/useUpdateProblem";
 
 interface Props {
   className: string;
   isOpen: boolean;
+  id: string;
   wrokbookId: string;
   onClose: () => void;
   onPush: () => void;
 }
 
-function CreateProblem({
+function UpdateProblem({
   className,
+  id,
   wrokbookId,
   isOpen,
   onClose,
   onPush,
 }: Props) {
-  const { QuestionField, OptionsField, onCreate } =
-    useCreateProblem(wrokbookId);
-
-  useEffect(() => {
-    if (isOpen) {
-      QuestionField.setValue("");
-      OptionsField.setValue([]);
-    }
-  }, [isOpen]);
+  const { QuestionField, OptionsField, onUpdate } = useUpdateProblem(
+    id,
+    wrokbookId,
+    isOpen
+  );
 
   return (
-    <Template className={`CreateProblem ${className}`}>
+    <Template className={`UpdateProblem ${className}`}>
       <Header
         onClose={onClose}
-        title="문항 추가"
+        title="문항 편집"
         action={{
           name: "완료",
-          handler: () => onCreate(onClose, onPush),
+          handler: () => onUpdate(onClose, onPush),
         }}
       />
       <Main>
@@ -80,12 +78,13 @@ function CreateProblem({
 const defaultProps = {
   className: "",
   isOpen: false,
+  id: "",
   wrokbookId: "",
   onClose: () => {},
   onPush: () => {},
 };
 
-CreateProblem.defaultProps = defaultProps;
+UpdateProblem.defaultProps = defaultProps;
 
 const Template = styled.div``;
 
@@ -99,4 +98,4 @@ const Main = styled.main`
   }
 `;
 
-export default CreateProblem;
+export default UpdateProblem;

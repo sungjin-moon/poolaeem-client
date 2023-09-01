@@ -16,6 +16,7 @@ import ConfirmModal from "../../../../components/Modal/DialogBox/Confirm";
 import ToastBox from "../../../../components/Toast";
 
 import CreateProblemTemplate from "./CreateProblem";
+import UpdateProblemTemplate from "./UpdateProblem";
 
 import useProblemList from "../../../../process/Workbook/Edit/ProblemList";
 
@@ -130,12 +131,32 @@ function ProblemList({ workbookId }: Props) {
       >
         <CreateProblemTemplate
           isOpen={CreateModal.isOpen}
-          data={{ id: workbookId }}
+          wrokbookId={workbookId}
           onClose={CreateModal.onClose}
           onPush={() =>
             Toast.onPush({
               status: "success",
               message: "문항이 추가되었어요",
+            })
+          }
+        />
+      </NextModal>
+      <NextModal
+        animateType="rightToLeft"
+        modalRef={UpdateModal.ref}
+        isOpen={UpdateModal.isOpen}
+        status={UpdateModal.status}
+        onClose={UpdateModal.onClose}
+      >
+        <UpdateProblemTemplate
+          isOpen={UpdateModal.isOpen}
+          wrokbookId={workbookId}
+          id={UpdateModal?.data?.id || ""}
+          onClose={UpdateModal.onClose}
+          onPush={() =>
+            Toast.onPush({
+              status: "success",
+              message: "문항이 편집되었어요",
             })
           }
         />

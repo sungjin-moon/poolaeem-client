@@ -1,6 +1,8 @@
 import axios, { API } from "../../settings";
 import { useMutation } from "react-query";
 
+import { ProblemOption } from "../types";
+
 type Option = {
   id?: string;
   name: string;
@@ -24,8 +26,7 @@ export const update = async (variables: Variables) => {
     question: variables.question,
     type: variables.type,
     options: variables.options.map((option) => {
-      return {
-        optionId: option.id,
+      const result: ProblemOption = {
         value: option.name,
         isCorrect:
           option.theme === "pink"
@@ -34,6 +35,10 @@ export const update = async (variables: Variables) => {
             ? false
             : false,
       };
+      if (option.id) {
+        result.optionId = option.id;
+      }
+      return result;
     }),
   };
 

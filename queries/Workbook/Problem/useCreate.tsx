@@ -8,7 +8,7 @@ type Option = {
 };
 
 export type Variables = {
-  id: string;
+  workbookId: string;
   question: string;
   type: "CHECKBOX";
   options: Option[];
@@ -17,7 +17,7 @@ export type Variables = {
 const initialData = null;
 
 export const create = async (variables: Variables) => {
-  const url = `${API}/api/workbooks/${variables.id}/problem`;
+  const url = `${API}/api/workbooks/${variables.workbookId}/problem`;
   const config = {};
 
   const body = {
