@@ -11,7 +11,7 @@ import useCreate from "../../queries/Account/useCreate";
 
 function useSignIn() {
   const Router = useRouter();
-  const { push, query } = Router;
+  const { push, query, replace } = Router;
 
   const Auth = useAuth({ key: "signIn" });
   const Create = useCreate({ key: "signUp" });
@@ -22,11 +22,18 @@ function useSignIn() {
     Auth.mutate(query, {
       onSuccess: (data) => {
         if (data?.code === 0) {
+          console.log(data);
           const cookies = new Cookies();
-          cookies.set("session", {
-            accessToken: data?.accessToken,
-            refreshToken: data?.refreshToken,
-          });
+          cookies.set(
+            "session",
+            {
+              accessToken: data?.accessToken,
+              refreshToken: data?.refreshToken,
+            },
+            {
+              path: "/",
+            }
+          );
           return push("/");
         }
         if (data?.code === 10023) {

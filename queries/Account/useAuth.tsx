@@ -5,7 +5,7 @@ interface Params {
   key: string;
 }
 
-interface SignInVariables {
+export interface SignInVariables {
   state?: string;
   code?: string;
   authuser?: string;

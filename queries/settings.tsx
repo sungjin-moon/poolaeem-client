@@ -30,11 +30,12 @@ instance.interceptors.response.use(
   },
   async (err) => {
     const code = err.response?.data?.code;
-    if (code === 10052 || code === 10004 || code === 20000) {
+    console.log(code);
+    if (code === 10052 || code === 10004) {
       console.log(err.response);
-      // const cookies = new Cookies();
-      // cookies.remove("session");
-      // window.location.href = "/sign-in";
+      const cookies = new Cookies();
+      cookies.remove("session");
+      window.location.href = "/sign-in";
     }
 
     if (code === 10050) {
