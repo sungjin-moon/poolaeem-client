@@ -12,7 +12,7 @@ import WorkbookCard from "../../components/Card/Workbook";
 import FloatButton from "../../components/Button/Float";
 import ToastBox from "../../components/Toast";
 
-import Layout from "../";
+import Layout from "./";
 
 import CreateWorkbookTemplate from "./Create";
 import UpdateWorkbookTemplate from "./Edit";

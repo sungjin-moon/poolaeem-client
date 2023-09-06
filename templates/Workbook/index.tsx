@@ -1,15 +1,15 @@
 import { ReactElement, useRef } from "react";
 import styled from "@emotion/styled";
 
-import Logo from "../assets/icons/Logo.svg";
+import Logo from "../../assets/icons/Logo.svg";
 
-import Gray from "../components/Color/Gray";
-import UserImage from "../components/Image/User";
-import NextModal from "../components/Modal/View/Next";
+import Gray from "../../components/Color/Gray";
+import UserImage from "../../components/Image/User";
+import NextModal from "../../components/Modal/View/Next";
 
-import SettingsTemplate from "../templates/Account/Settings";
+import SettingsTemplate from "../Account/Settings";
 
-import useAccount from "../process/Account";
+import useAccount from "../../process/Account";
 
 interface Props {
   children: ReactElement;
@@ -53,7 +53,7 @@ const Template = styled.div`
 `;
 
 const Header = styled.div`
-  min-height: 48px;
+  height: 48px;
   display: flex;
   justify-content: space-between;
   align-items: center;

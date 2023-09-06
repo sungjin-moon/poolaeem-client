@@ -22,7 +22,6 @@ function useSignIn() {
     Auth.mutate(query, {
       onSuccess: (data) => {
         if (data?.code === 0) {
-          console.log(data);
           const cookies = new Cookies();
           cookies.set(
             "session",
@@ -62,13 +61,18 @@ function useSignIn() {
       },
       {
         onSuccess: (data) => {
-          console.log(data);
           if (data) {
             const cookies = new Cookies();
-            cookies.set("session", {
-              accessToken: data?.accessToken,
-              refreshToken: data?.refreshToken,
-            });
+            cookies.set(
+              "session",
+              {
+                accessToken: data?.accessToken,
+                refreshToken: data?.refreshToken,
+              },
+              {
+                path: "/",
+              }
+            );
             return push("/");
           }
         },

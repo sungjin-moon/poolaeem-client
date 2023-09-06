@@ -19,7 +19,7 @@ function SignIn() {
   const { Modal, Create, onAuthGoogle, onSignUp } = useSignIn();
 
   return (
-    <Template>
+    <Template className="SignIn">
       <SignInBackground className="SignIn-background" />
       <Logo className="SignIn-logo" />
       <div className="SignIn-bottom">
@@ -83,6 +83,7 @@ const Template = styled.div`
       margin-top: 62px;
       justify-content: center;
       color: ${Pink[400]};
+      padding: 28px 0px;
     }
   }
 `;

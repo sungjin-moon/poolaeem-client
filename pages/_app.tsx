@@ -6,8 +6,16 @@ import Gray from "../components/Color/Gray";
 import Pink from "../components/Color/Pink";
 
 import QueryProvider from "../queries";
+import { useEffect } from "react";
 
 function App({ Component, pageProps }: AppProps) {
+  let vh = 0;
+
+  useEffect(() => {
+    vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
+  }, []);
+
   return (
     <>
       <Global styles={globalStyle} />
@@ -29,10 +37,15 @@ const globalStyle = css`
     margin: 0;
     font-family: Pretendard, sans-serif, Roboto;
   }
+  :root {
+    --vh: 100%;
+  }
 
   html,
   body {
     background: ${Pink[50]};
+    height: 100vh;
+    height: var(--vh);
   }
 
   @font-face {
@@ -41,26 +54,23 @@ const globalStyle = css`
   }
 `;
 
-// const GlobalLayout = styled.div`
-//   position: relative;
-//   max-width: 600px;
-//   min-height: calc(100vh);
-//   margin: 0 auto;
-//   background: ${Gray[50]};
-//   overflow-y: auto;
-// `;
-
 const GlobalLayout = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  /* height: -webkit-fill-available;
+  height: fill-available; */
+  /* height: 100vh; */
+  height: calc(var(--vh, 1vh) * 100);
+  @media (min-width: 960px) {
+    height: 100vh;
+  }
   .GlobalLayout-pages {
     display: flex;
     flex-direction: column;
     width: 600px;
-    height: 100vh;
+    height: 100%;
     background: ${Gray[200]};
     overflow-y: hidden;
     @media (min-width: 960px) {
