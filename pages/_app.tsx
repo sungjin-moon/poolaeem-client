@@ -73,6 +73,9 @@ const GlobalLayout = styled.div`
     height: 100%;
     background: ${Gray[200]};
     overflow-y: hidden;
+    ::-webkit-scrollbar {
+      display: none;
+    }
     @media (min-width: 960px) {
       width: 430px;
       height: 90vh;

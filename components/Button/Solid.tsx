@@ -99,7 +99,7 @@ function Solid({
     <Button
       className={`Button_Solid ${className}`}
       css={css({
-        height: _size.height,
+        minHeight: _size.height,
         padding: _size.padding,
         borderRadius: _size.borderRadius,
         background: _theme.background,
@@ -164,7 +164,6 @@ const Button = styled.button`
   outline: none;
   margin: 0px;
   padding: 0px 16px;
-  height: 48px;
   border-radius: 12px;
   cursor: pointer;
   gap: 4px;

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 import useModal from "../../../hooks/useModal";
 import useToast from "../../../hooks/useToast";
@@ -17,6 +18,7 @@ type onClose = () => void;
 type onPush = () => void;
 
 function useEdit(workbookId: string, isOpen: boolean) {
+  const Router = useRouter();
   const tabs = [
     { id: "problems", name: "문항 (0)" },
     { id: "solvedHisotries", name: "풀이내역 (0)" },
@@ -53,8 +55,11 @@ function useEdit(workbookId: string, isOpen: boolean) {
     );
   };
 
+  const onRedirectSolve = () => Router.push(`/solve/${workbookId}`);
+
   return {
-    Tabs: { tabs, tab, setTab },
+    Router,
+    Tabs: { tab, setTab },
     Toast,
     UpdateInfoModal,
     DeleteModal,
@@ -63,6 +68,7 @@ function useEdit(workbookId: string, isOpen: boolean) {
     SolvedHistoryList,
     ProblemList,
     onDelete,
+    onRedirectSolve,
   };
 }
 

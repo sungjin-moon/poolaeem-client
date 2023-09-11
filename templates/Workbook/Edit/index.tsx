@@ -222,13 +222,25 @@ function EditWorkbook({
     Toast,
     Delete,
     SolvedHistoryList,
+    ProblemList,
     onDelete,
+    onRedirectSolve,
   } = Update;
-  const { tabs, tab, setTab } = Update.Tabs;
+  const { tab, setTab } = Update.Tabs;
 
   const solvedHistoryPages = SolvedHistoryList.data?.pages || [];
   const solvedHistoryLength =
     solvedHistoryPages?.[solvedHistoryPages?.length - 1]?.list?.length || 0;
+
+  const problemPages = ProblemList.data?.pages || [];
+  const problemLength =
+    problemPages?.[problemPages?.length - 1]?.list?.length || 0;
+
+  const tabs = [
+    { id: "problems", name: `문항 (${problemLength})` },
+    { id: "solvedHisotries", name: `풀이내역 (${solvedHistoryLength})` },
+    { id: "settings", name: "설정" },
+  ];
 
   useEffect(() => {
     if (isOpen === true) {
@@ -243,7 +255,7 @@ function EditWorkbook({
         <Header
           onClose={onClose}
           title="문제집"
-          action={{ name: "풀이", handler: () => {} }}
+          action={{ name: "풀이", handler: onRedirectSolve }}
         />
         <Main>
           <Typography className="Main-name" type="subHeading" size={1}>

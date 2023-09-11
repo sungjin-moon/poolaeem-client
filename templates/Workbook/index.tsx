@@ -25,7 +25,11 @@ function Layout({ children }: Props) {
       <Header>
         <Logo className="Header-logo" />
         {Read?.data && (
-          <UserImage className="Header-user" onClick={Modal.onOpen} />
+          <UserImage
+            className="Header-user"
+            src={Read?.data?.image}
+            onClick={Modal.onOpen}
+          />
         )}
       </Header>
       {children}

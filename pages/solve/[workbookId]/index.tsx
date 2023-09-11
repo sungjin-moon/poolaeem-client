@@ -1,4 +1,4 @@
-import SolveTemplate from "../../templates/Solve";
+import SolveTemplate from "../../../templates/Solve";
 
 function Solve() {
   return <SolveTemplate />;

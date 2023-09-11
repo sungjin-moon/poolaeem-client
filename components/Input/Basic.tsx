@@ -87,6 +87,7 @@ export const Input = styled.div`
     border-radius: inherit;
     outline: none;
     background: inherit;
+    font-family: "Pretendard";
     font-size: 16px;
     font-weight: 600;
     transition: color 0.3s ease-in-out;
