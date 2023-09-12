@@ -17,7 +17,6 @@ import ToastBox from "../../../components/Toast";
 import Spinner from "../../../components/Loader/Spinner";
 
 import UpdateInfoTemplate from "./Settings/UpdateInfo";
-import CreateProblemTemplate from "./ProblemList/CreateProblem";
 import ProblemListTemplate from "./ProblemList";
 
 import useEdit from "../../../process/Workbook/Edit";
@@ -434,6 +433,7 @@ const Table = styled.div`
     .Table-row-name {
       width: 100%;
       border-right: solid 1px;
+      border-color: ${Pink[200]};
       color: ${Gray[50]};
       padding: 0px 6px;
       :last-child {

@@ -42,12 +42,18 @@ export const Menu = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  transition: 0.3s ease-in-out;
   .Menu_Basic-name {
     color: ${Gray[50]};
   }
   svg {
     path {
       fill: ${Gray[50]};
+    }
+  }
+  @media (min-width: 960px) {
+    :hover {
+      background: ${Pink[300]};
     }
   }
 `;

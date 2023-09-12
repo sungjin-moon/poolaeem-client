@@ -17,8 +17,8 @@ const defaultProps = {
 Loader.defaultProps = defaultProps;
 
 export const Spinner = styled.div`
-  border: 2px solid ${Pink[100]};
-  border-top: 2px solid ${Pink[500]};
+  border: 2px solid ${Pink[400]};
+  border-top: 2px solid ${Pink[100]};
   border-radius: 50%;
   width: 36px;
   height: 36px;

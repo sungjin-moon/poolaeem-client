@@ -7,20 +7,30 @@ import Typography from "../../components/Typography/Pretendard";
 import SolidButton from "../../components/Button/Solid";
 import Pink from "../../components/Color/Pink";
 import PromptModal from "../../components/Modal/DialogBox/Prompt";
+import NextModal from "../../components/Modal/View/Next";
 import Spinner from "../../components/Loader/Spinner";
 import UserImage from "../../components/Image/User";
 import ToastBox from "../../components/Toast";
+
+import ProblemListTemplate from "./ProblemList";
 
 import useSolve from "../../process/Solve/useSolve";
 
 interface Props {}
 
 function Solve() {
-  const { Router, Modal, Toast, Read, onCopyLink } = useSolve();
+  const {
+    Router,
+    EnterNameModal,
+    ProblemsModal,
+    Toast,
+    Info,
+    Profile,
+    onCopyLink,
+  } = useSolve();
+  const data = Info.data;
 
-  const data = Read.data;
-
-  if (Read.isLoading) {
+  if (!Info.isFetched) {
     return (
       <Template className="Solve">
         <div className="Solve-loading">
@@ -88,7 +98,14 @@ function Solve() {
         <SolidButton
           placeholder="풀이 시작"
           size="large"
-          onClick={Modal.onOpen}
+          onClick={() => {
+            if (Profile.isLoading) return;
+            const profile = Profile.data;
+            if (profile) {
+              return ProblemsModal.onOpen({ name: profile.name });
+            }
+            return EnterNameModal.onOpen();
+          }}
         />
         <Typography className="Main-copyright" type="body" size={6}>
           © team 901. All rights reserved.
@@ -97,21 +114,36 @@ function Solve() {
       <PromptModal
         Icon={<SpeechBalloon />}
         title="별명 입력"
-        field={Modal.field}
+        field={EnterNameModal.field}
         cancel={{
           placeholder: "닫기",
-          handler: Modal.onClose,
+          handler: EnterNameModal.onClose,
         }}
         success={{
           placeholder: "풀이 시작",
-          // status: Create.isLoading ? "loading" : "default",
-          handler: () => {},
+          handler: (item) => {
+            const name: string = item.value || "";
+            return ProblemsModal.onOpen({ name });
+          },
         }}
-        modalRef={Modal.ref}
-        isOpen={Modal.isOpen}
-        status={Modal.status}
-        onClose={Modal.onClose}
+        modalRef={EnterNameModal.ref}
+        isOpen={EnterNameModal.isOpen}
+        status={EnterNameModal.status}
+        onClose={EnterNameModal.onClose}
       />
+      <NextModal
+        modalRef={ProblemsModal.ref}
+        animateType="bottomToTop"
+        isOpen={ProblemsModal.isOpen}
+        status={ProblemsModal.status}
+        onClose={ProblemsModal.onClose}
+      >
+        <ProblemListTemplate
+          isOpen={ProblemsModal.isOpen}
+          name={ProblemsModal.data?.name}
+          onClose={ProblemsModal.onClose}
+        />
+      </NextModal>
       <ToastBox list={Toast.list} />
     </Template>
   );

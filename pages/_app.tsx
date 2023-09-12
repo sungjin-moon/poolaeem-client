@@ -70,7 +70,7 @@ const GlobalLayout = styled.div`
     display: flex;
     flex-direction: column;
     width: 600px;
-    height: 100%;
+    height: 100vh;
     background: ${Gray[200]};
     overflow-y: hidden;
     ::-webkit-scrollbar {

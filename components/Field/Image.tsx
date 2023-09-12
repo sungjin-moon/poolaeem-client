@@ -103,7 +103,8 @@ function Image({ className, label, item, onChange }: Props) {
           className="Wrapper-delete"
           placeholder="삭제"
           theme="lightPink"
-          onClick={onDelete}
+          status={!src ? "disabled" : "default"}
+          onClick={() => src && onDelete()}
         />
       </Wrapper>
     </Field>
@@ -137,6 +138,7 @@ const UploadImage = styled.div`
   position: relative;
   width: 104px;
   height: 104px;
+  cursor: pointer;
   .UploadImage-image {
     width: 100%;
     height: 100%;

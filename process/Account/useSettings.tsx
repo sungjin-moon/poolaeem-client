@@ -7,13 +7,13 @@ import useModal from "../../hooks/useModal";
 import useField, { Item } from "../../hooks/useField";
 
 import { queryClient } from "../../queries";
-import useRead from "../../queries/Account/useRead";
+import { useProfile } from "../../queries/Account/useRead";
 import useDelete from "../../queries/Account/useDelete";
 import { useUpdateImage } from "../../queries/Account/useUpdate";
 
 function useSettings() {
   const Router = useRouter();
-  const Read = useRead();
+  const Read = useProfile();
   const Update = useUpdateImage();
   const Delete = useDelete();
   const Toast = useToast();
@@ -30,11 +30,11 @@ function useSettings() {
     maxSize: 1000000,
   });
 
-  const userId = Read?.data?.id;
+  const userId = Read?.data?.id || "";
 
   const onSignOut = () => {
     const cookies = new Cookies();
-    cookies.remove("session");
+    cookies.remove("session", { path: "/" });
     Router.replace("/sign-in");
   };
 

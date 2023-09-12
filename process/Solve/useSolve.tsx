@@ -1,5 +1,7 @@
 import { useRouter } from "next/router";
-import useRead from "../../queries/Solve/useRead";
+
+import { useInfo } from "../../queries/Solve/useRead";
+import { useProfile } from "../../queries/Account/useRead";
 
 import useModal from "../../hooks/useModal";
 import useField from "../../hooks/useField";
@@ -7,7 +9,8 @@ import useToast from "../../hooks/useToast";
 
 function useSolve() {
   const Router = useRouter();
-  const Modal = useModal();
+  const EnterNameModal = useModal();
+  const ProblemsModal = useModal();
   const Field = useField({
     key: "Name",
     required: true,
@@ -18,14 +21,19 @@ function useSolve() {
     maxLength: 30,
   });
   const Toast = useToast();
+  const Profile = useProfile(
+    {},
+    {
+      retry: false,
+    }
+  );
 
   const workbookId = Router.query?.workbookId || "";
 
-  const Read = useRead(
+  const Info = useInfo(
     { id: workbookId },
     { enabled: workbookId ? true : false }
   );
-  console.log(Router);
   const onCopyLink = () => {
     const copyLink = window.location.href;
     navigator.clipboard.writeText(copyLink).then(
@@ -38,15 +46,16 @@ function useSolve() {
       (error) => {}
     );
   };
-  console.log(Read.data);
   return {
     Router,
-    Modal: {
-      ...Modal,
+    EnterNameModal: {
+      ...EnterNameModal,
       field: Field.item,
     },
+    ProblemsModal,
     Toast,
-    Read,
+    Info,
+    Profile,
     onCopyLink,
   };
 }

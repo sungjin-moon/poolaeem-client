@@ -1,16 +1,23 @@
 import axios, { API } from "../settings";
 import { useQuery } from "react-query";
 
-interface Params {
-  key: string;
-}
+type Variables = {};
 
-const initialData = null;
-const initialParams = {
-  key: "profile",
+type Profile = {
+  id: string;
+  name: string;
+  email: string;
+  image: string;
 };
 
-export const getProfile = async (params: Params = initialParams) => {
+const initialPayload: Profile = {
+  id: "",
+  name: "",
+  email: "",
+  image: "",
+};
+
+export const getProfile = async (variables: Variables) => {
   const url = `${API}/api/profile/info`;
 
   const config = {};
@@ -18,41 +25,26 @@ export const getProfile = async (params: Params = initialParams) => {
   const response = await axios.get(url, config);
   const { data } = response;
   if (data) {
-    return {
+    const payload: Profile = {
       id: data?.data?.userId || "",
       name: data?.data?.name || "",
       email: data?.data?.email || "",
       image: data?.data?.profileImageUrl || "",
     };
+
+    return payload;
   }
 
-  return initialData;
+  return initialPayload;
 };
 
-function useRead(params: Params = initialParams, options = {}) {
-  const _params = { ...initialParams, ...params };
-  const { key } = _params;
-
-  const payload = useQuery(
-    ["account", key],
-    async () => {
-      switch (key) {
-        case "profile": {
-          return getProfile();
-        }
-        default:
-          return initialData;
-      }
-    },
-    {
-      // refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      staleTime: 500000,
-      ...options,
-    }
-  );
+export function useProfile(variables: Variables = {}, options = {}) {
+  const payload = useQuery(["account-profile"], () => getProfile(variables), {
+    // refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    staleTime: 500000,
+    ...options,
+  });
 
   return payload;
 }
-
-export default useRead;

@@ -35,7 +35,7 @@ instance.interceptors.response.use(
     if (code === 10052 || code === 10004) {
       console.log(err.response);
       const cookies = new Cookies();
-      cookies.remove("session");
+      cookies.remove("session", { path: "/" });
       window.location.href = "/sign-in";
     }
 
@@ -43,7 +43,11 @@ instance.interceptors.response.use(
       const cookies = new Cookies();
       const session = cookies.get("session") || null;
       const payload = await refreshAccessToken(session?.refreshToken);
-      cookies.set("session", { ...session, accessToken: payload?.accessToken });
+      cookies.set(
+        "session",
+        { ...session, accessToken: payload?.accessToken },
+        { path: "/" }
+      );
       return instance(err.config);
     }
     return Promise.reject(err);

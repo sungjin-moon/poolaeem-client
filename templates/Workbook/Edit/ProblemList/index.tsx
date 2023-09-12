@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { css } from "@emotion/react";
 
 import Edit from "../../../../assets/icons/Edit.svg";
 import TrashCan from "../../../../assets/icons/TrashCan.svg";
@@ -26,6 +27,7 @@ interface Props {
 
 function ProblemList({ workbookId }: Props) {
   const {
+    InfiniteScroll,
     List,
     Delete,
     CreateModal,
@@ -34,7 +36,7 @@ function ProblemList({ workbookId }: Props) {
     Toast,
     onDelete,
   } = useProblemList(workbookId);
-  const { isFetched, isRefetching } = List;
+  const { isFetched, isRefetching, hasNextPage } = List;
 
   const pages = List.data?.pages || [];
   const length = pages?.[pages?.length - 1]?.list?.length || 0;
@@ -70,15 +72,26 @@ function ProblemList({ workbookId }: Props) {
           {pages.map((page, pageIndex) => {
             const lastPageIndex = pages.length - 1;
             const isLastPage = lastPageIndex === pageIndex;
-            return page.list.map((problem, index) => {
+            return page.list.map((problem, problemIndex) => {
               return (
                 <ProblemCard key={problem.id}>
+                  <ScrollView
+                    ref={InfiniteScroll.ref}
+                    css={css({
+                      display:
+                        hasNextPage === true &&
+                        isLastPage &&
+                        page.list.length - 1 === problemIndex
+                          ? "block"
+                          : "none",
+                    })}
+                  />
                   <Typography
                     className="ProblemCard-label"
                     type="body"
                     size={6}
                   >
-                    문항 {index + 1}
+                    문항 {problem.number}
                   </Typography>
                   <Typography
                     className="ProblemCard-question"
@@ -191,7 +204,6 @@ const defaultProps = {
 ProblemList.defaultProps = defaultProps;
 
 const Template = styled.div`
-  height: calc(100% - 76px - 18px - 36px);
   .ProblemList-menu {
     margin-bottom: 6px;
   }
@@ -208,10 +220,13 @@ const Template = styled.div`
     }
   }
   .ProblemList-list {
-    height: calc(100% - 48px - 6px);
+    height: calc(90vh - 48px - 72px - 20px - 72px - 18px - 36px - 48px);
     overflow-y: auto;
     ::-webkit-scrollbar {
       display: none;
+    }
+    @media (max-width: 960px) {
+      height: calc(100vh - 48px - 72px - 20px - 72px - 18px - 36px - 48px);
     }
   }
   .ProblemList-loading {
@@ -271,6 +286,10 @@ const ProblemCard = styled.div`
       }
     }
   }
+`;
+
+const ScrollView = styled.div`
+  height: 1px;
 `;
 
 export default ProblemList;

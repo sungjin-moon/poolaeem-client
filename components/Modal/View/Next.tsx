@@ -21,6 +21,10 @@ interface Props {
 interface HeaderProps {
   className?: string;
   title?: string;
+  close?: {
+    name: string;
+    handler: () => void;
+  };
   action?: {
     name: string;
     handler: () => void;
@@ -31,6 +35,10 @@ interface HeaderProps {
 export const Header = ({
   className,
   title = "Title",
+  close = {
+    name: "",
+    handler: () => {},
+  },
   action = {
     name: "Name",
     handler: () => {},
@@ -39,10 +47,21 @@ export const Header = ({
 }: HeaderProps) => {
   return (
     <HeaderBox className={`HeaderBox ${className}`}>
-      <LeftArrow
-        className="HeaderBox-close"
-        onClick={() => onClose(undefined)}
-      />
+      {close?.name ? (
+        <Typography
+          className="HeaderBox-action"
+          type="caption"
+          size={3}
+          onClick={close.handler}
+        >
+          {close.name}
+        </Typography>
+      ) : (
+        <LeftArrow
+          className="HeaderBox-close"
+          onClick={() => onClose(undefined)}
+        />
+      )}
       <Typography className="HeaderBox-title" type="caption" size={1}>
         {title}
       </Typography>
@@ -126,7 +145,7 @@ const HeaderBox = styled.header`
   }
   .HeaderBox-action {
     cursor: pointer;
-    padding-right: 12px;
+    padding: 0px 12px;
   }
 `;
 

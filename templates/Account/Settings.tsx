@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 
+import Link from "next/link";
+
 import WarningSign from "../../assets/icons/$WarningSign.svg";
 
 import Gray from "../../components/Color/Gray";
@@ -20,6 +22,7 @@ interface Props {
 
 function Settings({ className, onClose }: Props) {
   const {
+    Router,
     Toast,
     Read,
     Delete,
@@ -39,7 +42,12 @@ function Settings({ className, onClose }: Props) {
       <Header
         onClose={onClose}
         title="내 정보"
-        action={{ name: "문의", handler: () => {} }}
+        action={{
+          name: "문의",
+          handler: () => {
+            window.open("mailto:poolaeem901@gmail.com");
+          },
+        }}
       />
       <Main>
         <ImageFieldBox

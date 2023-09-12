@@ -53,10 +53,7 @@ export const get = async (variables: Variables) => {
   return initialPayload;
 };
 
-export default function useRead(
-  variables: Variables = { id: "" },
-  options = {}
-) {
+export function useInfo(variables: Variables = { id: "" }, options = {}) {
   const payload = useQuery(["solve-info", variables.id], () => get(variables), {
     refetchOnWindowFocus: false,
     staleTime: 500000,

@@ -1,11 +1,11 @@
 import useField from "../../hooks/useField";
 
 import { queryClient } from "../../queries";
-import useRead from "../../queries/Account/useRead";
+import { useProfile } from "../../queries/Account/useRead";
 import { useUpdateName } from "../../queries/Account/useUpdate";
 
 function useChangeName() {
-  const Read = useRead();
+  const Read = useProfile();
   const Update = useUpdateName();
 
   type Callback = () => void;

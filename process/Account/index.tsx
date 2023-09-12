@@ -5,11 +5,11 @@ import useModal from "../../hooks/useModal";
 import useToast from "../../hooks/useToast";
 
 import { queryClient } from "../../queries";
-import useRead from "../../queries/Account/useRead";
+import { useProfile } from "../../queries/Account/useRead";
 
 function useAccount() {
   const Router = useRouter();
-  const Read = useRead();
+  const Read = useProfile();
 
   const Modal = useModal();
   const Toast = useToast();

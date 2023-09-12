@@ -1,15 +1,21 @@
-import axios, { API } from "../../settings";
+import axios, { API } from "../settings";
 import { useInfiniteQuery } from "react-query";
 
-import { ServerProblemListPayload } from "../types";
+import { ServerProblemListPayload } from "./types";
+
+export type Option = {
+  id: string;
+  name: string;
+  isSelected: boolean;
+};
 
 export type Problem = {
   id: string;
   number: number;
   question: string;
   type: string;
-  optionCount: number;
   timeout: number;
+  options: Option[];
 };
 
 export type ClientPayload = {
@@ -32,12 +38,16 @@ type Config = {
 };
 
 interface Params {
-  workbookId: string;
+  workbookId: string | string[];
 }
 
-export const getList = async (workbookId = "", order = "", page = 1) => {
-  const url = `${API}/api/workbooks/${workbookId}/problems`;
-  const size = 7;
+export const getList = async (
+  workbookId: string | string[] = "",
+  order = "",
+  page = 1
+) => {
+  const url = `${API}/api/workbooks/${workbookId}/problems/solve`;
+  const size = 10;
   const config: Config = {
     params: {
       size,
@@ -64,8 +74,14 @@ export const getList = async (workbookId = "", order = "", page = 1) => {
             number,
             question: problem?.question || "",
             type: problem?.type || "",
-            optionCount: problem?.optionCount || 0,
             timeout: problem?.timeout || 0,
+            options: problem?.options?.map?.((option) => {
+              return {
+                id: option?.optionId || "",
+                name: option?.value || "",
+                isSelected: false,
+              };
+            }),
           };
         }) || [],
     };
@@ -80,7 +96,7 @@ export default function useList(
   options = {}
 ) {
   const payload = useInfiniteQuery(
-    ["problemList", params.workbookId],
+    ["solve-problemList", params.workbookId],
     ({ pageParam }) => {
       const workbookId = params?.workbookId || "";
       const order = pageParam?.order || "";

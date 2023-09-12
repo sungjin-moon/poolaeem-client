@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect } from "react";
 
 import useModal from "../../../../hooks/useModal";
+import useInfiniteScroll from "../../../../hooks/useInfiniteScroll";
 import useToast from "../../../../hooks/useToast";
 
 import { queryClient } from "../../../../queries";
@@ -14,6 +15,8 @@ function useProblemList(workbookId: string) {
   const DeleteModal = useModal();
   const CreateModal = useModal();
   const Toast = useToast();
+  const InfiniteScroll = useInfiniteScroll();
+  const { onScrollBottom } = InfiniteScroll;
 
   const onDelete = () => {
     if (Delete.isLoading) return;
@@ -35,8 +38,21 @@ function useProblemList(workbookId: string) {
     );
   };
 
+  useEffect(() => {
+    if (
+      List.status === "success" &&
+      List.isFetching === false &&
+      (List.hasNextPage === true || List.hasNextPage === undefined)
+    ) {
+      return onScrollBottom(() => {
+        List.fetchNextPage();
+      });
+    }
+  }, [List.isFetched, List.isFetching, List.hasNextPage]);
+
   return {
     Toast,
+    InfiniteScroll,
     CreateModal,
     DeleteModal,
     UpdateModal,
