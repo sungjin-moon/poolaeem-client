@@ -96,7 +96,7 @@ const Animate = keyframes`
 `;
 
 const Container = styled.div`
-  position: fixed;
+  position: absolute;
   left: 0px;
   right: 0px;
   margin-bottom: 4%;

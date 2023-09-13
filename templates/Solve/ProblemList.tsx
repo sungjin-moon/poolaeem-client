@@ -1,8 +1,12 @@
+import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
+import Logo from "../../assets/icons/$Logo-pink.svg";
 import WarningSign from "../../assets/icons/$WarningSign.svg";
 
 import Gray from "../../components/Color/Gray";
@@ -12,21 +16,61 @@ import Spinner from "../../components/Loader/Spinner";
 import ConfirmModal from "../../components/Modal/DialogBox/Confirm";
 import ToastBox from "../../components/Toast";
 import Selector from "../../components/Selector/Basic";
+import SolidButton from "../../components/Button/Solid";
+
+import useInterval from "../..//hooks/useInterval";
 
 import useProblemList from "../../process/Solve/useProblemList";
-import { useState } from "react";
 
 interface Props {
   className: string;
   isOpen: boolean;
   name: string;
   onClose: () => void;
+  onCopyLink: () => void;
 }
 
-function ProblemList({ className, isOpen, name, onClose }: Props) {
-  const [isEnd, setEnd] = useState(false);
+type ProgressProps = {
+  maxValue?: number;
+  timeout?: number;
+};
+
+const ProgressProvider = ({ maxValue = 70, timeout = 30 }: ProgressProps) => {
+  const [count, setCount] = useState(0);
+
+  useInterval(() => {
+    if (count < maxValue) {
+      setCount(count + 1);
+    }
+  }, timeout);
+
+  const a = count;
+
+  // console.log(a, maxValue, timeout);
+
+  return (
+    <CircularProgressbar
+      className="Main-info-progressBar"
+      strokeWidth={6}
+      value={a}
+      text={`${a}`}
+      styles={buildStyles({
+        textColor: Gray[50],
+        trailColor: Pink[400],
+        pathColor: Gray[50],
+        strokeLinecap: "butt",
+        textSize: "40px",
+      })}
+    />
+  );
+};
+
+function ProblemList({ className, isOpen, name, onClose, onCopyLink }: Props) {
   const {
+    isEnd,
+    setEnd,
     InfiniteScroll,
+    Router,
     Toast,
     CloseModal,
     Slide,
@@ -35,6 +79,8 @@ function ProblemList({ className, isOpen, name, onClose }: Props) {
     onNext,
     onSelect,
     onMarking,
+    onInit,
+    onCreateWorkbook,
   } = useProblemList(isOpen);
 
   if (Marking.isError || List.isError) {
@@ -79,37 +125,90 @@ function ProblemList({ className, isOpen, name, onClose }: Props) {
   }
 
   if (Marking.isSuccess) {
+    const name = Marking.data.name;
+    const solvedCount = Marking.data.solvedCount;
+    const correctedCount = Marking.data.correctedCount;
+    const accuracyRate = Marking.data.accuracyRate;
     return (
       <Template className={`ProblemList ${className}`}>
         <Header>
+          <Logo className="Header-logo" onClick={() => Router.push("/")} />
           <Typography
             className="Header-action"
             type="caption"
             size={3}
-            onClick={CloseModal.onOpen}
-          >
-            풀이 종료
-          </Typography>
-          <Typography
-            className="Header-action"
-            type="caption"
-            size={3}
-            // onClick={onMarking}
+            onClick={onCopyLink}
           >
             공유
           </Typography>
         </Header>
-        <Main>asd</Main>
-        <Typography className="ProblemList-copyright" type="body" size={6}>
-          © team 901. All rights reserved.
-        </Typography>
+        <Main>
+          <div className="Main-info">
+            <Typography className="Main-info-title" type="subHeading" size={1}>
+              풀이결과
+            </Typography>
+            <ProgressProvider maxValue={accuracyRate} />
+          </div>
+
+          <Table>
+            <div className="Table-row">
+              <Typography className="Table-row-label" type="body" size={3}>
+                내 별명
+              </Typography>
+              <Typography className="Table-row-value" type="caption" size={3}>
+                {name}
+              </Typography>
+            </div>
+            <div className="Table-row">
+              <Typography className="Table-row-label" type="body" size={3}>
+                풀이한 문항수
+              </Typography>
+              <Typography className="Table-row-value" type="caption" size={3}>
+                {solvedCount}
+              </Typography>
+            </div>
+            <div className="Table-row">
+              <Typography className="Table-row-label" type="body" size={3}>
+                맞힌 문항수
+              </Typography>
+              <Typography className="Table-row-value" type="caption" size={3}>
+                {correctedCount}
+              </Typography>
+            </div>
+            <div className="Table-row">
+              <Typography className="Table-row-label" type="body" size={3}>
+                정답률
+              </Typography>
+              <Typography className="Table-row-value" type="caption" size={3}>
+                {`${accuracyRate}%`}
+              </Typography>
+            </div>
+          </Table>
+          <div className="Main-buttons">
+            <SolidButton
+              className="Main-buttons-button"
+              theme="pink"
+              placeholder="다시 풀기"
+              size="large"
+              onClick={onInit}
+            />
+            <SolidButton
+              className="Main-buttons-button"
+              theme="lightPink"
+              placeholder="문제집 만들기"
+              size="large"
+              onClick={onCreateWorkbook}
+            />
+          </div>
+          <Typography className="Main-copyright" type="body" size={6}>
+            © team 901. All rights reserved.
+          </Typography>
+        </Main>
       </Template>
     );
   }
 
-  const { isLoading, isFetched, hasNextPage } = List;
-
-  if (isLoading) {
+  if (List.isLoading) {
     return (
       <Template className={`ProblemList ${className}`}>
         <div className="ProblemList-loading">
@@ -134,7 +233,7 @@ function ProblemList({ className, isOpen, name, onClose }: Props) {
   const pages = List.data?.pages || [];
   // const length = pages?.[pages?.length - 1]?.list?.length || 0;
 
-  if (isOpen && isFetched) {
+  if (isOpen && List.isFetched) {
     return (
       <Template className={`ProblemList ${className}`}>
         <Header>
@@ -194,7 +293,7 @@ function ProblemList({ className, isOpen, name, onClose }: Props) {
                       ref={InfiniteScroll.ref}
                       css={css({
                         display:
-                          hasNextPage === true &&
+                          List.hasNextPage === true &&
                           isLastPage &&
                           page.list.length - 1 === problemIndex
                             ? "block"
@@ -266,13 +365,15 @@ function ProblemList({ className, isOpen, name, onClose }: Props) {
       </Template>
     );
   }
-  return null;
+
+  return <Template className={`ProblemList ${className}`} />;
 }
 
 const defaultProps = {
   className: "",
   isOpen: false,
   onClose: () => {},
+  onCopyLink: () => {},
 };
 
 ProblemList.defaultProps = defaultProps;
@@ -314,6 +415,11 @@ const Header = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 0px 8px;
+  .Header-logo {
+    width: 92px;
+    height: 32px;
+    cursor: pointer;
+  }
   .Header-action {
     color: ${Gray[50]};
     cursor: pointer;
@@ -322,9 +428,37 @@ const Header = styled.header`
 `;
 
 const Main = styled.main`
-  .Main-swiper {
-    .Main-swiper-slide {
+  padding: 20px 20px 48px 20px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 48px);
+  overflow-y: auto;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  .Main-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    .Main-info-title {
+      color: ${Gray[50]};
     }
+    .Main-info-progressBar {
+      width: 120px;
+      height: 120px;
+    }
+  }
+  .Main-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 40px;
+  }
+  .Main-copyright {
+    color: ${Gray[50]};
+    justify-content: center;
+    margin-top: auto;
   }
 `;
 
@@ -363,6 +497,33 @@ const Problem = styled.div`
 
 const ScrollView = styled.div`
   height: 1px;
+`;
+
+const Table = styled.div`
+  margin: 40px 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  .Table-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 0px 12px;
+    height: 42px;
+    background: ${Pink[400]};
+    border-radius: 12px;
+    .Table-row-label,
+    .Table-row-value {
+      color: ${Gray[50]};
+      align-items: center;
+      .Table-row-value-userImage {
+        width: 26px;
+        height: 26px;
+        margin-right: 6px;
+      }
+    }
+  }
 `;
 
 export default ProblemList;

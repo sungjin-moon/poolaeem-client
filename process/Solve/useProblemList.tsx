@@ -31,6 +31,7 @@ function useProblemList(isOpen = false) {
   );
   const Marking = useMarking();
   const ref = useRef(null);
+  const [isEnd, setEnd] = useState(false);
 
   const onNext = () => {
     const el: any = ref?.current;
@@ -53,7 +54,6 @@ function useProblemList(isOpen = false) {
   };
 
   const onMarking = (name: string) => {
-    console.log(name);
     if (Marking.isLoading) return;
     const pages = List.data?.pages || [];
     Marking.mutate(
@@ -63,6 +63,16 @@ function useProblemList(isOpen = false) {
         onError: () => {},
       }
     );
+  };
+
+  const onInit = () => {
+    setEnd(false);
+    Marking.reset();
+    queryClient.invalidateQueries(["solve-problemList"]);
+  };
+
+  const onCreateWorkbook = () => {
+    Router.push("/?modal=create");
   };
 
   useEffect(() => {
@@ -77,7 +87,15 @@ function useProblemList(isOpen = false) {
     }
   }, [List.isFetched, List.isFetching, List.hasNextPage]);
 
+  useEffect(() => {
+    if (isOpen === false) {
+      queryClient.invalidateQueries(["solve-problemList"]);
+    }
+  }, [isOpen]);
+
   return {
+    isEnd,
+    setEnd,
     Router,
     Slide: {
       ref,
@@ -90,6 +108,8 @@ function useProblemList(isOpen = false) {
     onNext,
     onSelect,
     onMarking,
+    onInit,
+    onCreateWorkbook,
   };
 }
 

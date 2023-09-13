@@ -20,10 +20,29 @@ type RequestProblem = {
   };
 };
 
-type RequestPayload = {
+type ReqPayload = {
   name: string;
   problems: RequestProblem[];
 };
+
+type ResPayload = {
+  code: number;
+  data: {
+    name: string;
+    totalProblems: number;
+    correctCount: number;
+    accuracyRate: number;
+  };
+};
+
+type Data = {
+  name: string;
+  solvedCount: string;
+  correctedCount: string;
+  accuracyRate: number;
+};
+
+type Marking = (variables: Variables) => Promise<Data>;
 
 const parseList = (pages: ClientPayload[] = []) => {
   let result: RequestProblem[] = [];
@@ -53,22 +72,33 @@ const parseList = (pages: ClientPayload[] = []) => {
   return result;
 };
 
-const initialData = null;
+const initialData: Data = {
+  name: "",
+  solvedCount: "",
+  correctedCount: "",
+  accuracyRate: 0,
+};
 
-export const marking = async (variables: Variables) => {
+export const marking: Marking = async (variables) => {
   const url = `${API}/api/workbooks/${variables.workbookId}/grade`;
   const config = {};
 
-  const payload: RequestPayload = {
+  const reqPayload: ReqPayload = {
     name: variables.name,
     problems: parseList(variables.pages),
   };
 
-  const response = await axios.post(url, payload, config);
-  const { data, status } = response;
+  const response = await axios.post(url, reqPayload, config);
+  const status: number = response.status;
+  const resPayload: ResPayload = response.data;
 
   if (status === 200) {
-    return {};
+    return {
+      name: resPayload?.data?.name || "",
+      solvedCount: `${resPayload?.data?.totalProblems} 문항`,
+      correctedCount: `${resPayload?.data?.correctCount} 문항`,
+      accuracyRate: resPayload?.data?.accuracyRate || 0,
+    };
   }
 
   return initialData;

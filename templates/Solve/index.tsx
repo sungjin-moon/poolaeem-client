@@ -142,9 +142,10 @@ function Solve() {
           isOpen={ProblemsModal.isOpen}
           name={ProblemsModal.data?.name}
           onClose={ProblemsModal.onClose}
+          onCopyLink={onCopyLink}
         />
       </NextModal>
-      <ToastBox list={Toast.list} />
+      <ToastBox className="Solve-toast" list={Toast.list} />
     </Template>
   );
 }
@@ -161,6 +162,9 @@ const Template = styled.div`
     .Solve-loading-loader {
       border: solid 1px;
     }
+  }
+  .Solve-toast {
+    z-index: 9999;
   }
 `;
 
@@ -215,7 +219,7 @@ const Main = styled.main`
 `;
 
 const Table = styled.div`
-  margin: 48px 0px;
+  margin: 40px 0px;
   display: flex;
   flex-direction: column;
   gap: 6px;

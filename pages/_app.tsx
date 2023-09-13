@@ -12,8 +12,16 @@ function App({ Component, pageProps }: AppProps) {
   let vh = 0;
 
   useEffect(() => {
-    vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty("--vh", `${vh}px`);
+    // vh = window.innerHeight * 0.01;
+    // document.documentElement.style.setProperty("--vh", `${vh}px`);
+    const setVh = () => {
+      vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    };
+    window.addEventListener("resize", setVh);
+    setVh();
+
+    return () => window.removeEventListener("resize", setVh);
   }, []);
 
   return (

@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 import useModal from "../../hooks/useModal";
@@ -8,6 +9,7 @@ import { queryClient } from "../../queries";
 import useList from "../../queries/Workbook/useList";
 
 function useWorkbookList() {
+  const Router = useRouter();
   const CreateModal = useModal();
   const UpdateModal = useModal();
   const InfiniteScroll = useInfiniteScroll();
@@ -29,7 +31,18 @@ function useWorkbookList() {
     }
   }, [List.isFetched, List.isFetching, List.hasNextPage]);
 
+  useEffect(() => {
+    const modal = Router.query?.modal || "";
+    if (modal) {
+      if (modal === "create") {
+        CreateModal.onOpen();
+        Router.replace("/", undefined, { shallow: true });
+      }
+    }
+  }, [Router.query]);
+
   return {
+    Router,
     CreateModal,
     UpdateModal,
     List,

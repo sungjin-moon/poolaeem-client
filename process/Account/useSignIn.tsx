@@ -31,6 +31,8 @@ function useSignIn() {
             },
             {
               path: "/",
+              // secure: true,
+              // httpOnly: true,
             }
           );
           return push("/");
