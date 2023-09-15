@@ -32,6 +32,7 @@ function Background({
       css={{
         height: isOpen === true ? "100%" : "0%",
         opacity: status === "fadeIn" ? "1" : "0",
+        willChange: status === "fadeIn" ? "opacity" : "auto",
       }}
     >
       {children}
@@ -61,6 +62,7 @@ export const Modal = styled.div`
   background: rgba(46, 44, 44, 0.64);
   display: flex;
   transition: opacity 0.3s ease-in-out;
+  will-change: opacity;
 `;
 
 export default Background;

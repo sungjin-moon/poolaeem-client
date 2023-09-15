@@ -10,7 +10,7 @@ import useToast from "../../hooks/useToast";
 function useSolve() {
   const Router = useRouter();
   const EnterNameModal = useModal();
-  const ProblemsModal = useModal();
+  const ProblemListModal = useModal();
   const Field = useField({
     key: "Name",
     required: true,
@@ -52,7 +52,7 @@ function useSolve() {
       ...EnterNameModal,
       field: Field.item,
     },
-    ProblemsModal,
+    ProblemListModal,
     Toast,
     Info,
     Profile,

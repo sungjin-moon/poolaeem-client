@@ -59,6 +59,9 @@ function Confirm({
         css={css({
           transform:
             status === "fadeIn" ? "translateY(0px)" : "translateY(1000px)",
+          WebkitTransform:
+            status === "fadeIn" ? "translateY(0px)" : "translateY(1000px)",
+          willChange: status === "fadeIn" ? "transform" : "auto",
         })}
       >
         {Icon}
@@ -122,7 +125,7 @@ export const Container = styled.div`
   width: 100%;
   margin-top: auto;
   background: ${Gray[50]};
-  transition: 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
   border-radius: 24px 24px 0px 0px;
   padding: 40px;
   display: flex;

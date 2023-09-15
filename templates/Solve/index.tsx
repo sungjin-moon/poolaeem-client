@@ -22,7 +22,7 @@ function Solve() {
   const {
     Router,
     EnterNameModal,
-    ProblemsModal,
+    ProblemListModal,
     Toast,
     Info,
     Profile,
@@ -83,7 +83,7 @@ function Solve() {
               문항수
             </Typography>
             <Typography className="Table-row-value" type="caption" size={3}>
-              {data?.problemCount}
+              {`${data?.problemCount} 문항`}
             </Typography>
           </div>
           <div className="Table-row">
@@ -91,7 +91,7 @@ function Solve() {
               풀이한 사람
             </Typography>
             <Typography className="Table-row-value" type="caption" size={3}>
-              {data?.solvedCount}
+              {`${data?.solvedCount} 명`}
             </Typography>
           </div>
         </Table>
@@ -99,10 +99,21 @@ function Solve() {
           placeholder="풀이 시작"
           size="large"
           onClick={() => {
-            if (Profile.isLoading) return;
+            const problemCount = data?.problemCount;
             const profile = Profile.data;
+            if (problemCount === 0) {
+              return Toast.onPush({
+                status: "alert",
+                message: "문항이 존재하지 않아 풀이할 수 없어요",
+              });
+            }
+
+            if (Profile.isLoading) return;
             if (profile) {
-              return ProblemsModal.onOpen({ name: profile.name });
+              return ProblemListModal.onOpen({
+                name: profile.name,
+                problemCount,
+              });
             }
             return EnterNameModal.onOpen();
           }}
@@ -123,7 +134,8 @@ function Solve() {
           placeholder: "풀이 시작",
           handler: (item) => {
             const name: string = item.value || "";
-            return ProblemsModal.onOpen({ name });
+            const problemCount = data?.problemCount;
+            return ProblemListModal.onOpen({ name, problemCount });
           },
         }}
         modalRef={EnterNameModal.ref}
@@ -132,16 +144,17 @@ function Solve() {
         onClose={EnterNameModal.onClose}
       />
       <NextModal
-        modalRef={ProblemsModal.ref}
+        modalRef={ProblemListModal.ref}
         animateType="bottomToTop"
-        isOpen={ProblemsModal.isOpen}
-        status={ProblemsModal.status}
-        onClose={ProblemsModal.onClose}
+        isOpen={ProblemListModal.isOpen}
+        status={ProblemListModal.status}
+        onClose={ProblemListModal.onClose}
       >
         <ProblemListTemplate
-          isOpen={ProblemsModal.isOpen}
-          name={ProblemsModal.data?.name}
-          onClose={ProblemsModal.onClose}
+          isOpen={ProblemListModal.isOpen}
+          name={ProblemListModal.data?.name}
+          problemCount={ProblemListModal.data?.problemCount}
+          onClose={ProblemListModal.onClose}
           onCopyLink={onCopyLink}
         />
       </NextModal>

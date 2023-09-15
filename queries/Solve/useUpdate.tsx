@@ -37,8 +37,8 @@ type ResPayload = {
 
 type Data = {
   name: string;
-  solvedCount: string;
-  correctedCount: string;
+  solvedCount: number;
+  correctedCount: number;
   accuracyRate: number;
 };
 
@@ -74,8 +74,8 @@ const parseList = (pages: ClientPayload[] = []) => {
 
 const initialData: Data = {
   name: "",
-  solvedCount: "",
-  correctedCount: "",
+  solvedCount: 0,
+  correctedCount: 0,
   accuracyRate: 0,
 };
 
@@ -95,8 +95,8 @@ export const marking: Marking = async (variables) => {
   if (status === 200) {
     return {
       name: resPayload?.data?.name || "",
-      solvedCount: `${resPayload?.data?.totalProblems} 문항`,
-      correctedCount: `${resPayload?.data?.correctCount} 문항`,
+      solvedCount: resPayload?.data?.totalProblems,
+      correctedCount: resPayload?.data?.correctCount,
       accuracyRate: resPayload?.data?.accuracyRate || 0,
     };
   }

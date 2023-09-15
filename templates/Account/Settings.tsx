@@ -72,7 +72,7 @@ function Settings({ className, onClose }: Props) {
           <SoldButton
             className="Main-buttons-button"
             size="large"
-            placeholder="로그 아웃"
+            placeholder="로그아웃"
             theme="lightPink"
             onClick={onSignOut}
           />

@@ -106,6 +106,8 @@ function Next({
         className={`Modal_Next ${className}`}
         css={css({
           transform: animate(),
+          WebkitTransform: animate(),
+          willChange: status === "fadeIn" ? "transform" : "auto",
         })}
       >
         {children}
@@ -129,7 +131,7 @@ export const Container = styled.div`
   width: 100%;
   height: 100%;
   background: ${Gray[50]};
-  transition: 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
   display: flex;
   flex-direction: column;
 `;

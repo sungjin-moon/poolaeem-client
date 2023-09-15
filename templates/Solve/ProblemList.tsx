@@ -1,10 +1,7 @@
-import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
 
 import Logo from "../../assets/icons/$Logo-pink.svg";
 import WarningSign from "../../assets/icons/$WarningSign.svg";
@@ -17,8 +14,7 @@ import ConfirmModal from "../../components/Modal/DialogBox/Confirm";
 import ToastBox from "../../components/Toast";
 import Selector from "../../components/Selector/Basic";
 import SolidButton from "../../components/Button/Solid";
-
-import useInterval from "../..//hooks/useInterval";
+import ProgressBar, { useCount } from "../../components/ProgressBar/Circular";
 
 import useProblemList from "../../process/Solve/useProblemList";
 
@@ -26,46 +22,19 @@ interface Props {
   className: string;
   isOpen: boolean;
   name: string;
+  problemCount: number;
   onClose: () => void;
   onCopyLink: () => void;
 }
 
-type ProgressProps = {
-  maxValue?: number;
-  timeout?: number;
-};
-
-const ProgressProvider = ({ maxValue = 70, timeout = 30 }: ProgressProps) => {
-  const [count, setCount] = useState(0);
-
-  useInterval(() => {
-    if (count < maxValue) {
-      setCount(count + 1);
-    }
-  }, timeout);
-
-  const a = count;
-
-  // console.log(a, maxValue, timeout);
-
-  return (
-    <CircularProgressbar
-      className="Main-info-progressBar"
-      strokeWidth={6}
-      value={a}
-      text={`${a}`}
-      styles={buildStyles({
-        textColor: Gray[50],
-        trailColor: Pink[400],
-        pathColor: Gray[50],
-        strokeLinecap: "butt",
-        textSize: "40px",
-      })}
-    />
-  );
-};
-
-function ProblemList({ className, isOpen, name, onClose, onCopyLink }: Props) {
+function ProblemList({
+  className,
+  isOpen,
+  name,
+  problemCount,
+  onClose,
+  onCopyLink,
+}: Props) {
   const {
     isEnd,
     setEnd,
@@ -82,8 +51,9 @@ function ProblemList({ className, isOpen, name, onClose, onCopyLink }: Props) {
     onInit,
     onCreateWorkbook,
   } = useProblemList(isOpen);
+  const { count, setCount } = useCount();
 
-  if (Marking.isError || List.isError) {
+  if ((isOpen && Marking.isError) || List.isError) {
     return (
       <Template className={`ProblemList ${className}`}>
         <div className="ProblemList-loading">
@@ -102,7 +72,7 @@ function ProblemList({ className, isOpen, name, onClose, onCopyLink }: Props) {
     );
   }
 
-  if (Marking.isLoading) {
+  if (isOpen && Marking.isLoading) {
     return (
       <Template className={`ProblemList ${className}`}>
         <div className="ProblemList-loading">
@@ -124,7 +94,7 @@ function ProblemList({ className, isOpen, name, onClose, onCopyLink }: Props) {
     );
   }
 
-  if (Marking.isSuccess) {
+  if (isOpen && Marking.isSuccess) {
     const name = Marking.data.name;
     const solvedCount = Marking.data.solvedCount;
     const correctedCount = Marking.data.correctedCount;
@@ -147,7 +117,10 @@ function ProblemList({ className, isOpen, name, onClose, onCopyLink }: Props) {
             <Typography className="Main-info-title" type="subHeading" size={1}>
               풀이결과
             </Typography>
-            <ProgressProvider maxValue={accuracyRate} />
+            <ProgressBar
+              className="Main-info-progressBar"
+              value={accuracyRate}
+            />
           </div>
 
           <Table>
@@ -164,7 +137,7 @@ function ProblemList({ className, isOpen, name, onClose, onCopyLink }: Props) {
                 풀이한 문항수
               </Typography>
               <Typography className="Table-row-value" type="caption" size={3}>
-                {solvedCount}
+                {`${solvedCount} 문항`}
               </Typography>
             </div>
             <div className="Table-row">
@@ -172,7 +145,7 @@ function ProblemList({ className, isOpen, name, onClose, onCopyLink }: Props) {
                 맞힌 문항수
               </Typography>
               <Typography className="Table-row-value" type="caption" size={3}>
-                {correctedCount}
+                {`${correctedCount} 문항`}
               </Typography>
             </div>
             <div className="Table-row">
@@ -208,7 +181,7 @@ function ProblemList({ className, isOpen, name, onClose, onCopyLink }: Props) {
     );
   }
 
-  if (List.isLoading) {
+  if (isOpen && List.isLoading) {
     return (
       <Template className={`ProblemList ${className}`}>
         <div className="ProblemList-loading">
@@ -245,6 +218,21 @@ function ProblemList({ className, isOpen, name, onClose, onCopyLink }: Props) {
           >
             풀이 종료
           </Typography>
+          <ProgressBar
+            className="Header-progressBar"
+            value={30}
+            maxValue={30}
+            timeout={1000}
+            count={count}
+            setCount={setCount}
+            onChange={(count) => {
+              if (count === 30) {
+                onNext();
+                return true;
+              }
+              return false;
+            }}
+          />
           {isEnd ? (
             <Typography
               className="Header-action"
@@ -271,9 +259,11 @@ function ProblemList({ className, isOpen, name, onClose, onCopyLink }: Props) {
           slidesPerView={1}
           loop={false}
           speed={500}
+          allowSlidePrev={false}
           simulateTouch={true}
           onSlideChange={(swiper) => {
             // console.log("slide change", swiper);
+            setCount(0);
             if (swiper.isEnd) {
               setEnd(swiper.isEnd);
             }
@@ -306,7 +296,7 @@ function ProblemList({ className, isOpen, name, onClose, onCopyLink }: Props) {
                         type="body"
                         size={4}
                       >
-                        문항 {problem.number}/10
+                        문항 {problem.number}/{problemCount}
                       </Typography>
                       <Typography
                         className="Problem-info-question"
@@ -352,6 +342,7 @@ function ProblemList({ className, isOpen, name, onClose, onCopyLink }: Props) {
           success={{
             placeholder: "풀이 종료",
             handler: () => {
+              setEnd(false);
               onClose();
               CloseModal.onClose();
             },
@@ -420,6 +411,10 @@ const Header = styled.header`
     height: 32px;
     cursor: pointer;
   }
+  .Header-progressBar {
+    width: 36px;
+    height: 36px;
+  }
   .Header-action {
     color: ${Gray[50]};
     cursor: pointer;
@@ -445,8 +440,6 @@ const Main = styled.main`
       color: ${Gray[50]};
     }
     .Main-info-progressBar {
-      width: 120px;
-      height: 120px;
     }
   }
   .Main-buttons {

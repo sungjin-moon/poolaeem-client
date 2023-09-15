@@ -17,8 +17,8 @@ type Info = {
     name: string;
     imageUrl: string;
   };
-  problemCount: string;
-  solvedCount: string;
+  problemCount: number;
+  solvedCount: number;
   createdAt: string;
 };
 
@@ -43,8 +43,8 @@ export const get = async (variables: Variables) => {
         name: payload?.data?.creator?.name || "",
         imageUrl: payload?.data?.creator?.profileImageUrl || "",
       },
-      problemCount: `${payload?.data?.problemCount} 문항`,
-      solvedCount: `${payload?.data?.solvedCount} 명`,
+      problemCount: payload?.data?.problemCount,
+      solvedCount: payload?.data?.solvedCount,
       createdAt:
         moment(payload?.data?.createdAt).format("YYYY년 MM월 DD일") || "",
     };

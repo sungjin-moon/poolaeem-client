@@ -47,7 +47,7 @@ export const getList = async (
   page = 1
 ) => {
   const url = `${API}/api/workbooks/${workbookId}/problems/solve`;
-  const size = 10;
+  const size = 4;
   const config: Config = {
     params: {
       size,

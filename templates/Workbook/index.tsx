@@ -18,12 +18,12 @@ interface Props {
 function Layout({ children }: Props) {
   const Account = useAccount();
 
-  const { Read, Modal } = Account;
+  const { Router, Read, Modal } = Account;
 
   return (
     <Template>
       <Header>
-        <Logo className="Header-logo" />
+        <Logo className="Header-logo" onClick={() => Router.push("/")} />
         {Read?.data && (
           <UserImage
             className="Header-user"
@@ -63,6 +63,7 @@ const Header = styled.div`
   align-items: center;
   padding: 0px 8px;
   .Header-logo {
+    cursor: pointer;
     width: 92px;
     height: 32px;
   }
