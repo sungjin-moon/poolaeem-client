@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { css } from "@emotion/react";
 import { useState, useEffect } from "react";
 
 import Edit from "../../../assets/icons/Edit.svg";
@@ -26,6 +27,8 @@ interface Props {
   workbookId: string;
   name: string;
   description: string;
+  problemCount: number;
+  solvedCount: number;
   createdAt: string;
   isOpen: boolean;
   onClose: () => void;
@@ -152,16 +155,16 @@ const SolvedHistories = ({
               return (
                 <div className="Table-row" key={solvedHistory.id}>
                   {/* <ScrollView
-                        ref={InfiniteScroll.ref}
-                        css={css({
-                          display:
-                            hasNextPage === true &&
-                            isLastPage &&
-                            page.list.length - 1 === workbookIndex
-                              ? "block"
-                              : "none",
-                        })}
-                      /> */}
+                    ref={InfiniteScroll.ref}
+                    css={css({
+                      display:
+                        hasNextPage === true &&
+                        isLastPage &&
+                        page.list.length - 1 === workbookIndex
+                          ? "block"
+                          : "none",
+                    })}
+                  /> */}
                   <Typography
                     className="Table-row-name"
                     type="caption"
@@ -204,6 +207,8 @@ function EditWorkbook({
   workbookId,
   name,
   description,
+  problemCount,
+  solvedCount,
   createdAt,
   isOpen,
   onClose,
@@ -221,7 +226,6 @@ function EditWorkbook({
     Toast,
     Delete,
     SolvedHistoryList,
-    ProblemList,
     onDelete,
     onRedirectSolve,
   } = Update;
@@ -231,19 +235,19 @@ function EditWorkbook({
   const solvedHistoryLength =
     solvedHistoryPages?.[solvedHistoryPages?.length - 1]?.list?.length || 0;
 
-  const problemPages = ProblemList.data?.pages || [];
-  const problemLength =
-    problemPages?.[problemPages?.length - 1]?.list?.length || 0;
-
   const tabs = [
-    { id: "problems", name: `문항 (${problemLength})` },
-    { id: "solvedHisotries", name: `풀이내역 (${solvedHistoryLength})` },
+    { id: "problems", name: `문항 (${problemCount})` },
+    { id: "solvedHisotries", name: `풀이내역 (${solvedCount})` },
     { id: "settings", name: "설정" },
   ];
 
   useEffect(() => {
     if (isOpen === true) {
       setData({ id: workbookId, name, description });
+      return;
+    }
+    if (isOpen === false) {
+      setTab(tabs[0]);
       return;
     }
   }, [isOpen]);
@@ -350,6 +354,8 @@ const defaultProps = {
   workbookId: "",
   name: "Title",
   description: "",
+  problemCount: 0,
+  solvedCount: 0,
   createdAt: "0000년 0월 0일",
   isOpen: false,
   onClose: () => {},
@@ -441,6 +447,10 @@ const Table = styled.div`
       }
     }
   }
+`;
+
+const ScrollView = styled.div`
+  height: 1px;
 `;
 
 export default EditWorkbook;
