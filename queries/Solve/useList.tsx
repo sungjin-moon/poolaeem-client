@@ -11,6 +11,7 @@ export type Option = {
 
 export type Problem = {
   id: string;
+  isEnd: boolean;
   number: number;
   question: string;
   type: string;
@@ -18,13 +19,13 @@ export type Problem = {
   options: Option[];
 };
 
-export type ClientPayload = {
+export type ClientProblemListPayload = {
   total: number;
   hasNext: boolean;
   list: Problem[];
 };
 
-const initialPayload: ClientPayload = {
+const initialPayload: ClientProblemListPayload = {
   total: 0,
   hasNext: false,
   list: [],
@@ -63,14 +64,17 @@ export const getList = async (
   const payload: ServerProblemListPayload = response.data;
 
   if (status === 200) {
-    const nextPayload: ClientPayload = {
+    const hasNext = payload?.data?.hasNext || false;
+    const list = payload?.data?.problems;
+    const nextPayload: ClientProblemListPayload = {
       total: 0,
-      hasNext: payload?.data?.hasNext || false,
+      hasNext,
       list:
-        payload?.data?.problems?.map?.((problem, index) => {
+        list?.map?.((problem, index) => {
           const number = page * size + (index + 1);
           return {
             id: problem?.problemId || "",
+            isEnd: hasNext === false && list.length - 1 === index,
             number,
             question: problem?.question || "",
             type: problem?.type || "",
@@ -106,16 +110,16 @@ export default function useList(
     {
       ...options,
       // refetchOnMount: false,
+      // staleTime: 500000,
       refetchOnWindowFocus: false,
-      staleTime: 500000,
       getNextPageParam: (lastPage, allPage) => {
-        const list = lastPage?.list;
+        const lastItem = lastPage?.list?.[lastPage.list.length - 1];
 
         if (lastPage.hasNext === false) {
           return undefined;
         }
         return {
-          order: list.length,
+          order: lastItem.number,
           page: allPage.length,
         };
       },

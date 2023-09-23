@@ -93,13 +93,11 @@ export default function useList(
       refetchOnWindowFocus: false,
       staleTime: 500000,
       getNextPageParam: (lastPage, allPage) => {
-        const list = lastPage?.list;
-
         if (lastPage.hasNext === false) {
           return undefined;
         }
         return {
-          order: list.length,
+          order: allPage.length,
           page: allPage.length,
         };
       },

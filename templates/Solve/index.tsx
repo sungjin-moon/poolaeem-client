@@ -18,7 +18,7 @@ import useSolve from "../../process/Solve/useSolve";
 
 interface Props {}
 
-function Solve() {
+function Solve({}: Props) {
   const {
     Router,
     EnterNameModal,

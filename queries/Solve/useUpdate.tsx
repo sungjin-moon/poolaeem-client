@@ -2,11 +2,11 @@ import axios, { API } from "../settings";
 import { useMutation } from "react-query";
 
 import { ProblemOption } from "./types";
-import { Problem, ClientPayload } from "./useList";
+import { Problem, ClientProblemListPayload } from "./useList";
 
 export type Variables = {
   workbookId: string | string[];
-  pages: ClientPayload[];
+  pages: ClientProblemListPayload[];
   name: string;
 };
 
@@ -44,7 +44,7 @@ type Data = {
 
 type Marking = (variables: Variables) => Promise<Data>;
 
-const parseList = (pages: ClientPayload[] = []) => {
+const parseList = (pages: ClientProblemListPayload[] = []) => {
   let result: RequestProblem[] = [];
 
   let list: any[] = [];

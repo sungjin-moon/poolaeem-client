@@ -14,12 +14,13 @@ type Props = {
   maxValue: number;
   timeout: number;
   count?: number;
+  isCountDown: boolean;
   setCount?: Dispatch<SetStateAction<number>>;
   onChange: (count: number) => boolean;
 };
 
-export const useCount = () => {
-  const [count, setCount] = useState(0);
+export const useCount = (initialCount: number = 0) => {
+  const [count, setCount] = useState(initialCount);
 
   return {
     count,
@@ -34,6 +35,7 @@ function Circular({
   timeout,
   onChange,
   count,
+  isCountDown,
   setCount,
 }: Props) {
   const [$count, $setCount] = useState<number>(0);
@@ -49,6 +51,12 @@ function Circular({
     _setCount = setCount;
   }
 
+  let text = _count;
+
+  if (isCountDown) {
+    text = value - _count;
+  }
+
   useInterval(() => {
     if (_count < value) {
       const nextCount = _count + 1;
@@ -60,6 +68,7 @@ function Circular({
     const isReset = onChange(_count);
     if (isReset) {
       _setCount(0);
+      return;
     }
   }, [_count]);
 
@@ -74,7 +83,7 @@ function Circular({
         strokeWidth={6}
         value={_count}
         maxValue={maxValue}
-        text={`${_count}`}
+        text={`${text}`}
         styles={buildStyles({
           textColor: Gray[50],
           trailColor: Pink[400],
@@ -89,9 +98,10 @@ function Circular({
 
 const defaultProps = {
   className: "",
-  value: 10,
-  maxValue: 70,
-  timeout: 30,
+  value: 0,
+  maxValue: 100,
+  timeout: 1000,
+  isCountDown: false,
   onChange: () => false,
 };
 

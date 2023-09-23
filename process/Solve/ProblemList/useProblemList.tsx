@@ -1,13 +1,12 @@
 import { useRouter } from "next/router";
-import { useEffect, useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
-import useToast from "../../hooks/useToast";
-import useInfiniteScroll from "../../hooks/useInfiniteScroll";
-import useModal from "../../hooks/useModal";
+import useToast from "@/hooks/useToast";
+import useInfiniteScroll from "@/hooks/useInfiniteScroll";
+import useModal from "@/hooks/useModal";
 
-import { queryClient } from "../../queries";
-import useList from "../../queries/Solve/useList";
-import { useMarking } from "../../queries/Solve/useUpdate";
+import { queryClient } from "@/queries";
+import useList from "@/queries/Solve/useList";
 
 type SelectPayload = {
   isSelected: boolean;
@@ -17,6 +16,7 @@ type SelectPayload = {
 };
 
 function useProblemList(isOpen = false) {
+  const [view, setView] = useState("ready");
   const Router = useRouter();
   const Toast = useToast();
   const CloseModal = useModal();
@@ -27,11 +27,9 @@ function useProblemList(isOpen = false) {
 
   const List = useList(
     { workbookId },
-    { enabled: isOpen && workbookId ? true : false }
+    { enabled: isOpen && workbookId && view === "problemList" ? true : false }
   );
-  const Marking = useMarking();
   const ref = useRef(null);
-  const [isEnd, setEnd] = useState(false);
 
   const onNext = () => {
     const el: any = ref?.current;
@@ -53,28 +51,6 @@ function useProblemList(isOpen = false) {
     );
   };
 
-  const onMarking = (name: string) => {
-    if (Marking.isLoading) return;
-    const pages = List.data?.pages || [];
-    Marking.mutate(
-      { workbookId, pages, name },
-      {
-        onSuccess: () => {},
-        onError: () => {},
-      }
-    );
-  };
-
-  const onInit = () => {
-    setEnd(false);
-    Marking.reset();
-    queryClient.invalidateQueries(["solve-problemList"]);
-  };
-
-  const onCreateWorkbook = () => {
-    Router.push("/?modal=create");
-  };
-
   useEffect(() => {
     if (
       List.status === "success" &&
@@ -89,14 +65,16 @@ function useProblemList(isOpen = false) {
 
   useEffect(() => {
     if (isOpen === false) {
-      queryClient.invalidateQueries(["solve-problemList"]);
+      setView("ready");
     }
   }, [isOpen]);
 
   return {
-    isEnd,
-    setEnd,
     Router,
+    View: {
+      view,
+      setView,
+    },
     Slide: {
       ref,
     },
@@ -104,12 +82,8 @@ function useProblemList(isOpen = false) {
     CloseModal,
     InfiniteScroll,
     List,
-    Marking,
     onNext,
     onSelect,
-    onMarking,
-    onInit,
-    onCreateWorkbook,
   };
 }
 
