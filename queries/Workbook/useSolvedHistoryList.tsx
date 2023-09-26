@@ -39,7 +39,7 @@ export const getList = async (workbookId = "", lastId = "") => {
   const url = `${API}/api/results/workbooks/${workbookId}/solved/histories`;
   const config: Config = {
     params: {
-      size: 10,
+      size: 15,
     },
   };
 

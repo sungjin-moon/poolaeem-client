@@ -6,8 +6,6 @@ import useToast from "../../../hooks/useToast";
 
 import { queryClient } from "../../../queries";
 import useDelete from "../../../queries/Workbook/useDelete";
-import useSolvedHistoryList from "../../../queries/Workbook/useSolvedHistoryList";
-import useProblemList from "../../../queries/Workbook/Problem/useList";
 
 type Tab = {
   id?: string;
@@ -27,14 +25,6 @@ function useEdit(workbookId: string, isOpen: boolean) {
 
   const [tab, setTab] = useState<Tab>(tabs[0]);
   const Delete = useDelete();
-  const ProblemList = useProblemList(
-    { workbookId },
-    { enabled: isOpen && tab.id === "problems" }
-  );
-  const SolvedHistoryList = useSolvedHistoryList(
-    { workbookId },
-    { enabled: isOpen && tab.id === "solvedHisotries" }
-  );
   const UpdateInfoModal = useModal();
   const DeleteModal = useModal();
   const CreateProblemModal = useModal();
@@ -65,8 +55,6 @@ function useEdit(workbookId: string, isOpen: boolean) {
     DeleteModal,
     CreateProblemModal,
     Delete,
-    SolvedHistoryList,
-    ProblemList,
     onDelete,
     onRedirectSolve,
   };

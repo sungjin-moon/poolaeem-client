@@ -37,7 +37,7 @@ interface Params {
 
 export const getList = async (workbookId = "", order = "", page = 1) => {
   const url = `${API}/api/workbooks/${workbookId}/problems`;
-  const size = 7;
+  const size = 4;
   const config: Config = {
     params: {
       size,
@@ -53,11 +53,13 @@ export const getList = async (workbookId = "", order = "", page = 1) => {
   const payload: ServerProblemListPayload = response.data;
 
   if (status === 200) {
+    const hasNext = payload?.data?.hasNext || false;
+    const list = payload?.data?.problems;
     const nextPayload: ClientPayload = {
       total: 0,
-      hasNext: payload?.data?.hasNext || false,
+      hasNext: hasNext,
       list:
-        payload?.data?.problems?.map?.((problem, index) => {
+        list?.map?.((problem, index) => {
           const number = page * size + (index + 1);
           return {
             id: problem?.problemId || "",
@@ -93,11 +95,12 @@ export default function useList(
       refetchOnWindowFocus: false,
       staleTime: 500000,
       getNextPageParam: (lastPage, allPage) => {
+        const lastItem = lastPage?.list?.[lastPage.list.length - 1];
         if (lastPage.hasNext === false) {
           return undefined;
         }
         return {
-          order: allPage.length,
+          order: lastItem.number,
           page: allPage.length,
         };
       },

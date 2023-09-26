@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { css } from "@emotion/react";
 import { useState, useEffect } from "react";
 
 import Edit from "../../../assets/icons/Edit.svg";
@@ -15,10 +14,10 @@ import NextModal from "../../../components/Modal/View/Next";
 import ConfirmModal from "../../../components/Modal/DialogBox/Confirm";
 import Menu from "../../../components/Menu/Basic";
 import ToastBox from "../../../components/Toast";
-import Spinner from "../../../components/Loader/Spinner";
 
 import UpdateInfoTemplate from "./Settings/UpdateInfo";
 import ProblemListTemplate from "./ProblemList";
+import SolvedHistoryListTemplate from "./SolvedHistoryList";
 
 import useEdit from "../../../process/Workbook/Edit";
 
@@ -40,164 +39,27 @@ interface SettingsProps {
   onDelete: () => void;
 }
 
-interface ProblemsProps {
-  isFetched: boolean;
-  isRefetching: boolean;
-  pages: ProblemPages[];
-  length: number;
-  onOpenCreate: () => void;
-  onOpenEdit: () => void;
-  onOpenDelete: () => void;
-}
-
-interface SolvedHistoriesProps {
-  isFetched: boolean;
-  isRefetching: boolean;
-  pages: SolvedHistoryPages[];
-  length: number;
-}
-
 type Data = {
   id: string;
   name: string;
   description: string;
 };
 
-type SolvedHistory = {
-  id: string;
-  userName: string;
-  questionCount: number;
-  correctCount: number;
-  solvedAt: string;
-};
-
-type Problem = {
-  id: string;
-  question: string;
-  type: string;
-  optionCount: number;
-  timeout: number;
-};
-
-type SolvedHistoryPages = {
-  total: number;
-  hasNext: boolean;
-  list: SolvedHistory[];
-};
-
-type ProblemPages = {
-  total: number;
-  hasNext: boolean;
-  list: Problem[];
-};
-
 const Settings = ({ onOpenInfo, onDelete }: SettingsProps) => {
   return (
-    <div className="Main-settings">
+    <div className="Main-list-settings">
       <Menu
-        className="Main-settings-menu"
+        className="Main-list-settings-menu"
         name="문제집 기본정보 변경"
         Icon={<Edit />}
         onClick={onOpenInfo}
       />
       <Menu
-        className="Main-settings-menu"
+        className="Main-list-settings-menu"
         name="문제집 삭제"
         Icon={<TrashCan />}
         onClick={onDelete}
       />
-    </div>
-  );
-};
-
-const SolvedHistories = ({
-  isFetched,
-  isRefetching,
-  pages,
-  length,
-}: SolvedHistoriesProps) => {
-  return (
-    <div className="Main-solvedHistories">
-      {isFetched && length === 0 && (
-        <div className="Main-solvedHistories-empty">
-          <Typography
-            className="Main-solvedHistories-empty-description"
-            type="body"
-            size={6}
-          >
-            아직 풀이내역이 존재하지 않아요
-          </Typography>
-        </div>
-      )}
-
-      {!isFetched && (
-        <div className="Main-solvedHistories-loading">
-          <Spinner className="Main-solvedHistories-loading-spinner" />
-        </div>
-      )}
-      {isFetched && length > 0 && (
-        <Table>
-          <div className="Table-column">
-            <Typography className="Table-column-name" type="body" size={6}>
-              별명
-            </Typography>
-            <Typography className="Table-column-name" type="body" size={6}>
-              풀이날짜
-            </Typography>
-            <Typography className="Table-column-name" type="body" size={6}>
-              문항
-            </Typography>
-          </div>
-          {pages.map((page, pageIndex) => {
-            const lastPageIndex = pages.length - 1;
-            const isLastPage = lastPageIndex === pageIndex;
-            return page.list.map((solvedHistory) => {
-              return (
-                <div className="Table-row" key={solvedHistory.id}>
-                  {/* <ScrollView
-                    ref={InfiniteScroll.ref}
-                    css={css({
-                      display:
-                        hasNextPage === true &&
-                        isLastPage &&
-                        page.list.length - 1 === workbookIndex
-                          ? "block"
-                          : "none",
-                    })}
-                  /> */}
-                  <Typography
-                    className="Table-row-name"
-                    type="caption"
-                    size={6}
-                  >
-                    {solvedHistory.userName}
-                  </Typography>
-                  <Typography
-                    className="Table-row-name"
-                    type="caption"
-                    size={6}
-                  >
-                    {solvedHistory.solvedAt}
-                  </Typography>
-                  <Typography
-                    className="Table-row-name"
-                    type="caption"
-                    size={6}
-                  >
-                    {`${solvedHistory.correctCount}/${solvedHistory.questionCount} 문항`}
-                  </Typography>
-                </div>
-              );
-            });
-          })}
-        </Table>
-      )}
-
-      {isRefetching && (
-        <div className="Main-solvedHistories-loading">
-          <Spinner className="Main-solvedHistories-loading-spinner" />
-        </div>
-      )}
     </div>
   );
 };
@@ -225,15 +87,10 @@ function EditWorkbook({
     DeleteModal,
     Toast,
     Delete,
-    SolvedHistoryList,
     onDelete,
     onRedirectSolve,
   } = Update;
   const { tab, setTab } = Update.Tabs;
-
-  const solvedHistoryPages = SolvedHistoryList.data?.pages || [];
-  const solvedHistoryLength =
-    solvedHistoryPages?.[solvedHistoryPages?.length - 1]?.list?.length || 0;
 
   const tabs = [
     { id: "problems", name: `문항 (${problemCount})` },
@@ -261,41 +118,40 @@ function EditWorkbook({
           action={{ name: "풀이", handler: onRedirectSolve }}
         />
         <Main>
-          <Typography className="Main-name" type="subHeading" size={1}>
-            {data?.name}
-          </Typography>
-          <Typography className="Main-createdAt" type="body" size={5}>
-            {createdAt}
-          </Typography>
-          <Tabs
-            className="Main-tabs"
-            tabs={tabs}
-            tab={tab}
-            setTab={(tab) => {
-              if (Delete.isLoading) return;
-              setTab(tab);
-            }}
-          />
-          {tab.id === "problems" && (
-            <ProblemListTemplate workbookId={workbookId} />
-          )}
-          {tab.id === "solvedHisotries" && (
-            <SolvedHistories
-              isFetched={SolvedHistoryList.isFetched}
-              isRefetching={SolvedHistoryList.isRefetching}
-              pages={solvedHistoryPages}
-              length={solvedHistoryLength}
-            />
-          )}
-          {tab.id === "settings" && (
-            <Settings
-              onOpenInfo={() => {
+          <div className="Main-info">
+            <Typography className="Main-info-name" type="subHeading" size={1}>
+              {data?.name}
+            </Typography>
+            <Typography className="Main-info-createdAt" type="body" size={5}>
+              {createdAt}
+            </Typography>
+            <Tabs
+              className="Main-info-tabs"
+              tabs={tabs}
+              tab={tab}
+              setTab={(tab) => {
                 if (Delete.isLoading) return;
-                UpdateInfoModal.onOpen();
+                setTab(tab);
               }}
-              onDelete={DeleteModal.onOpen}
             />
-          )}
+          </div>
+          <div className="Main-list">
+            {tab.id === "problems" && (
+              <ProblemListTemplate workbookId={workbookId} />
+            )}
+            {tab.id === "solvedHisotries" && (
+              <SolvedHistoryListTemplate workbookId={workbookId} />
+            )}
+            {tab.id === "settings" && (
+              <Settings
+                onOpenInfo={() => {
+                  if (Delete.isLoading) return;
+                  UpdateInfoModal.onOpen();
+                }}
+                onDelete={DeleteModal.onOpen}
+              />
+            )}
+          </div>
         </Main>
         <NextModal
           animateType="rightToLeft"
@@ -369,88 +225,36 @@ const Template = styled.div`
 `;
 
 const Main = styled.main`
-  padding: 20px;
   background: ${Pink[500]};
   border-radius: 20px 20px 0px 0px;
   height: calc(100% - 48px);
-  .Main-name {
-    color: ${Gray[50]};
+  overflow-y: auto;
+  ::-webkit-scrollbar {
+    display: none;
   }
-  .Main-createdAt {
-    color: ${Gray[50]};
-  }
-  .Main-tabs {
-    margin: 20px 0px;
-  }
-  .Main-settings {
-    .Main-settings-menu {
-      margin-bottom: 6px;
-    }
-  }
-  .Main-solvedHistories {
-    .Main-solvedHistories-empty {
-      height: 120px;
-      border: solid 1px;
-      border-color: ${Pink[400]};
-      border-radius: 12px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      .Main-solvedHistories-empty-description {
-        color: ${Gray[50]};
-      }
-    }
-    .Main-solvedHistories-loading {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 240px;
-      .Main-solvedHistories-loading-spinner {
-        border: 2px solid ${Pink[400]};
-        border-top: 2px solid ${Gray[50]};
-      }
-    }
-  }
-`;
-
-const Table = styled.div`
-  display: flex;
-  flex-direction: column;
-  .Table-column {
-    display: flex;
-    padding: 0px 6px;
-    .Table-column-name {
-      width: 100%;
-      padding: 0px 6px;
-      border-right: solid 1px;
+  .Main-info {
+    position: sticky;
+    top: 0px;
+    background: inherit;
+    padding: 20px;
+    .Main-info-name {
       color: ${Gray[50]};
-      border-color: transparent;
-      :last-child {
-        border-right: 0px;
-      }
     }
-  }
-  .Table-row {
-    display: flex;
-    padding: 8px 6px;
-    background: ${Pink[400]};
-    border-radius: 12px;
-    margin-top: 6px;
-    .Table-row-name {
-      width: 100%;
-      border-right: solid 1px;
-      border-color: ${Pink[200]};
+    .Main-info-createdAt {
       color: ${Gray[50]};
-      padding: 0px 6px;
-      :last-child {
-        border-right: 0px;
+    }
+    .Main-info-tabs {
+      margin-top: 20px;
+    }
+  }
+  .Main-list {
+    padding: 0px 20px 20px 20px;
+    .Main-list-settings {
+      .Main-list-settings-menu {
+        margin-bottom: 6px;
       }
     }
   }
-`;
-
-const ScrollView = styled.div`
-  height: 1px;
 `;
 
 export default EditWorkbook;

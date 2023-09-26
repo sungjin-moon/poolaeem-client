@@ -220,14 +220,6 @@ const Template = styled.div`
     }
   }
   .ProblemList-list {
-    height: calc(90vh - 48px - 72px - 20px - 72px - 18px - 36px - 48px);
-    overflow-y: auto;
-    ::-webkit-scrollbar {
-      display: none;
-    }
-    @media (max-width: 960px) {
-      height: calc(100vh - 48px - 72px - 20px - 72px - 18px - 36px - 48px);
-    }
   }
   .ProblemList-loading {
     display: flex;
