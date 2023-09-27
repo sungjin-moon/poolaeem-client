@@ -93,8 +93,9 @@ export const Textarea = styled.div`
     border-radius: inherit;
     outline: none;
     background: inherit;
+    font-family: "Pretendard";
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 500;
     transition: color 0.3s ease-in-out;
     width: 100%;
     line-height: 24px;
@@ -103,7 +104,8 @@ export const Textarea = styled.div`
     resize: none;
   }
   textarea::placeholder {
-    color: rgba(95, 92, 93, 0.36);
+    color: ${Gray[700]};
+    opacity: 0.36;
   }
 `;
 

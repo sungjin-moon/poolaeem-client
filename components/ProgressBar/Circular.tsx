@@ -114,7 +114,7 @@ const ProgressBar = styled.div`
     width: 100%;
     height: 100%;
     .CircularProgressbar-text {
-      font-weight: 600;
+      font-weight: 500;
     }
   }
 `;

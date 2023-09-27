@@ -143,7 +143,7 @@ Pretendard.defaultProps = defaultProps;
 export const Heading = styled.div<Props>`
   display: flex;
   font-family: "Pretendard";
-  font-weight: 700;
+  font-weight: 600;
   color: ${Gray["700"]};
   font-size: ${({ size }) => {
     return heading[size].fontSize;
@@ -158,7 +158,7 @@ export const Heading = styled.div<Props>`
 export const SubHeading = styled.div<Props>`
   display: flex;
   font-family: "Pretendard";
-  font-weight: 700;
+  font-weight: 600;
   color: ${Gray["700"]};
   font-size: ${({ size }) => {
     return subHeading[size].fontSize;
@@ -173,7 +173,7 @@ export const SubHeading = styled.div<Props>`
 export const Caption = styled.div<Props>`
   display: flex;
   font-family: "Pretendard";
-  font-weight: 600;
+  font-weight: 500;
   color: ${Gray["700"]};
   font-size: ${({ size }) => {
     return caption[size].fontSize;

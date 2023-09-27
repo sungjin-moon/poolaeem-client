@@ -51,6 +51,7 @@ function useSolve() {
     EnterNameModal: {
       ...EnterNameModal,
       field: Field.item,
+      Field,
     },
     ProblemListModal,
     Toast,

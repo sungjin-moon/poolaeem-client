@@ -154,7 +154,11 @@ function Solve({}: Props) {
           isOpen={ProblemListModal.isOpen}
           name={ProblemListModal.data?.name}
           problemCount={ProblemListModal.data?.problemCount}
-          onClose={ProblemListModal.onClose}
+          onClose={() => {
+            EnterNameModal.onClose();
+            EnterNameModal.Field.setValue("");
+            ProblemListModal.onClose();
+          }}
           onCopyLink={onCopyLink}
         />
       </NextModal>
