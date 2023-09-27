@@ -75,7 +75,7 @@ const buttonTheme: buttonStatusType = {
   },
   white: {
     background: Gray[50],
-    color: Gray[600],
+    color: Gray[700],
     hover: {
       background: Gray[100],
     },

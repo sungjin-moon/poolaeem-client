@@ -34,12 +34,12 @@ function List() {
     <Layout>
       <Template>
         {!isFetched && (
-          <div className="Template-loading">
-            <Spinner className="Template-loading-spinner" />
+          <div className="WorkbookListTemplate-loading">
+            <Spinner className="WorkbookListTemplate-loading-spinner" />
           </div>
         )}
         {isFetched && length > 0 && (
-          <div className="Template-list">
+          <div className="WorkbookListTemplate-list">
             {pages.map((page, pageIndex) => {
               const lastPageIndex = pages.length - 1;
               const isLastPage = lastPageIndex === pageIndex;
@@ -70,7 +70,7 @@ function List() {
               });
             })}
             <FloatButton
-              className="Template-list-button"
+              className="WorkbookListTemplate-list-button"
               onClick={CreateModal.onOpen}
             />
           </div>
@@ -105,8 +105,8 @@ function List() {
         )}
 
         {isRefetching && (
-          <div className="Template-loading">
-            <Spinner className="Template-loading-spinner" />
+          <div className="WorkbookListTemplate-loading">
+            <Spinner className="WorkbookListTemplate-loading-spinner" />
           </div>
         )}
         <NextModal
@@ -159,15 +159,15 @@ const Template = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
-  .Template-loading {
+  .WorkbookListTemplate-loading {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 40px 0px;
   }
-  .Template-list {
+  .WorkbookListTemplate-list {
     padding: 12px 8px;
-    .Template-list-button {
+    .WorkbookListTemplate-list-button {
       position: absolute;
       bottom: 0px;
       right: 0px;
