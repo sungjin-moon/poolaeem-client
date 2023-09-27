@@ -5,15 +5,15 @@ import Pink from "../Color/Pink";
 import Typography from "../Typography/Pretendard";
 
 type Tab = {
-  id?: string;
+  id: string;
   name: string;
 };
 
 interface Props {
   className: string;
   tabs: Tab[];
-  tab?: undefined | Tab;
-  setTab: (value: Tab) => void;
+  tab: string;
+  setTab: (id: string) => void;
 }
 
 function Basic({ className, tabs, tab, setTab }: Props) {
@@ -24,11 +24,11 @@ function Basic({ className, tabs, tab, setTab }: Props) {
           <Typography
             key={index}
             className={`Tabs_Basic-tab ${
-              tab?.id === item.id ? "actived" : "default"
+              tab === item.id ? "actived" : "default"
             }`}
             type="body"
             size={4}
-            onClick={() => setTab(item)}
+            onClick={() => setTab(item.id)}
           >
             {item.name}
           </Typography>
@@ -45,7 +45,7 @@ const defaultProps = {
     { id: "1", name: "Name" },
     { id: "2", name: "Name" },
   ],
-  tab: undefined,
+  tab: "0",
   setTab: () => {},
 };
 

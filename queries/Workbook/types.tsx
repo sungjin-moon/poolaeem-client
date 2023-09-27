@@ -39,6 +39,17 @@ export interface ServerWorkbookListPayload {
   };
 }
 
+export interface ServerWorkbookInfoPayload {
+  code: number;
+  data: {
+    name: string;
+    description: string;
+    theme: "PINK" | "GRAY" | "BLUE" | "YELLOW" | "GREEN";
+    problemCount: number;
+    solvedCount: number;
+  };
+}
+
 export interface ServerSolvedHistoryListPayload {
   code: number;
   data: {

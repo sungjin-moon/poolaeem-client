@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import Edit from "../../../assets/icons/Edit.svg";
 import TrashCan from "../../../assets/icons/TrashCan.svg";
@@ -24,10 +24,6 @@ import useEdit from "../../../process/Workbook/Edit";
 interface Props {
   className: string;
   workbookId: string;
-  name: string;
-  description: string;
-  problemCount: number;
-  solvedCount: number;
   createdAt: string;
   isOpen: boolean;
   onClose: () => void;
@@ -67,10 +63,6 @@ const Settings = ({ onOpenInfo, onDelete }: SettingsProps) => {
 function EditWorkbook({
   className,
   workbookId,
-  name,
-  description,
-  problemCount,
-  solvedCount,
   createdAt,
   isOpen,
   onClose,
@@ -81,35 +73,31 @@ function EditWorkbook({
     name: "",
     description: "",
   });
-  const Update = useEdit(workbookId, isOpen);
+  const Edit = useEdit(workbookId, isOpen);
   const {
     UpdateInfoModal,
     DeleteModal,
     Toast,
     Delete,
+    Info,
     onDelete,
     onRedirectSolve,
-  } = Update;
-  const { tab, setTab } = Update.Tabs;
-
-  const tabs = [
-    { id: "problems", name: `문항 (${problemCount})` },
-    { id: "solvedHisotries", name: `풀이내역 (${solvedCount})` },
-    { id: "settings", name: "설정" },
-  ];
-
-  useEffect(() => {
-    if (isOpen === true) {
-      setData({ id: workbookId, name, description });
-      return;
-    }
-    if (isOpen === false) {
-      setTab(tabs[0]);
-      return;
-    }
-  }, [isOpen]);
+  } = Edit;
+  const { tab, setTab } = Edit.Tabs;
 
   if (isOpen) {
+    const name = Info?.data?.name || "";
+    const description = Info?.data?.description || "";
+    const problemCount = Info?.data?.problemCount || 0;
+    const solvedCount = Info?.data?.solvedCount || 0;
+    const theme = Info?.data?.theme || "pink";
+
+    const tabs = [
+      { id: "problemList", name: `문항 (${problemCount})` },
+      { id: "solvedHisotryList", name: `풀이내역 (${solvedCount})` },
+      { id: "settings", name: "설정" },
+    ];
+
     return (
       <Template className={`EditWorkbook ${className}`}>
         <Header
@@ -120,7 +108,7 @@ function EditWorkbook({
         <Main>
           <div className="Main-info">
             <Typography className="Main-info-name" type="subHeading" size={1}>
-              {data?.name}
+              {name}
             </Typography>
             <Typography className="Main-info-createdAt" type="body" size={5}>
               {createdAt}
@@ -136,13 +124,13 @@ function EditWorkbook({
             />
           </div>
           <div className="Main-list">
-            {tab.id === "problems" && (
+            {tab === "problemList" && (
               <ProblemListTemplate workbookId={workbookId} />
             )}
-            {tab.id === "solvedHisotries" && (
+            {tab === "solvedHisotryList" && (
               <SolvedHistoryListTemplate workbookId={workbookId} />
             )}
-            {tab.id === "settings" && (
+            {tab === "settings" && (
               <Settings
                 onOpenInfo={() => {
                   if (Delete.isLoading) return;
@@ -162,9 +150,9 @@ function EditWorkbook({
         >
           <UpdateInfoTemplate
             isOpen={UpdateInfoModal.isOpen}
-            data={data}
+            data={{ id: workbookId, name, description }}
             onClose={(data) => {
-              data && setData(data);
+              // data && setData(data);
               UpdateInfoModal.onClose();
             }}
             onPush={() =>
@@ -208,10 +196,6 @@ function EditWorkbook({
 const defaultProps = {
   className: "",
   workbookId: "",
-  name: "Title",
-  description: "",
-  problemCount: 0,
-  solvedCount: 0,
   createdAt: "0000년 0월 0일",
   isOpen: false,
   onClose: () => {},

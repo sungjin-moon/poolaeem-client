@@ -27,6 +27,7 @@ function useProblemList(workbookId: string) {
         onSuccess: () => {
           queryClient.invalidateQueries(["problemList", workbookId]);
           queryClient.invalidateQueries("workbookList");
+          queryClient.invalidateQueries(["workbook-info", workbookId]);
           DeleteModal.onClose();
           Toast.onPush({
             status: "success",

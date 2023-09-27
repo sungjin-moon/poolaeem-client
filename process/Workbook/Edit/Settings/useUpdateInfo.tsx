@@ -51,6 +51,7 @@ function useUpdate() {
         {
           onSuccess: (data) => {
             queryClient.invalidateQueries("workbookList");
+            queryClient.invalidateQueries(["workbook-info", id]);
             onClose({ id, name, description });
             onPush();
           },

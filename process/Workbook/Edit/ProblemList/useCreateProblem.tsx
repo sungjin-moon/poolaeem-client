@@ -34,7 +34,6 @@ function useCreateProblem(workbookId: string = "") {
     if (Create.isLoading) return;
     const nameChecked = QuestionField.onCheckValue();
     const optionsChecked = OptionsField.onCheckValue();
-    console.log(OptionsField.getValue());
     if (nameChecked && optionsChecked) {
       const question = QuestionField.getValue();
       const options = OptionsField.getValue();
@@ -45,6 +44,7 @@ function useCreateProblem(workbookId: string = "") {
           onSuccess: (data) => {
             queryClient.invalidateQueries(["problemList", workbookId]);
             queryClient.invalidateQueries("workbookList");
+            queryClient.invalidateQueries(["workbook-info", workbookId]);
             onClose();
             onPush();
           },

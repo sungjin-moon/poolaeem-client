@@ -136,11 +136,7 @@ function List() {
         >
           <UpdateWorkbookTemplate
             workbookId={UpdateModal.data?.id}
-            name={UpdateModal.data?.name}
-            description={UpdateModal.data?.description}
             createdAt={UpdateModal.data?.createdAt}
-            problemCount={UpdateModal.data?.problemCount}
-            solvedCount={UpdateModal.data?.solvedCount}
             isOpen={UpdateModal.isOpen}
             onClose={UpdateModal.onClose}
             onPush={() =>

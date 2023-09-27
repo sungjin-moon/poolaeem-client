@@ -29,7 +29,7 @@ function useChangeName() {
       { name },
       {
         onSuccess: (data) => {
-          queryClient.setQueryData(["account", "profile"], {
+          queryClient.setQueryData(["account-profile"], {
             ...Read.data,
             ...data,
           });

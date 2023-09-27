@@ -40,7 +40,10 @@ function Settings({ className, onClose }: Props) {
   return (
     <Template className={`Settings ${className}`}>
       <Header
-        onClose={onClose}
+        onClose={() => {
+          Toast.onClear();
+          onClose();
+        }}
         title="내 정보"
         action={{
           name: "문의",
