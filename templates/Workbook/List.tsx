@@ -28,7 +28,6 @@ function List() {
   const { isFetched, isRefetching, hasNextPage } = List;
   const pages = List.data?.pages || [];
   const length = pages?.[pages?.length - 1]?.list?.length || 0;
-  console.log(UpdateModal.data);
 
   return (
     <Layout>

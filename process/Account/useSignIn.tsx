@@ -47,9 +47,7 @@ function useSignIn() {
           });
         }
       },
-      onError: (error) => {
-        console.log(error);
-      },
+      onError: (error) => {},
     });
   };
 
@@ -78,9 +76,7 @@ function useSignIn() {
             return push("/");
           }
         },
-        onError: (error) => {
-          console.log(error);
-        },
+        onError: (error) => {},
       }
     );
   };

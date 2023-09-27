@@ -70,7 +70,6 @@ function useUpdateProblem(
 
   useEffect(() => {
     if (isOpen && Read.isFetched) {
-      console.log(Read.data);
       const question = Read.data?.question;
       const options = Read.data?.options;
       QuestionField.setValue(question);

@@ -31,9 +31,7 @@ instance.interceptors.response.use(
   },
   async (err) => {
     const code = err.response?.data?.code;
-    console.log(code);
     if (code === 10052 || code === 10004) {
-      console.log(err.response);
       const cookies = new Cookies();
       cookies.remove("session", { path: "/" });
       window.location.href = "/sign-in";

@@ -63,7 +63,6 @@ function Data({
         type: "plugin",
         value: item.value,
         setValue: (value: Value[]) => {
-          console.log(value);
           onChange({ ...item, value });
         },
       };
@@ -166,7 +165,6 @@ function Data({
             success={{
               placeholder: secondButton.name,
               handler: (item) => {
-                console.log(item);
                 if (item.status !== "success") return;
                 const name: string = item.value || "";
                 onAdd(name, "lightPink");
@@ -191,7 +189,6 @@ function Data({
             success={{
               placeholder: firstButton.name,
               handler: (item) => {
-                console.log(item);
                 if (item.status !== "success") return;
                 const name: string = item.value || "";
                 onAdd(name, "pink");

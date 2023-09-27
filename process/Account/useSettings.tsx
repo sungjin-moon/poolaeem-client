@@ -48,9 +48,7 @@ function useSettings() {
             onSignOut();
           }
         },
-        onError: (error) => {
-          console.log(error);
-        },
+        onError: (error) => {},
       }
     );
   };
