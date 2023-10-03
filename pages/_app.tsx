@@ -2,6 +2,8 @@ import { Global, css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { AppProps } from "next/app";
 import Head from "next/head";
+import Script from "next/script";
+import { useRouter } from "next/router";
 
 import Logo from "../assets/icons/$Logo-pink.svg";
 
@@ -12,13 +14,16 @@ import Typography from "../components/Typography/Pretendard";
 import QueryProvider from "../queries";
 import { useEffect, useState } from "react";
 
+const GA_TRACKING_ID = "G-8GDVRKRQ67";
+
 function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
   const [isActive, setActive] = useState(false);
   const [disable, setDisable] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => {
       setActive(true);
-    }, 3000);
+    }, 1000);
 
     return () => {
       clearTimeout(timer);
@@ -35,6 +40,20 @@ function App({ Component, pageProps }: AppProps) {
       };
     }
   }, [isActive]);
+
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      window.gtag("config", GA_TRACKING_ID, {
+        page_path: url,
+      });
+    };
+    router.events.on("routeChangeComplete", handleRouteChange);
+    router.events.on("hashChangeComplete", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+      router.events.off("hashChangeComplete", handleRouteChange);
+    };
+  }, [router.events]);
 
   return (
     <>
@@ -89,6 +108,24 @@ function App({ Component, pageProps }: AppProps) {
           href="/poolaeem-logo.png"
           sizes="16x16"
         />
+        <Script
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+        />
+        <Script
+          id="gtag-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_TRACKING_ID}', {
+                  page_path: window.location.pathname,
+                });
+              `,
+          }}
+        />
       </Head>
       <Global styles={globalStyle} />
       <QueryProvider>
@@ -127,6 +164,9 @@ const globalStyle = css`
   html,
   body {
     background: ${Pink[50]};
+    @media (max-width: 960px) {
+      background: ${Gray[50]};
+    }
   }
 
   @font-face {

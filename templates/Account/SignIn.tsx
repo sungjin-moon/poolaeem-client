@@ -177,11 +177,12 @@ const Template = styled.div`
 `;
 
 const Info = styled.div`
-  padding: 60px 0px;
+  /* padding: 60px 0px; */
+  padding: 0px 0px 60px 0px;
   .Info-swiper {
     .Info-swiper-slide {
       width: 100%;
-      height: 335px;
+      height: 300px;
       .Info-swiper-slide-card {
         width: 100%;
         height: 100%;
